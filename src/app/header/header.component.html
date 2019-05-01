@@ -7,15 +7,15 @@
   </h1>
 
   <div class="header__menu">
-    <a [routerLink]="'/' + routes.landing"
-       [routerLinkActiveOptions]="{exact: true}"
-       routerLinkActive="active-link">
-      Landing
-    </a>
-
     <a [routerLink]="'/' + routes.tokens"
        routerLinkActive="active-link">
       Tokens
+    </a>
+
+    <a [routerLink]="'/' + routes.tokens"
+       [routerLinkActiveOptions]="{exact: true}"
+       routerLinkActive="active-link">
+      Balance
     </a>
   </div>
 </div>

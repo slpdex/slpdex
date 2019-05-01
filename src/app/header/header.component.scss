@@ -7,13 +7,15 @@
   position: absolute;
   right: 0;
   top: 0;
+  z-index: 10;
 }
 
 .header {
   align-items: center;
   display: flex;
   margin: 0 auto;
-  max-width: $content-width;
+  max-width: calc(#{$content-width} + 30px);
+  padding: 0 30px;
   width: 100%;
 
   &__menu {
@@ -21,17 +23,20 @@
     margin-left: auto;
 
     a {
-      color: $color-gray;
+      color: white;
       font-weight: 600;
-      margin-left: 10px;
+      margin-left: 15px;
     }
   }
 
   &--slp {
-    color: $color-green;
+    color: white;
   }
 
   &--dex {
-    color: $color-gray;
+    color: white;
   }
+}
+
+.active-link {
 }

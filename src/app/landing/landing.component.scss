@@ -1,6 +1,100 @@
 @import 'helpers';
 
 :host {
-  background: #ececec; //temp
-  height: 100vh;
+}
+
+.landing {
+  &__top {
+    background: rgba($color-green, .7);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    justify-content: center;
+    min-height: 800px;
+    position: relative;
+
+    app-wrapper {
+      flex: 1;
+      justify-content: center;
+    }
+
+    &__content {
+      align-items: center;
+      display: flex;
+      padding: 0 50px;
+
+      &--left {
+        flex-direction: column;
+        width: 60%;
+      }
+
+      &--right {
+        width: 40%;
+      }
+
+      p {
+        border-bottom: 4px solid white;
+        color: white;
+        display: inline-flex;
+        font-size: 40px;
+        font-weight: 600;
+        margin-bottom: 15px;
+      }
+    }
+
+    &__showcase {
+      align-items: center;
+      align-self: flex-end;
+      background: lighten($color-green, 18%);
+      display: flex;
+      flex-shrink: 0;
+      height: 100px;
+      margin: 40px 0 80px;
+      padding: 0 40px;
+      width: 100%;
+
+      &--wrapper {
+        display: flex;
+        margin: 0 auto;
+        max-width: calc(#{$content-width} + 100px);
+        width: 100%;
+      }
+
+      &--img {
+        display: flex;
+        flex: 1;
+        justify-content: center;
+      }
+
+      img {
+        max-width: 240px;
+        object-fit: contain;
+        padding: 0 10px;
+        width: 100%;
+      }
+    }
+  }
+
+  &__bg {
+    bottom: 0;
+    left: 0;
+    pointer-events: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+
+    img {
+      height: 100%;
+      max-height: 100%;
+      max-width: 100%;
+      object-fit: cover;
+      opacity: .1;
+      width: 100%;
+    }
+  }
+
+  &__content {
+    background: white;
+    min-height: 50vh;
+  }
 }

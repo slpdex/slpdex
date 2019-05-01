@@ -1,0 +1,59 @@
+@import 'helpers';
+
+:host {
+  align-items: center;
+  background: white;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  padding: 40px;
+  width: 100%;
+
+  h3 {
+    color: $color-green;
+    font-size: 30px;
+    font-weight: 800;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+}
+
+.quick-order {
+  &__label {
+    margin-bottom: 10px;
+  }
+
+  &__row {
+    align-items: center;
+    display: flex;
+  }
+
+  &__amount {
+    background: darken(white, 5%);
+    margin-right: 40px;
+    padding: 10px 20px;
+  }
+
+  &__token {
+    background: darken(white, 5%);
+    padding: 10px 20px;
+  }
+
+  &__icon {
+    padding: 30px;
+    transform: rotate(90deg);
+  }
+
+  &__button {
+    background: $color-green;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+    margin: 40px 0 10px;
+    max-width: 300px;
+    padding: 10px 30px;
+    text-align: center;
+    width: 100%;
+  }
+}
