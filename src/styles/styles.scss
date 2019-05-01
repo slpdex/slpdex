@@ -1,4 +1,4 @@
-/* You can add global styles to this file, and also import other style files */
+@import 'helpers';
 
 * {
   box-sizing: border-box;
@@ -12,6 +12,7 @@ h1 {
 }
 
 body {
+  color: $color-gray;
   font-family: 'Montserrat', sans-serif;
   min-height: 100vh;
   width: 100%;
@@ -21,4 +22,18 @@ h1 {
   font-size: 40px;
   margin: 0;
   padding: 0;
+}
+
+a {
+  &:active,
+  &:hover,
+  &:visited,
+  &:link {
+    color: $color-gray;
+    text-decoration: none;
+  }
+}
+
+.active-link {
+  color: $color-green !important;
 }
