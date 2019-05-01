@@ -1,0 +1,9 @@
+{
+  "prettier.stylelintIntegration": true,
+  "html.format.wrapAttributes": "force-aligned",
+  "html.format.endWithNewline": true,
+  "html.format.maxPreserveNewLines": 1,
+  "prettier.disableLanguages": [
+      "html"
+  ]
+}
