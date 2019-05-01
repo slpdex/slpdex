@@ -1,0 +1,37 @@
+@import 'helpers';
+
+:host {
+  display: flex;
+  height: $header-height;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.header {
+  align-items: center;
+  display: flex;
+  margin: 0 auto;
+  max-width: $content-width;
+  width: 100%;
+
+  &__menu {
+    display: flex;
+    margin-left: auto;
+
+    a {
+      color: $color-gray;
+      font-weight: 600;
+      margin-left: 10px;
+    }
+  }
+
+  &--slp {
+    color: $color-green;
+  }
+
+  &--dex {
+    color: $color-gray;
+  }
+}

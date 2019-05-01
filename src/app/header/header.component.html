@@ -1,0 +1,21 @@
+<div class="header">
+  <h1>
+    <a [routerLink]="'/' + routes.landing">
+      <span class="header--slp">SLP</span>
+      <span class="header--dex">DEX</span>
+    </a>
+  </h1>
+
+  <div class="header__menu">
+    <a [routerLink]="'/' + routes.landing"
+       [routerLinkActiveOptions]="{exact: true}"
+       routerLinkActive="active-link">
+      Landing
+    </a>
+
+    <a [routerLink]="'/' + routes.tokens"
+       routerLinkActive="active-link">
+      Tokens
+    </a>
+  </div>
+</div>

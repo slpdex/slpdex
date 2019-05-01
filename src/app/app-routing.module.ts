@@ -1,10 +1,20 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { SLPRoutes } from './shared/slp-routes';
 
-const routes: Routes = [];
+const routes: Routes = [
+  {
+    path: SLPRoutes.landing,
+    loadChildren: './landing/landing.module#LandingModule',
+  },
+  {
+    path: SLPRoutes.tokens,
+    loadChildren: './tokens/tokens.module#TokensModule',
+  },
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

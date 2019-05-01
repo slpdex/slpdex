@@ -1,0 +1,10 @@
+@import 'helpers';
+
+:host {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  max-width: $content-width;
+  padding-top: $header-height;
+  width: 100%;
+}
