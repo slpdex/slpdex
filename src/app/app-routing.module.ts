@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
-import { SLPRoutes } from './shared/slp-routes';
+import { LandingComponent } from './landing/landing.component';
+import { SLPRoutes } from './slp-routes';
 
 const routes: Routes = [
   {
     path: SLPRoutes.landing,
-    loadChildren: './landing/landing.module#LandingModule',
+    component: LandingComponent,
   },
   {
     path: SLPRoutes.tokens,
@@ -14,7 +15,11 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })],
+  imports: [
+    RouterModule.forRoot(routes, {
+      preloadingStrategy: PreloadAllModules,
+    }),
+  ],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

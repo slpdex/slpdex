@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SLPRoutes } from '../shared/slp-routes';
+import { SLPRoutes } from '../slp-routes';
 
 @Component({
   selector: 'app-header',  templateUrl: './header.component.html',
