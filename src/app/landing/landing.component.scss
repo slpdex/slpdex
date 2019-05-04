@@ -8,10 +8,9 @@
   &__top {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: calc(100vh - #{$header-height});
     justify-content: center;
     min-height: 800px;
-    position: relative;
 
     app-wrapper {
       flex: 1;
@@ -30,6 +29,7 @@
 
       &--right {
         width: 40%;
+        z-index: 10;
       }
 
       p {
@@ -88,7 +88,7 @@
   }
 
   &__bg {
-    bottom: 0;
+    height: 100vh;
     left: 0;
     pointer-events: none;
     position: absolute;

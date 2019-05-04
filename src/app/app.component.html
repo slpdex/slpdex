@@ -1,5 +1,6 @@
+<app-header></app-header>
+
 <div [@routeAnimations]="o.isActivated ? o.activatedRoute : ''">
-  <app-header></app-header>
 
   <router-outlet #o="outlet"></router-outlet>
 </div>
