@@ -21,6 +21,7 @@
     margin-left: auto;
 
     a {
+      border-bottom: 2px solid transparent;
       color: white;
       font-weight: 600;
       margin-left: 15px;
@@ -37,4 +38,5 @@
 }
 
 .active-link {
+  border-bottom-color: white !important;
 }
