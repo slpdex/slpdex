@@ -14,6 +14,6 @@ export class QuickOrderComponent implements OnInit {
 
   createOrder = () => {
     console.log('hello');
-    this.router.navigateByUrl('/' + SLPRoutes.landingOrder);
+    this.router.navigateByUrl('/' + SLPRoutes.order);
   };
 }

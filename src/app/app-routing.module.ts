@@ -19,6 +19,10 @@ const routes: Routes = [
     path: SLPRoutes.tokens,
     loadChildren: './tokens/tokens.module#TokensModule',
   },
+  {
+    path: SLPRoutes.balance,
+    loadChildren: './balance/balance.module#BalanceModule',
+  },
 ];
 
 @NgModule({

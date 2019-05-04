@@ -1,5 +1,6 @@
 export enum SLPRoutes {
   landing = '',
-  landingOrder = '/order',
+  order = 'order',
   tokens = 'tokens',
+  balance = 'balance',
 }
