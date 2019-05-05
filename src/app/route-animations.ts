@@ -7,7 +7,7 @@ import {
 } from '@angular/animations';
 import { SLPRoutes } from './slp-routes';
 
-const fade = () => {
+export function fade() {
   return [
     query(
       ':enter',
@@ -15,12 +15,10 @@ const fade = () => {
       { optional: true },
     ),
   ];
-};
-
-export function routeAnimations() {
-  return trigger('routeAnimations', [
-    transition('* => landing', fade()),
-    transition(`* => ${SLPRoutes.balance}`, fade()),
-    transition(`* => ${SLPRoutes.tokens}`, fade()),
-  ]);
 }
+
+export const routeAnimations = trigger('routeAnimations', [
+  transition('* => landing', fade()),
+  transition(`* => ${SLPRoutes.tokens}`, fade()),
+  transition(`* => ${SLPRoutes.balance}`, fade()),
+]);
