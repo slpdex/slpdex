@@ -1,0 +1,41 @@
+@import 'helpers';
+
+:host {
+  background: $color-gray;
+  display: flex;
+  padding: 50px 0 200px;
+}
+
+h3,
+p {
+  color: white;
+}
+
+.landing-donate {
+  margin: 0 auto;
+  max-width: 1000px;
+  text-align: center;
+
+  h3 {
+    font-size: 30px;
+    margin-bottom: 20px;
+  }
+
+  p {
+    font-size: 16px;
+  }
+
+  &__button {
+    background: $color-green;
+    border-radius: 4px;
+    color: white;
+    font-size: 30px;
+    font-weight: 600;
+    margin: 0 auto;
+    margin-top: 50px;
+    max-width: 300px;
+    padding: 10px 20px;
+    text-align: center;
+    width: 100%;
+  }
+}
