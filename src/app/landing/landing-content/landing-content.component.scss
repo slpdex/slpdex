@@ -1,0 +1,39 @@
+@import 'helpers';
+
+:host {
+  background: white;
+  display: flex;
+  min-height: 50vh;
+  padding-top: 50px;
+}
+
+.landing-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  &__box {
+    align-items: center;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    height: 300px;
+    max-width: 400px;
+    min-width: 200px;
+    padding: 0 20px;
+
+    p {
+      font-size: 13px;
+      text-align: center;
+    }
+  }
+
+  h3 {
+    margin-bottom: 10px;
+  }
+
+  svg {
+    fill: $color-gray;
+    width: 80px;
+  }
+}
