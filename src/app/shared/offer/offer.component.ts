@@ -3,18 +3,18 @@ import anime from 'animejs/lib/anime.es.js';
 import { AnimeAnimParams } from 'animejs';
 
 @Component({
-  selector: 'app-order',
-  templateUrl: './order.component.html',
-  styleUrls: ['./order.component.scss'],
+  selector: 'app-offer',
+  templateUrl: './offer.component.html',
+  styleUrls: ['./offer.component.scss'],
 })
-export class OrderComponent implements OnInit {
-  @ViewChild('order') order: ElementRef<HTMLElement>;
+export class OfferComponent implements OnInit {
+  @ViewChild('offer') offer: ElementRef<HTMLElement>;
 
   constructor() {}
 
   ngOnInit() {
     anime({
-      targets: this.order.nativeElement,
+      targets: this.offer.nativeElement,
       marginTop: [400, 0],
       opacity: 1,
       duration: 1000,

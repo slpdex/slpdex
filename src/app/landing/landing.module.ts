@@ -7,12 +7,12 @@ import { LandingDonateComponent } from './landing-donate/landing-donate.componen
 import { LandingRecentComponent } from './landing-recent/landing-recent.component';
 import { LandingTeamComponent } from './landing-team/landing-team.component';
 import { LandingComponent } from './landing.component';
-import { QuickOrderComponent } from './quick-order/quick-order.component';
+import { QuickOfferComponent } from './quick-offer/quick-offer.component';
 
 @NgModule({
   declarations: [
     LandingComponent,
-    QuickOrderComponent,
+    QuickOfferComponent,
     LandingContentComponent,
     LandingRecentComponent,
     LandingTeamComponent,

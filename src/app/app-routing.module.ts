@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
+import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { LandingComponent } from './landing/landing.component';
+import { OfferComponent } from './shared/offer/offer.component';
 import { SLPRoutes } from './slp-routes';
-import { OrderComponent } from './shared/order/order.component';
 
 const routes: Routes = [
   {
@@ -13,10 +13,10 @@ const routes: Routes = [
     },
   },
   {
-    path: SLPRoutes.order,
-    component: OrderComponent,
+    path: SLPRoutes.offer,
+    component: OfferComponent,
     data: {
-      animation: SLPRoutes.order,
+      animation: SLPRoutes.offer,
     },
   },
   {
