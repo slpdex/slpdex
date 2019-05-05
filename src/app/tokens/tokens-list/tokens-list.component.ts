@@ -28,7 +28,7 @@ export class TokensListComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes && changes.tokens) {
+    if (changes && changes.tokens && this.tokens.length) {
       this.selectedSymbol = this.tokens[0].slp.detail.symbol;
     }
   }
