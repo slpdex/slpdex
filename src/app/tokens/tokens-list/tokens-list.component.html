@@ -1,4 +1,5 @@
-<div class="tokens-list__list">
+<div *ngIf="tokens.length && selectedSymbol"
+     class="tokens-list__list">
 
   <div *ngFor="let token of tokens"
        class="tokens-list__item">
