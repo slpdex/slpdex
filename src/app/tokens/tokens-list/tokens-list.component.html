@@ -1,21 +1,23 @@
-<div *ngIf="tokens.length && selectedSymbol"
+<div #list
      class="tokens-list__list">
 
-  <div *ngFor="let token of tokens"
-       class="tokens-list__item">
+  <ng-container *ngIf="tokens.length && selectedSymbol">
+    <div *ngFor="let token of tokens"
+         class="tokens-list__item">
 
-    <div [class.tokens-list__card--active]="token.slp.detail.symbol === selectedSymbol"
-         (click)="select(token)"
-         class="tokens-list__card">
-      <p class="tokens-list__item--name">
-        {{token.slp.detail.name}}
-      </p>
-      <p *ngIf="token.slp.detail.symbol"
-         class="tokens-list__item--symbol">
-        {{token.slp.detail.symbol}}
-      </p>
+      <div [class.tokens-list__card--active]="token.slp.detail.symbol === selectedSymbol"
+           (click)="select(token)"
+           class="tokens-list__card">
+        <p class="tokens-list__item--name">
+          {{token.slp.detail.name}}
+        </p>
+        <p *ngIf="token.slp.detail.symbol"
+           class="tokens-list__item--symbol">
+          {{token.slp.detail.symbol}}
+        </p>
+      </div>
+
     </div>
-
-  </div>
+  </ng-container>
 
 </div>

@@ -6,25 +6,36 @@ import {
   EventEmitter,
   OnChanges,
   SimpleChanges,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
 } from '@angular/core';
 import { Token } from '../../endpoints';
+
+import SimpleBar from 'simplebar';
 
 @Component({
   selector: 'app-tokens-list',
   templateUrl: './tokens-list.component.html',
   styleUrls: ['./tokens-list.component.scss'],
 })
-export class TokensListComponent implements OnInit, OnChanges {
+export class TokensListComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() tokens: Token[] = [];
 
   @Output() selectToken = new EventEmitter<Token>();
 
   selectedSymbol = '';
 
+  @ViewChild('list') list: ElementRef<HTMLElement>;
+
   constructor() {}
 
   ngOnInit() {
     console.log(this.tokens);
+  }
+
+  ngAfterViewInit(): void {
+    const simpleBar = new SimpleBar(this.list.nativeElement);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
