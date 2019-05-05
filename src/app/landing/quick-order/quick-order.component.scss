@@ -42,6 +42,11 @@
   &__icon {
     padding: 30px;
     transform: rotate(90deg);
+
+    svg {
+      fill: $color-gray;
+      height: 50px;
+    }
   }
 
   &__button {
