@@ -28,7 +28,7 @@ export class QuickOfferComponent implements OnInit {
 
     anime({
       targets: dummyElement,
-      top: [element.offsetTop, 0],
+      top: [element.offsetTop - window.scrollY, 0],
       left: [element.offsetLeft, 0],
       width: [element.clientWidth, window.innerWidth],
       height: [element.clientHeight, window.innerHeight],
