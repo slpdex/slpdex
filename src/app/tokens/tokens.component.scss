@@ -9,11 +9,18 @@
     background: lighten($color-green-light, 10%);
     border: 0;
     border-radius: 4px;
+    color: white;
+    font-weight: 600;
     height: 40px;
     margin-bottom: 10px;
     outline: 0;
     padding: 10px;
     width: 30%;
+
+    &::placeholder {
+      color: white;
+      font-weight: 600;
+    }
   }
 
   &__content {

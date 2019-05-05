@@ -1,12 +1,41 @@
-<ng-container *ngIf="token">
+<ng-container *ngIf="token && tokenDetails">
   <div class="tokens-details__header">
 
-    <h2>
-      {{token.slp.detail.name}}
-    </h2>
+    <div class="tokens-details__header--top">
+      <h2>
+        {{token.slp.detail.name}}
+        -
+        {{token.slp.detail.symbol}}
+      </h2>
+    </div>
+
+    <div class="tokens-details__header--bottom">
+      <p>Open offers: {{tokenDetails.numberOfOpenOffers}}</p>
+      <p>Closed offers: {{tokenDetails.numberOfClosedOffers}}</p>
+      <p>Last trade: {{timeSinceLastTrade}}</p>
+    </div>
   </div>
 
-  <div class="tokens-details__content">
-  </div>
+  <!-- <div class="tokens-details__content">
+
+    <p>Open orders</p>
+
+    <div class="token-details__open">
+
+      <ng-container *ngIf="tokenDetails.slp.detail.outputs?.length">
+        <div *ngFor="let item of tokenDetails.slp.detail.outputs"
+             class="token-details__open--item">
+
+          <p>
+            {{item.address}}
+            {{item.amount}}
+          </p>
+
+        </div>
+      </ng-container>
+
+    </div>
+
+  </div> -->
 
 </ng-container>
