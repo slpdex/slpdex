@@ -1,0 +1,11 @@
+@import 'helpers';
+
+:host {
+  padding-left: 10px;
+}
+
+.tokens-details__header {
+  background: white;
+  border-radius: 4px;
+  padding: 10px 15px;
+}

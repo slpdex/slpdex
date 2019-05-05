@@ -1,7 +1,31 @@
+@import 'helpers';
+
 :host {
   display: block;
 }
 
-app-tokens-list {
-  width: 30%;
+.tokens {
+  &__search {
+    background: lighten($color-green-light, 10%);
+    border: 0;
+    border-radius: 4px;
+    height: 40px;
+    margin-bottom: 10px;
+    outline: 0;
+    padding: 10px;
+    width: 30%;
+  }
+
+  &__content {
+    display: flex;
+    height: calc(100vh - #{$header-height} - 100px);
+
+    app-tokens-list {
+      width: 30%;
+    }
+
+    app-tokens-details {
+      width: 70%;
+    }
+  }
 }

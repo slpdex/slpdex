@@ -1,6 +1,16 @@
 <app-wrapper>
 
-  <app-tokens-list [tokens]="tokens">
-  </app-tokens-list>
+  <input type="text"
+         placeholder="Search"
+         class="tokens__search">
+
+  <div class="tokens__content">
+    <app-tokens-list [tokens]="tokens"
+                     (selectToken)="selectToken($event)">
+    </app-tokens-list>
+
+    <app-tokens-details [token]="selectedToken">
+    </app-tokens-details>
+  </div>
 
 </app-wrapper>

@@ -3,7 +3,8 @@
   <div *ngFor="let token of tokens"
        class="tokens-list__item">
 
-    <div class="tokens-list__card">
+    <div (click)="select(token)"
+         class="tokens-list__card">
       <p class="tokens-list__item--name">
         {{token.slp.detail.name}}
       </p>

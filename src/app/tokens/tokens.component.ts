@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { take, filter } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 import { Token } from '../endpoints';
 import { EndpointsService } from '../endpoints.service';
 
@@ -11,6 +11,7 @@ import { EndpointsService } from '../endpoints.service';
 })
 export class TokensComponent implements OnInit {
   tokens: Token[] = [];
+  selectedToken: Token;
 
   constructor(private endpointsService: EndpointsService) {}
 
@@ -27,6 +28,12 @@ export class TokensComponent implements OnInit {
         this.tokens = data.t.filter(item => {
           return item.slp.detail.name && item.slp.detail.symbol;
         });
+
+        this.selectedToken = this.tokens[0];
       });
+  };
+
+  selectToken = (token: Token) => {
+    this.selectedToken = token;
   };
 }
