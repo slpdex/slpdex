@@ -6,6 +6,7 @@ import {
   trigger,
   group,
 } from '@angular/animations';
+import { SLPRoutes } from './slp-routes';
 
 const fade = () => {
   return [
@@ -18,5 +19,7 @@ const fade = () => {
 };
 
 export const routeAnimations = trigger('routeAnimations', [
-  transition('* => *', fade()),
+  transition('* => landing', fade()),
+  transition(`* => ${SLPRoutes.balance}`, fade()),
+  transition(`* => ${SLPRoutes.tokens}`, fade()),
 ]);

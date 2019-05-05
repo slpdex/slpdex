@@ -8,20 +8,30 @@ const routes: Routes = [
   {
     path: SLPRoutes.landing,
     component: LandingComponent,
-    children: [
-      {
-        path: 'order',
-        component: OrderComponent,
-      },
-    ],
+    data: {
+      animation: 'landing',
+    },
+  },
+  {
+    path: SLPRoutes.order,
+    component: OrderComponent,
+    data: {
+      animation: SLPRoutes.order,
+    },
   },
   {
     path: SLPRoutes.tokens,
     loadChildren: './tokens/tokens.module#TokensModule',
+    data: {
+      animation: SLPRoutes.tokens,
+    },
   },
   {
     path: SLPRoutes.balance,
     loadChildren: './balance/balance.module#BalanceModule',
+    data: {
+      animation: SLPRoutes.balance,
+    },
   },
 ];
 
@@ -29,7 +39,7 @@ const routes: Routes = [
   imports: [
     RouterModule.forRoot(routes, {
       preloadingStrategy: PreloadAllModules,
-      enableTracing: true,
+      // enableTracing: true,
     }),
   ],
   exports: [RouterModule],

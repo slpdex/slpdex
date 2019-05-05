@@ -1,6 +1,5 @@
-<app-header></app-header>
+<div [@routeAnimations]="prepareRoute(outlet)">
+  <app-header></app-header>
 
-<div [@routeAnimations]="o.isActivated ? o.activatedRoute : ''">
-
-  <router-outlet #o="outlet"></router-outlet>
+  <router-outlet #outlet="outlet"></router-outlet>
 </div>

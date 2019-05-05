@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { routeAnimations } from './route-animations';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -9,4 +10,14 @@ import { routeAnimations } from './route-animations';
 })
 export class AppComponent {
   title = 'slpdex';
+
+  prepareRoute = (outlet: RouterOutlet) => {
+    const animation =
+      outlet &&
+      outlet.activatedRouteData &&
+      outlet.activatedRouteData.animation;
+    console.log(animation);
+
+    return animation;
+  };
 }
