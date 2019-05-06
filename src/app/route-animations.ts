@@ -21,4 +21,5 @@ export const routeAnimations = trigger('routeAnimations', [
   transition('* => landing', fade()),
   transition(`* => ${SLPRoutes.tokens}`, fade()),
   transition(`* => ${SLPRoutes.balance}`, fade()),
+  transition(`* => ${SLPRoutes.wallet}`, fade()),
 ]);

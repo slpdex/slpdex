@@ -1,0 +1,79 @@
+@import 'helpers';
+
+:host {
+  display: block;
+}
+
+.wallet {
+  align-items: center;
+  display: flex;
+  height: calc(100vh - #{$header-height} - 60px);
+  justify-content: center;
+
+  &__none {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+
+    h2 {
+      color: white;
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+
+    &--title {
+      color: white;
+      margin-bottom: 60px;
+
+      span {
+        border-bottom: 1px solid white;
+        font-weight: 600;
+      }
+    }
+
+    &--selection {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 60px;
+      width: 100%;
+    }
+
+    &--box {
+      align-items: center;
+      background: rgba(white, .9);
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      font-size: 26px;
+      height: 200px;
+      justify-content: center;
+      max-width: 400px;
+      text-align: center;
+      width: 100%;
+    }
+
+    &--or {
+      color: white;
+      font-size: 18px;
+      font-weight: 600;
+      padding: 0 50px;
+    }
+  }
+
+  &__info {
+    background: lighten($color-green, 18%);
+    border-radius: 4px;
+    color: white;
+    margin-bottom: 20px;
+    max-width: 600px;
+    padding: 30px 20px;
+
+    p {
+      margin-bottom: 10px;
+      text-align: center;
+    }
+  }
+}

@@ -33,6 +33,14 @@ const routes: Routes = [
       animation: SLPRoutes.balance,
     },
   },
+
+  {
+    path: SLPRoutes.wallet,
+    loadChildren: './wallet/wallet.module#WalletModule',
+    data: {
+      animation: SLPRoutes.wallet,
+    },
+  },
 ];
 
 @NgModule({

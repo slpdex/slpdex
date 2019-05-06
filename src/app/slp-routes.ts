@@ -3,4 +3,5 @@ export enum SLPRoutes {
   offer = 'offer',
   tokens = 'tokens',
   balance = 'balance',
+  wallet = 'wallet',
 }
