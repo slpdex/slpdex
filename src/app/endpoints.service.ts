@@ -1,6 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AllTokens, allTokensQuery } from './queries/allTokensQuery';
+import {
+  TimeSinceLastBlock,
+  timeSinceLastBlockQuery,
+} from './queries/timeSinceLastBlockQuery';
 import { TokenDetails, tokenDetailsQuery } from './queries/tokenDetailsQuery';
 
 @Injectable({
@@ -15,5 +19,9 @@ export class EndpointsService {
 
   getTokenDetails = (symbol: string) => {
     return this.httpClient.get<TokenDetails>(tokenDetailsQuery(symbol));
+  };
+
+  getTimeSinceLastBlock = () => {
+    return this.httpClient.get<TimeSinceLastBlock>(timeSinceLastBlockQuery());
   };
 }

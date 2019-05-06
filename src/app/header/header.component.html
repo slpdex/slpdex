@@ -1,20 +1,38 @@
 <div class="header">
-  <h1>
-    <a [routerLink]="'/' + routes.landing">
-      <span class="header--slp">SLP</span>
-      <span class="header--dex">DEX</span>
-    </a>
-  </h1>
+  <div class="header__top">
+    <div class="header__top--bar">
+      <p>{{timeSinceLastBlock}} since last block</p>
 
-  <div class="header__menu">
-    <a [routerLink]="'/' + routes.tokens"
-       routerLinkActive="active-link">
-      Tokens
-    </a>
+      <span class="header__top--divider"></span>
 
-    <a [routerLink]="'/' + routes.balance"
-       routerLinkActive="active-link">
-      Balance
-    </a>
+      <a href="https://github.com/slpdex/slpdex"
+         target="_blank">
+        <svg class="header__top--github">
+          <use xlink:href="#github"></use>
+        </svg>
+      </a>
+    </div>
   </div>
+
+  <div class="header__bottom">
+    <h1>
+      <a [routerLink]="'/' + routes.landing">
+        <span class="header--slp">SLP</span>
+        <span class="header--dex">DEX</span>
+      </a>
+    </h1>
+
+    <div class="header__menu">
+      <a [routerLink]="'/' + routes.tokens"
+         routerLinkActive="active-link">
+        Tokens
+      </a>
+
+      <a [routerLink]="'/' + routes.balance"
+         routerLinkActive="active-link">
+        Balance
+      </a>
+    </div>
+  </div>
+
 </div>
