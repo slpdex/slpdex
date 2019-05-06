@@ -10,9 +10,9 @@ import {
   ElementRef,
   AfterViewInit,
 } from '@angular/core';
-import { Token } from '../../endpoints';
 
 import SimpleBar from 'simplebar';
+import { AllTokensToken } from '../../queries/allTokensQuery';
 
 @Component({
   selector: 'app-tokens-list',
@@ -20,9 +20,9 @@ import SimpleBar from 'simplebar';
   styleUrls: ['./tokens-list.component.scss'],
 })
 export class TokensListComponent implements OnInit, OnChanges, AfterViewInit {
-  @Input() tokens: Token[] = [];
+  @Input() tokens: AllTokensToken[] = [];
 
-  @Output() selectToken = new EventEmitter<Token>();
+  @Output() selectToken = new EventEmitter<AllTokensToken>();
 
   selectedSymbol = '';
 
@@ -31,7 +31,6 @@ export class TokensListComponent implements OnInit, OnChanges, AfterViewInit {
   constructor() {}
 
   ngOnInit() {
-    console.log(this.tokens);
   }
 
   ngAfterViewInit(): void {
@@ -44,7 +43,7 @@ export class TokensListComponent implements OnInit, OnChanges, AfterViewInit {
     }
   }
 
-  select = (token: Token) => {
+  select = (token: AllTokensToken) => {
     this.selectToken.emit(token);
     this.selectedSymbol = token.slp.detail.symbol;
   };

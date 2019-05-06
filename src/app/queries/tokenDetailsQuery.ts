@@ -1,39 +1,6 @@
 import { Base64 } from 'js-base64';
 
-export const allTokensEndpoint = () => {
-  return 'https://slpdb.bitcoin.com/q/ewogICJ2IjogMywKICAiZGIiOiBbInQiXSwKICAicSI6IHsKICAgICJhZ2dyZWdhdGUiOiBbCiAgICAgIHsiJHByb2plY3QiOiB7InNscC5kZXRhaWwiOiAiJHRva2VuRGV0YWlscyJ9fQogICAgXSwKICAgICJsaW1pdCI6IDEwMAogIH0KfQ==';
-};
-
-export interface AllTokens {
-  t: Token[];
-}
-
-export interface Token {
-  _id: string;
-  slp: Slp;
-}
-
-export interface Detail {
-  decimals: number;
-  tokenIdHex: string;
-  timestamp: string;
-  transactionType: string;
-  versionType: number;
-  documentUri: string;
-  documentSha256Hex?: any;
-  symbol: string;
-  name: string;
-  batonVout?: any;
-  containsBaton: boolean;
-  genesisOrMintQuantity: string;
-  sendOutputs?: any;
-}
-
-export interface Slp {
-  detail: Detail;
-}
-
-export const getTokenDetails = (symbol: string) => {
+export const tokenDetailsQuery = (symbol: string) => {
   const base64Symbol = Base64.encode(symbol);
 
   const params = {
@@ -121,7 +88,7 @@ export interface TokenDetails {
   u: any[];
 }
 
-export interface Output {
+export interface TokenDetailsOutput {
   address: string;
   amount: string;
 }
@@ -137,7 +104,7 @@ export interface TokenDetailsDetail {
   name: string;
   txnBatonVout?: any;
   txnContainsBaton: boolean;
-  outputs: Output[];
+  outputs: TokenDetailsOutput[];
 }
 
 export interface TokenDetailsSlp {
@@ -147,7 +114,7 @@ export interface TokenDetailsSlp {
   schema_version: number;
 }
 
-export interface LastTrade {
+export interface TokenDetailsLastTrade {
   timestamp: number;
   txHash: string;
   isAccepted: boolean;
@@ -158,5 +125,5 @@ export interface TokenDetailsC {
   numberOfOpenOffers: number;
   numberOfClosedOffers: number;
   slp: TokenDetailsSlp;
-  lastTrade: LastTrade;
+  lastTrade: TokenDetailsLastTrade;
 }

@@ -1,14 +1,15 @@
 import {
   Component,
-  OnInit,
   Input,
   OnChanges,
+  OnInit,
   SimpleChanges,
 } from '@angular/core';
-import { Token, TokenDetailsC } from '../../endpoints';
-import { EndpointsService } from '../../endpoints.service';
-import { take } from 'rxjs/operators';
 import * as moment from 'moment';
+import { take } from 'rxjs/operators';
+import { EndpointsService } from '../../endpoints.service';
+import { AllTokensToken } from '../../queries/allTokensQuery';
+import { TokenDetailsC } from '../../queries/tokenDetailsQuery';
 
 @Component({
   selector: 'app-tokens-details',
@@ -16,7 +17,7 @@ import * as moment from 'moment';
   styleUrls: ['./tokens-details.component.scss'],
 })
 export class TokensDetailsComponent implements OnInit, OnChanges {
-  @Input() token: Token;
+  @Input() token: AllTokensToken;
 
   tokenDetails: TokenDetailsC;
   timeSinceLastTrade: string;

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { take } from 'rxjs/operators';
-import { Token } from '../endpoints';
 import { EndpointsService } from '../endpoints.service';
+import { AllTokensToken } from '../queries/allTokensQuery';
 
 @Component({
   selector: 'app-tokens',
@@ -10,8 +10,8 @@ import { EndpointsService } from '../endpoints.service';
   animations: [],
 })
 export class TokensComponent implements OnInit {
-  tokens: Token[] = [];
-  selectedToken: Token;
+  tokens: AllTokensToken[] = [];
+  selectedToken: AllTokensToken;
 
   constructor(private endpointsService: EndpointsService) {}
 
@@ -24,7 +24,6 @@ export class TokensComponent implements OnInit {
       .getAllTokens()
       .pipe(take(1))
       .subscribe(data => {
-        console.log(data);
         this.tokens = data.t.filter(item => {
           return item.slp.detail.name && item.slp.detail.symbol;
         });
@@ -33,7 +32,7 @@ export class TokensComponent implements OnInit {
       });
   };
 
-  selectToken = (token: Token) => {
+  selectToken = (token: AllTokensToken) => {
     this.selectedToken = token;
   };
 }
