@@ -28,4 +28,12 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 ### Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+Run `npm run prod` to build the project. The build artifacts will be stored in the `prod/` directory.
+
+### SVG Sprite
+
+Run `npm run svg` to compile SVGs into a SVG sprite. The sprite content currently needs to be copy & pasted into svgs.component.
+
+### Publish
+
+Run `npm run prod-push` to quickly push a new release from `prod/` directory to our hosting repo - https://github.com/slpdex/slpdex.github.io. To set this up, you need to `git init` in your `prod/` directory and set remote origin to git@github.com:slpdex/slpdex.github.io.git.
