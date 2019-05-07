@@ -10,7 +10,7 @@
     "e2e": "ng e2e",
     "dev": "ng serve --hmr",
     "svg": "cd src/svgs/ && node generate-svg-sprite.js",
-    "prod": "ng build --aot --prod --output-path=prod/ --delete-output-path=false",
+    "prod": "ng build --aot --prod --build-optimizer --output-path=prod/ --delete-output-path=false",
     "push-prod": "cd prod && git add . && git commit -m \"build(slpdev): release\" && git push"
   },
   "private": true,
