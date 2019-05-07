@@ -1,7 +1,7 @@
 {
   "name": "slpdex",
   "short_name": "slpdex",
-  "theme_color": "#82cc8e",
+  "theme_color": "#5c5c5c",
   "background_color": "#82cc8e",
   "display": "standalone",
   "scope": "/",
