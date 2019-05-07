@@ -1,16 +1,16 @@
 import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
-  OnInit,
-  Input,
-  Output,
+  ElementRef,
   EventEmitter,
+  Input,
   OnChanges,
+  OnInit,
+  Output,
   SimpleChanges,
   ViewChild,
-  ElementRef,
-  AfterViewInit,
 } from '@angular/core';
-
 import SimpleBar from 'simplebar';
 import { AllTokensToken } from '../../queries/allTokensQuery';
 
@@ -18,6 +18,7 @@ import { AllTokensToken } from '../../queries/allTokensQuery';
   selector: 'app-tokens-list',
   templateUrl: './tokens-list.component.html',
   styleUrls: ['./tokens-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TokensListComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() tokens: AllTokensToken[] = [];
@@ -30,8 +31,7 @@ export class TokensListComponent implements OnInit, OnChanges, AfterViewInit {
 
   constructor() {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   ngAfterViewInit(): void {
     const simpleBar = new SimpleBar(this.list.nativeElement);

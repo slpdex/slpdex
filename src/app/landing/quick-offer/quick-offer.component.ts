@@ -1,4 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { AnimeAnimParams } from 'animejs';
 import anime from 'animejs/lib/anime.es.js';
@@ -8,6 +14,7 @@ import { SLPRoutes } from '../../slp-routes';
   selector: 'app-quick-offer',
   templateUrl: './quick-offer.component.html',
   styleUrls: ['./quick-offer.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class QuickOfferComponent implements OnInit {
   animateButton = false;

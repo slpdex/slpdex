@@ -1,11 +1,18 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import anime from 'animejs/lib/anime.es.js';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { AnimeAnimParams } from 'animejs';
+import anime from 'animejs/lib/anime.es.js';
 
 @Component({
   selector: 'app-offer',
   templateUrl: './offer.component.html',
   styleUrls: ['./offer.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OfferComponent implements OnInit {
   @ViewChild('offer') offer: ElementRef<HTMLElement>;

@@ -1,4 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+} from '@angular/core';
 import { take } from 'rxjs/operators';
 import { EndpointsService } from '../endpoints.service';
 import { AllTokensToken } from '../queries/allTokensQuery';
@@ -7,13 +12,16 @@ import { AllTokensToken } from '../queries/allTokensQuery';
   selector: 'app-tokens',
   templateUrl: './tokens.component.html',
   styleUrls: ['./tokens.component.scss'],
-  animations: [],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TokensComponent implements OnInit {
   tokens: AllTokensToken[] = [];
   selectedToken: AllTokensToken;
 
-  constructor(private endpointsService: EndpointsService) {}
+  constructor(
+    private endpointsService: EndpointsService,
+    private changeDetectorRef: ChangeDetectorRef,
+  ) {}
 
   ngOnInit() {
     this.getAllTokens();
@@ -28,11 +36,13 @@ export class TokensComponent implements OnInit {
           return item.slp.detail.name && item.slp.detail.symbol;
         });
 
-        this.selectedToken = this.tokens[0];
+        this.selectedToken = { ...this.tokens[0] };
+
+        this.changeDetectorRef.markForCheck();
       });
   };
 
   selectToken = (token: AllTokensToken) => {
-    this.selectedToken = token;
+    this.selectedToken = { ...token };
   };
 }

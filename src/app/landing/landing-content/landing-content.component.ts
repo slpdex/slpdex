@@ -1,15 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-landing-content',
   templateUrl: './landing-content.component.html',
-  styleUrls: ['./landing-content.component.scss']
+  styleUrls: ['./landing-content.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LandingContentComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

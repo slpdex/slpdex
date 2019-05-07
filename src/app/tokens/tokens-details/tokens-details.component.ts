@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   Input,
   OnChanges,
@@ -15,6 +16,7 @@ import { TokenDetailsC } from '../../queries/tokenDetailsQuery';
   selector: 'app-tokens-details',
   templateUrl: './tokens-details.component.html',
   styleUrls: ['./tokens-details.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TokensDetailsComponent implements OnInit, OnChanges {
   @Input() token: AllTokensToken;

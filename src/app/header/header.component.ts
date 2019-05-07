@@ -1,17 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import { SLPRoutes } from '../slp-routes';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
-import { EndpointsService } from '../endpoints.service';
+import { Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { EndpointsService } from '../endpoints.service';
+import { SLPRoutes } from '../slp-routes';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent implements OnInit {
   routes = { ...SLPRoutes };
-  timeSinceLastBlock: string;
+  timeSinceLastBlock$ = new Subject<string>();
 
   constructor(private endpointsService: EndpointsService) {}
 
@@ -27,7 +29,7 @@ export class HeaderComponent implements OnInit {
       .subscribe(data => {
         const timestamp = data.c.last_block_time;
 
-        this.timeSinceLastBlock = moment.unix(timestamp).fromNow(true);
+        this.timeSinceLastBlock$.next(moment.unix(timestamp).fromNow(true));
       });
   };
 }

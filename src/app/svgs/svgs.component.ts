@@ -1,15 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-svgs',
   templateUrl: './svgs.component.html',
-  styleUrls: ['./svgs.component.scss']
+  styleUrls: ['./svgs.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SvgsComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }
