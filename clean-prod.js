@@ -9,7 +9,7 @@ const removeFile = (file, filePath) => {
   const validFile = !ignore.find(x => x === file);
 
   if (validFile) {
-    fs.unlink(`${filePath}/${file}`);
+    fs.unlink(`${filePath}/${file}`, () => {});
   }
 };
 
