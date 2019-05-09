@@ -2,6 +2,10 @@
   <div class="wallet-details">
     <h2>Wallet</h2>
 
+    <p>CashAddress: {{cashAddress$ | async}}</p>
+
+    <p>slpAddress: {{slpAddress$ | async}}</p>
+
     <div class="wallet-details__widget">
 
       <div class="wallet-details__main">
@@ -14,9 +18,6 @@
           {{usdPrice$ | async}} USD
         </p>
 
-        <!-- <p>CashAddress: {{cashAddress$ | async}}</p>
-
-      <p>slpAddress: {{slpAddress$ | async}}</p> -->
         <div class="wallet-details__main__buttons">
           <a class="wallet-details__send">
             Send
