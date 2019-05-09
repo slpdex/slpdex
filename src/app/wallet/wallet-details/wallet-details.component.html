@@ -1,0 +1,39 @@
+<app-wrapper>
+  <div class="wallet-details">
+    <h2>Wallet</h2>
+
+    <div class="wallet-details__main wallet-details__widget">
+
+      <p class="wallet-details--bch">
+        {{bchBalance$ | async}} BCH
+      </p>
+
+      <p>CashAddress: {{cashAddress$ | async}}</p>
+
+      <p>slpAddress: {{slpAddress$ | async}}</p>
+
+    </div>
+
+    <div class="wallet-details__content">
+
+      <div class="wallet-details__tokens">
+        <h3>Tokens</h3>
+
+        <div class="wallet-details__widget">
+
+        </div>
+      </div>
+
+      <div class="wallet-details__transactions">
+        <h3>Transactions</h3>
+
+        <div class="wallet-details__widget">
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</app-wrapper>

@@ -1,0 +1,55 @@
+@import 'helpers';
+
+:host {
+  display: flex;
+}
+
+h2 {
+  color: white;
+  font-size: 30px;
+  margin-bottom: 10px;
+}
+
+h3 {
+  color: white;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.wallet-details {
+  display: flex;
+  flex-direction: column;
+
+  &__widget {
+    background: white;
+    border-radius: 4px;
+    padding: 40px 20px;
+  }
+
+  &__main {
+    height: 400px;
+    margin-bottom: 30px;
+  }
+
+  &__content {
+    display: flex;
+  }
+
+  &__tokens,
+  &__transactions {
+    flex: 1;
+  }
+
+  &__tokens {
+    margin-right: 10px;
+  }
+
+  &__transactions {
+    margin-left: 10px;
+  }
+
+  &--bch {
+    font-size: 40px;
+    text-align: center;
+  }
+}

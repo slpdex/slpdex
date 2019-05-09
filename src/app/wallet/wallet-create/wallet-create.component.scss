@@ -1,7 +1,7 @@
 @import 'helpers';
 
 :host {
-  display: block;
+  display: flex;
 }
 
 .wallet {
@@ -26,11 +26,6 @@
     &--title {
       color: white;
       margin-bottom: 60px;
-
-      span {
-        border-bottom: 1px solid white;
-        font-weight: 600;
-      }
     }
 
     &--selection {

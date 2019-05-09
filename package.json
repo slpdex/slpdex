@@ -29,6 +29,8 @@
     "@angular/router": "~7.2.15",
     "@angular/service-worker": "~7.2.15",
     "animejs": "^3.0.1",
+    "bignumber.js": "^8.1.1",
+    "cashcontracts-bch": "^0.1.5",
     "core-js": "^3.0.1",
     "js-base64": "^2.5.1",
     "moment": "^2.24.0",
