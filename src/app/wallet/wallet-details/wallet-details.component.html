@@ -34,9 +34,17 @@
       <div class="wallet-details__tokens">
         <h3>Tokens</h3>
 
-        <div class="wallet-details__widget">
+        <ng-container *ngIf="(tokens$ | async) as tokens">
 
-        </div>
+          <div *ngFor="let token of tokens"
+               class="wallet-details__widget">
+            <p>{{token.name}}</p>
+            <p>{{token.symbol}}</p>
+            <p>balance: {{token.balance}}</p>
+
+          </div>
+        </ng-container>
+
       </div>
 
       <div class="wallet-details__transactions">

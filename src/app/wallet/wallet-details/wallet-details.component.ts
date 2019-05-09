@@ -1,10 +1,14 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import BigNumber from 'bignumber.js';
 import * as cb from 'cashcontracts-bch';
 import { BehaviorSubject, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { EndpointsService } from '../../endpoints.service';
-import { take } from 'rxjs/operators';
-import { CryptoNator } from '../../queries/bchUsdQuery';
 
 @Component({
   selector: 'app-wallet-details',
@@ -12,20 +16,34 @@ import { CryptoNator } from '../../queries/bchUsdQuery';
   styleUrls: ['./wallet-details.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class WalletDetailsComponent implements OnInit {
-  wallet: cb.Wallet;
+export class WalletDetailsComponent implements OnInit, OnDestroy {
+  destroy$ = new Subject();
 
   bchBalance$ = new BehaviorSubject('0.00000000');
-  usdPrice$ = new BehaviorSubject<number>(0);
+  usdPrice$ = new BehaviorSubject<string>('0');
 
   cashAddress$ = new Subject();
   slpAddress$ = new Subject();
   transactions$ = new Subject();
+  tokens$ = new Subject();
+
+  private usdPrice = 0;
+  private wallet: cb.Wallet;
 
   constructor(private endpointsService: EndpointsService) {}
 
   ngOnInit() {
     this.loadWallet();
+
+    this.bchBalance$.pipe(takeUntil(this.destroy$)).subscribe(bch => {
+      const usdPriceForBch = new BigNumber(this.usdPrice * +bch);
+      this.usdPrice$.next(usdPriceForBch.decimalPlaces(5).toString());
+    });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.unsubscribe();
   }
 
   loadWallet = async () => {
@@ -35,19 +53,30 @@ export class WalletDetailsComponent implements OnInit {
     ]);
 
     this.wallet = values[0];
+    this.usdPrice = +values[1].ticker.price;
     console.log(this.wallet);
 
     this.cashAddress$.next(this.wallet.cashAddr());
     this.slpAddress$.next(this.wallet.slpAddr());
 
     // this.setTransactions();
+
     this.setBchBalance();
+    this.setTokens();
+  };
 
-    this.bchBalance$.pipe(take(1)).subscribe(bch => {
-      const usdPrice = new BigNumber(+values[1].ticker.price * +bch);
+  private setTokens = () => {
+    const tokenIds = this.wallet.tokenIds();
+    console.log(tokenIds);
 
-      this.usdPrice$.next(usdPrice.decimalPlaces(5).toNumber());
+    const tokens = tokenIds.map(tokenId => {
+      return {
+        ...this.wallet.tokenDetails(tokenId),
+        balance: this.wallet.tokenBalance(tokenId),
+      };
     });
+
+    this.tokens$.next(tokens.toArray());
   };
 
   private setTransactions = () => {
