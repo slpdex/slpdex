@@ -20,19 +20,41 @@ h3 {
   display: flex;
   flex-direction: column;
 
-  &__widget {
-    background: white;
-    border-radius: 4px;
-    padding: 40px 20px;
+  &--bch {
+    font-size: 40px;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  &--usd {
+    font-size: 20px;
+    text-align: center;
   }
 
   &__main {
-    height: 400px;
-    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    height: 200px;
+
+    &__buttons {
+      display: flex;
+      justify-content: center;
+      margin-top: auto;
+
+      a {
+        background: $color-green-light;
+        border-radius: 4px;
+        color: white;
+        cursor: pointer;
+        margin: 0 20px;
+        padding: 10px 20px;
+      }
+    }
   }
 
   &__content {
     display: flex;
+    margin-top: 40px;
   }
 
   &__tokens,
@@ -41,15 +63,16 @@ h3 {
   }
 
   &__tokens {
-    margin-right: 10px;
+    margin-right: 20px;
   }
 
   &__transactions {
-    margin-left: 10px;
+    margin-left: 20px;
   }
 
-  &--bch {
-    font-size: 40px;
-    text-align: center;
+  &__widget {
+    background: white;
+    border-radius: 4px;
+    padding: 40px 20px;
   }
 }

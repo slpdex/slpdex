@@ -6,6 +6,7 @@ import {
   timeSinceLastBlockQuery,
 } from './queries/timeSinceLastBlockQuery';
 import { TokenDetails, tokenDetailsQuery } from './queries/tokenDetailsQuery';
+import { bchUsdQuery, CryptoNator } from './queries/bchUsdQuery';
 
 @Injectable({
   providedIn: 'root',
@@ -23,5 +24,9 @@ export class EndpointsService {
 
   getTimeSinceLastBlock = () => {
     return this.httpClient.get<TimeSinceLastBlock>(timeSinceLastBlockQuery());
+  };
+
+  getBchUsdPrice = () => {
+    return this.httpClient.get<CryptoNator>(bchUsdQuery());
   };
 }

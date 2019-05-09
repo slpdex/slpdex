@@ -2,16 +2,31 @@
   <div class="wallet-details">
     <h2>Wallet</h2>
 
-    <div class="wallet-details__main wallet-details__widget">
+    <div class="wallet-details__widget">
 
-      <p class="wallet-details--bch">
-        {{bchBalance$ | async}} BCH
-      </p>
+      <div class="wallet-details__main">
 
-      <p>CashAddress: {{cashAddress$ | async}}</p>
+        <p class="wallet-details--bch">
+          {{bchBalance$ | async}} BCH
+        </p>
 
-      <p>slpAddress: {{slpAddress$ | async}}</p>
+        <p class="wallet-details--usd">
+          {{usdPrice$ | async}} USD
+        </p>
 
+        <!-- <p>CashAddress: {{cashAddress$ | async}}</p>
+
+      <p>slpAddress: {{slpAddress$ | async}}</p> -->
+        <div class="wallet-details__main__buttons">
+          <a class="wallet-details__send">
+            Send
+          </a>
+
+          <a class="wallet-details__receive">
+            Receive
+          </a>
+        </div>
+      </div>
     </div>
 
     <div class="wallet-details__content">
