@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import * as cb from 'cashcontracts-bch';
 import { Router } from '@angular/router';
-import { SLPRoutes } from '../../slp-routes';
+import { SLPRoutes } from '../../../slp-routes';
 
 @Component({
   selector: 'app-wallet-create',

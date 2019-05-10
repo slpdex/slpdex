@@ -8,7 +8,7 @@ import {
 import { Router } from '@angular/router';
 import { AnimeAnimParams } from 'animejs';
 import anime from 'animejs/lib/anime.es.js';
-import { SLPRoutes } from '../../slp-routes';
+import { SLPRoutes } from '../../../slp-routes';
 
 @Component({
   selector: 'app-quick-offer',

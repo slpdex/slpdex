@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { LandingComponent } from './landing/landing.component';
+import { LandingComponent } from './module/landing/landing.component';
 import { OfferComponent } from './shared/offer/offer.component';
 import { SLPRoutes } from './slp-routes';
 
@@ -21,14 +21,14 @@ const routes: Routes = [
   },
   {
     path: SLPRoutes.tokens,
-    loadChildren: './tokens/tokens.module#TokensModule',
+    loadChildren: './module/tokens/tokens.module#TokensModule',
     data: {
       animation: SLPRoutes.tokens,
     },
   },
   {
     path: SLPRoutes.balance,
-    loadChildren: './balance/balance.module#BalanceModule',
+    loadChildren: './module/balance/balance.module#BalanceModule',
     data: {
       animation: SLPRoutes.balance,
     },
@@ -36,7 +36,7 @@ const routes: Routes = [
 
   {
     path: SLPRoutes.wallet,
-    loadChildren: './wallet/wallet.module#WalletModule',
+    loadChildren: './module/wallet/wallet.module#WalletModule',
     data: {
       animation: SLPRoutes.wallet,
     },

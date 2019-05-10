@@ -8,7 +8,7 @@ import BigNumber from 'bignumber.js';
 import * as cb from 'cashcontracts-bch';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { EndpointsService } from '../../endpoints.service';
+import { EndpointsService } from '../../../endpoints.service';
 
 @Component({
   selector: 'app-wallet-details',

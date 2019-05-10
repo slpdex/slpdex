@@ -5,8 +5,8 @@ import {
   OnInit,
 } from '@angular/core';
 import { take } from 'rxjs/operators';
-import { EndpointsService } from '../endpoints.service';
-import { AllTokensToken } from '../queries/allTokensQuery';
+import { EndpointsService } from '../../endpoints.service';
+import { AllTokensToken } from '../../queries/allTokensQuery';
 
 @Component({
   selector: 'app-tokens',

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
-import { SLPRoutes } from '../slp-routes';
+import { SLPRoutes } from '../../slp-routes';
 import * as cb from 'cashcontracts-bch';
 
 @Injectable({

@@ -12,7 +12,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import SimpleBar from 'simplebar';
-import { AllTokensToken } from '../../queries/allTokensQuery';
+import { AllTokensToken } from '../../../queries/allTokensQuery';
 
 @Component({
   selector: 'app-tokens-list',

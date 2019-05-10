@@ -8,9 +8,9 @@ import {
 } from '@angular/core';
 import * as moment from 'moment';
 import { take } from 'rxjs/operators';
-import { EndpointsService } from '../../endpoints.service';
-import { AllTokensToken } from '../../queries/allTokensQuery';
-import { TokenDetailsC } from '../../queries/tokenDetailsQuery';
+import { EndpointsService } from '../../../endpoints.service';
+import { AllTokensToken } from '../../../queries/allTokensQuery';
+import { TokenDetailsC } from '../../../queries/tokenDetailsQuery';
 
 @Component({
   selector: 'app-tokens-details',

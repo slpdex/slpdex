@@ -7,7 +7,7 @@ import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderModule } from './header/header.module';
-import { LandingModule } from './landing/landing.module';
+import { LandingModule } from './module/landing/landing.module';
 import { SvgsComponent } from './svgs/svgs.component';
 
 @NgModule({

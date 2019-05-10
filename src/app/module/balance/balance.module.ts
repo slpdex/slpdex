@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { BalanceRoutingModule } from './balance-routing.module';
 import { BalanceComponent } from './balance.component';
-import { SharedModule } from '../shared/shared.module';
+import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({
   declarations: [BalanceComponent],
