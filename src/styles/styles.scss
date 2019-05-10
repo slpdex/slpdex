@@ -40,3 +40,46 @@ a {
     text-decoration: none;
   }
 }
+
+@keyframes PulseAnimation {
+  0% {
+    background-position: 200% 50%;
+  }
+  75%,
+  100% {
+    background-position: -100% 50%;
+  }
+}
+
+.placeholder {
+  animation: PulseAnimation 2s infinite;
+  background: linear-gradient(
+    90deg,
+    darken(white, 10%),
+    darken(white, 2%),
+    darken(white, 10%) 100%
+  );
+  background-size: 300% 300%;
+  border-radius: 4px;
+  width: 100%;
+
+  &--header {
+    height: 50px;
+    max-width: 300px;
+  }
+
+  &--text-small {
+    height: 30px;
+    max-width: 200px;
+  }
+
+  &--text {
+    height: 30px;
+    max-width: 400px;
+  }
+
+  &--text-long {
+    height: 30px;
+    max-width: 600px;
+  }
+}
