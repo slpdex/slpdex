@@ -19,7 +19,7 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
     this.getTimeSinceLastBlock();
-    setInterval(() => this.getTimeSinceLastBlock(), 10000);
+    setInterval(() => this.getTimeSinceLastBlock(), 20000);
   }
 
   getTimeSinceLastBlock = () => {

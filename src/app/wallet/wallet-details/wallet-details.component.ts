@@ -17,6 +17,8 @@ import { EndpointsService } from '../../endpoints.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WalletDetailsComponent implements OnInit, OnDestroy {
+  isLoading = true;
+
   destroy$ = new Subject();
 
   bchBalance$ = new BehaviorSubject('0.00000000');
@@ -51,6 +53,8 @@ export class WalletDetailsComponent implements OnInit, OnDestroy {
       cb.Wallet.loadFromStorage(),
       this.endpointsService.getBchUsdPrice().toPromise(),
     ]);
+
+    this.isLoading = false;
 
     this.wallet = values[0];
     this.usdPrice = +values[1].ticker.price;

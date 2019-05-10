@@ -1,22 +1,43 @@
 <app-wrapper>
   <div class="wallet-details">
-    <h2>Wallet</h2>
 
-    <p>CashAddress: {{cashAddress$ | async}}</p>
+    <!-- <p>CashAddress: {{cashAddress$ | async}}</p>
 
-    <p>slpAddress: {{slpAddress$ | async}}</p>
+    <p>slpAddress: {{slpAddress$ | async}}</p> -->
+
+    <div class="wallet-details__header">
+      <h2>Wallet</h2>
+
+      <div class="wallet-details__header--right">
+        <a>Import</a>
+        <a>Export</a>
+      </div>
+    </div>
 
     <div class="wallet-details__widget">
 
       <div class="wallet-details__main">
 
-        <p class="wallet-details--bch">
-          {{bchBalance$ | async}} BCH
-        </p>
+        <div class="wallet-details--bch">
 
-        <p class="wallet-details--usd">
-          {{usdPrice$ | async}} USD
-        </p>
+          <p *ngIf="!isLoading">
+            {{bchBalance$ | async}} BCH
+          </p>
+
+          <div *ngIf="isLoading"
+               class="placeholder placeholder--header">
+          </div>
+        </div>
+
+        <div class="wallet-details--usd">
+          <p *ngIf="!isLoading">
+            {{usdPrice$ | async}} USD
+          </p>
+
+          <div *ngIf="isLoading"
+               class="placeholder placeholder--text-small">
+          </div>
+        </div>
 
         <div class="wallet-details__main__buttons">
           <a class="wallet-details__send">
@@ -35,24 +56,42 @@
       <div class="wallet-details__tokens">
         <h3>Tokens</h3>
 
-        <ng-container *ngIf="(tokens$ | async) as tokens">
+        <ng-container *ngIf="tokens$ | async as tokens">
 
           <div *ngFor="let token of tokens"
-               class="wallet-details__widget">
-            <p>{{token.name}}</p>
-            <p>{{token.symbol}}</p>
-            <p>balance: {{token.balance}}</p>
+               class="wallet-details__widget wallet-details__token">
+
+            <div class="wallet-details__token--icon">
+            </div>
+
+            <div>
+              <p class="wallet-details__token--name">
+                {{token.name}}
+              </p>
+
+              <p>
+                {{token.symbol}}
+              </p>
+            </div>
+
+            <p class="wallet-details__token--balance">
+              {{token.balance}}
+            </p>
 
           </div>
-        </ng-container>
 
+        </ng-container>
       </div>
 
       <div class="wallet-details__transactions">
         <h3>Transactions</h3>
 
-        <div class="wallet-details__widget">
+        <div class="wallet-details__widget wallet-details__transaction-empty">
+          <svg>
+            <use xlink:href="#empty"></use>
+          </svg>
 
+          <p>No transactions yet</p>
         </div>
 
       </div>
