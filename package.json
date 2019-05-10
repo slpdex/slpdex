@@ -9,7 +9,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "dev": "ng serve --hmr",
-    "svg": "cd src/svgs/ && node generate-svg-sprite.js",
+    "svg": "cd src/svgs/ && node generate-svg-sprite.js && cd ../../ && node copy-svgs.js",
     "prod": "node clean-prod.js && ng build --aot --prod --build-optimizer --output-path=prod/ --delete-output-path=false && node copy-index.js",
     "push-prod": "cd prod && git add . && git commit -m \"build(slpdev): release\" && git push",
     "postinstall": "node clean-moment-locales.js"
