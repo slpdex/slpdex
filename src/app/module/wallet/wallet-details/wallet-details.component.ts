@@ -9,6 +9,8 @@ import * as cb from 'cashcontracts-bch';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { EndpointsService } from '../../../endpoints.service';
+import { Router } from '@angular/router';
+import { SLPRoutes } from '../../../slp-routes';
 
 @Component({
   selector: 'app-wallet-details',
@@ -19,8 +21,6 @@ import { EndpointsService } from '../../../endpoints.service';
 export class WalletDetailsComponent implements OnInit, OnDestroy {
   isLoading = true;
 
-  destroy$ = new Subject();
-
   bchBalance$ = new BehaviorSubject('0.00000000');
   usdPrice$ = new BehaviorSubject<string>('0');
 
@@ -29,10 +29,15 @@ export class WalletDetailsComponent implements OnInit, OnDestroy {
   transactions$ = new Subject();
   tokens$ = new Subject();
 
+  private destroy$ = new Subject();
+
   private usdPrice = 0;
   private wallet: cb.Wallet;
 
-  constructor(private endpointsService: EndpointsService) {}
+  constructor(
+    private endpointsService: EndpointsService,
+    private router: Router,
+  ) {}
 
   ngOnInit() {
     this.loadWallet();
@@ -67,6 +72,10 @@ export class WalletDetailsComponent implements OnInit, OnDestroy {
 
     this.setBchBalance();
     this.setTokens();
+  };
+
+  receive = () => {
+    this.router.navigate([`${SLPRoutes.wallet}/${SLPRoutes.walletReceive}`]);
   };
 
   private setTokens = () => {

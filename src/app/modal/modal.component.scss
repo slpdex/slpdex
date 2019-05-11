@@ -1,0 +1,35 @@
+@import 'helpers';
+
+:host {
+  background: $color-green-light;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  left: 0;
+  overflow: auto;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 100;
+}
+
+.modal {
+  &__header {
+    display: flex;
+    padding: 40px 0;
+  }
+
+  &__close {
+    margin-left: auto;
+
+    svg {
+      background: lighten($color-green-light, 10%);
+      border-radius: 100%;
+      cursor: pointer;
+      fill: white;
+      height: 50px;
+      padding: 10px;
+      width: 50px;
+    }
+  }
+}

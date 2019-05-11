@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { WalletGuard } from './wallet.guard';
-import { WalletCreateComponent } from './wallet-create/wallet-create.component';
+import { RouterModule, Routes } from '@angular/router';
 import { SLPRoutes } from '../../slp-routes';
+import { WalletCreateComponent } from './wallet-create/wallet-create.component';
 import { WalletDetailsComponent } from './wallet-details/wallet-details.component';
+import { WalletReceiveComponent } from './wallet-receive/wallet-receive.component';
+import { WalletGuard } from './wallet.guard';
 
 const routes: Routes = [
   {
@@ -18,6 +19,11 @@ const routes: Routes = [
   {
     path: SLPRoutes.walletCreate,
     component: WalletCreateComponent,
+  },
+  {
+    path: SLPRoutes.walletReceive,
+    component: WalletReceiveComponent,
+    canActivate: [WalletGuard],
   },
 ];
 

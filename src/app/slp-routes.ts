@@ -6,4 +6,5 @@ export enum SLPRoutes {
   wallet = 'wallet',
   walletDetails = 'details',
   walletCreate = 'create',
+  walletReceive = 'receive',
 }

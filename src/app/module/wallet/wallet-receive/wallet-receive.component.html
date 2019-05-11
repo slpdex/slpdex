@@ -1,3 +1,58 @@
-<p>
-  wallet-receive works!
-</p>
+<app-modal>
+
+  <app-wrapper>
+
+    <div class="wallet-receive">
+
+      <div class="wallet-receive__header">
+        <h2>Receive funds</h2>
+        <p>Sed aliquam ultrices mauris. Curabitur ullamcorper ultricies nisi. Praesent egestas neque eu enim.</p>
+      </div>
+
+      <h3>BCH address</h3>
+
+      <div class="wallet-receive__widget">
+
+        <div class="wallet-receive__qr">
+          <img *ngIf="bchDataUrl$ | async as bchDataUrl"
+               [src]="bchDataUrl">
+        </div>
+
+        <div class="wallet-receive__address">
+          <input #bchInput
+                 type="text"
+                 [value]="cashAddr$ | async">
+          <a class="wallet-receive__copy"
+             (click)="copyBch()">
+            Copy
+          </a>
+        </div>
+
+      </div>
+
+      <h3>SLP address</h3>
+
+      <div class="wallet-receive__widget">
+
+        <div class="wallet-receive__qr">
+          <img *ngIf="slpDataUrl$ | async as slpDataUrl"
+               [src]="slpDataUrl">
+        </div>
+
+        <div class="wallet-receive__address">
+          <input #slpInput
+                 type="text"
+                 [value]="slpAddr$ | async">
+          <a class="wallet-receive__copy"
+             (click)="copySlp()">
+            Copy
+          </a>
+        </div>
+
+      </div>
+
+    </div>
+
+  </app-wrapper>
+
+</app-modal>
