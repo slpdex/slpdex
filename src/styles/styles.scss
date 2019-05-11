@@ -83,3 +83,6 @@ a {
     max-width: 600px;
   }
 }
+
+@include generate-size-helpers(m, margin);
+@include generate-size-helpers(p, padding);
