@@ -19,7 +19,15 @@
     </p>
 
     <p>
-      {{item.balance}} {{item.symbol}}
+      <ng-container *ngIf="item.isToken; else bch">
+        {{item.balance}}
+      </ng-container>
+
+      <ng-template #bch>
+        {{item.balance | bchSeparator}}
+      </ng-template>
+
+      {{item.symbol}}
     </p>
   </div>
 

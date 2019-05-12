@@ -14,7 +14,11 @@ import { TokenDetails } from 'cashcontracts';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CoinCardComponent implements OnInit, AfterViewInit {
-  @Input() item: TokenDetails & { shortId: string; balance: number };
+  @Input() item: TokenDetails & {
+    shortId: string;
+    balance: number;
+    isToken: boolean;
+  };
 
   constructor() {}
 

@@ -33,7 +33,7 @@
                    [(ngModel)]="selectedAmount">
 
             <p>
-              Max: {{(selected$ | async).balance || 0}}
+              Max: {{((selected$ | async).balance | bchSeparator) || 0}}
             </p>
           </div>
 

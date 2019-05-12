@@ -4,16 +4,16 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import * as cc from 'cashcontracts';
-import { BehaviorSubject, Subject, forkJoin, combineLatest } from 'rxjs';
-import { takeUntil, take } from 'rxjs/operators';
-import { EndpointsService } from '../../../endpoints.service';
 import { Router } from '@angular/router';
-import { SLPRoutes } from '../../../slp-routes';
 import BigNumber from 'bignumber.js';
-import { convertSatsToBch, generateShortId } from '../../../helpers';
-import { WalletSendSelected } from '../wallet-send/wallet-send.component';
+import * as cc from 'cashcontracts';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
 import { CashContractsService } from '../../../cash-contracts.service';
+import { EndpointsService } from '../../../endpoints.service';
+import { convertSatsToBch, generateShortId } from '../../../helpers';
+import { SLPRoutes } from '../../../slp-routes';
+import { WalletSendSelected } from '../wallet-send/wallet-send.component';
 
 @Component({
   selector: 'app-wallet-details',
@@ -22,7 +22,7 @@ import { CashContractsService } from '../../../cash-contracts.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WalletDetailsComponent implements OnInit, OnDestroy {
-  bchBalance$ = new BehaviorSubject('0.00000000');
+  bchBalance$ = new BehaviorSubject(+'0.00000000');
   usdPrice$ = new BehaviorSubject<string>('0');
 
   transactions$ = new BehaviorSubject([]);
@@ -87,6 +87,7 @@ export class WalletDetailsComponent implements OnInit, OnDestroy {
       state: {
         selected: {
           name: token.name,
+          symbol: token.symbol,
           balance: token.balance,
           tokenId: token.id,
           isToken: true,
@@ -106,6 +107,7 @@ export class WalletDetailsComponent implements OnInit, OnDestroy {
       return {
         ...this.wallet.tokenDetails(tokenId),
         balance: this.wallet.tokenBalance(tokenId),
+        isToken: true,
         shortId: generateShortId(tokenId),
       };
     });
@@ -114,8 +116,8 @@ export class WalletDetailsComponent implements OnInit, OnDestroy {
   };
 
   private setBchBalance = () => {
-    const value = new BigNumber(this.wallet.nonTokenBalance());
-    const bchBalance = convertSatsToBch(value).toFixed(8);
+    const value = this.wallet.nonTokenBalance();
+    const bchBalance = convertSatsToBch(value);
     this.bchBalance$.next(bchBalance);
   };
 

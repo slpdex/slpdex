@@ -1,11 +1,11 @@
 import BigNumber from 'bignumber.js';
 
-export const convertSatsToBch = (sats: BigNumber) => {
-  return sats.dividedBy(100000000).decimalPlaces(8);
+export const convertSatsToBch = (sats: number) => {
+  return +new BigNumber(sats).dividedBy(100000000).toFixed(8);
 };
 
-export const convertBchToSats = (bch: BigNumber) => {
-  return bch.times(100000000).decimalPlaces(8);
+export const convertBchToSats = (bch: number) => {
+  return Math.floor(new BigNumber(bch).times(100000000).toNumber());
 };
 
 export const generateShortId = (id: string) => {

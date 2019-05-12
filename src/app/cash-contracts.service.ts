@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import BigNumber from 'bignumber.js';
 import * as cc from 'cashcontracts';
 import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -55,9 +54,7 @@ export class CashContractsService {
     this.walletSubject.pipe(take(1)).subscribe(async wallet => {
       console.log(wallet);
 
-      const sats = Math.floor(
-        convertBchToSats(new BigNumber(amount)).toNumber(),
-      );
+      const sats = convertBchToSats(amount);
 
       console.log(sats);
 
@@ -76,9 +73,7 @@ export class CashContractsService {
     console.log(address, amount, tokenId);
 
     this.walletSubject.pipe(take(1)).subscribe(async wallet => {
-      const sats = Math.floor(
-        convertBchToSats(new BigNumber(amount)).toNumber(),
-      );
+      const sats = Math.floor(convertBchToSats(amount));
 
       console.log(sats);
 

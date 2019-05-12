@@ -16,8 +16,8 @@ import { convertSatsToBch, generateShortId } from '../../../helpers';
 export interface WalletSendSelected {
   name: string;
   balance: number;
+  isToken: boolean;
   tokenId?: string;
-  isToken?: boolean;
 }
 
 interface TokenDetailsExtended extends TokenDetails {
@@ -71,9 +71,7 @@ export class WalletSendComponent implements OnInit, OnDestroy {
         const bchItem = {
           name: 'Bitcoin Cash',
           symbol: 'BCH',
-          balance: convertSatsToBch(
-            new BigNumber(wallet.nonTokenBalance()),
-          ).toNumber(),
+          balance: convertSatsToBch(wallet.nonTokenBalance()),
         } as TokenDetailsExtended;
 
         this.bchDetails$.next(bchItem);
@@ -93,6 +91,7 @@ export class WalletSendComponent implements OnInit, OnDestroy {
           this.selected$.next({
             name: bchItem.name,
             balance: bchItem.balance,
+            isToken: false,
           });
           this.selectedAmount = bchItem.balance;
         }
@@ -117,9 +116,7 @@ export class WalletSendComponent implements OnInit, OnDestroy {
   }
 
   selectBch = () => {
-    const balance = convertSatsToBch(
-      new BigNumber(this.wallet.nonTokenBalance()),
-    ).toNumber();
+    const balance = convertSatsToBch(this.wallet.nonTokenBalance());
 
     this.selected$.next({
       name: 'Bitcoin Cash',
