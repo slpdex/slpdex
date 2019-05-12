@@ -51,8 +51,6 @@ export class WalletSendComponent implements OnInit, OnDestroy {
   ) {
     const state = this.router.getCurrentNavigation().extras.state;
 
-    console.log(state);
-
     if (state) {
       this.selected = this.router.getCurrentNavigation().extras.state.selected;
     }
@@ -75,8 +73,6 @@ export class WalletSendComponent implements OnInit, OnDestroy {
         } as TokenDetailsExtended;
 
         this.bchDetails$.next(bchItem);
-
-        console.log(this.selected);
 
         if (this.selected && this.selected.name) {
           this.selected$.next({
