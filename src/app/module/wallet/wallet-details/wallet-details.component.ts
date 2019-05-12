@@ -4,13 +4,14 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import BigNumber from 'bignumber.js';
 import * as cb from 'cashcontracts-bch';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { EndpointsService } from '../../../endpoints.service';
 import { Router } from '@angular/router';
 import { SLPRoutes } from '../../../slp-routes';
+import BigNumber from 'bignumber.js';
+import { convertSatsToBch } from '../../../helpers';
 
 @Component({
   selector: 'app-wallet-details',
@@ -101,10 +102,6 @@ export class WalletDetailsComponent implements OnInit, OnDestroy {
   private setBchBalance = () => {
     const value = new BigNumber(this.wallet.nonTokenBalance());
 
-    this.bchBalance$.next(this.convertSatsToBch(value).toString());
-  };
-
-  private convertSatsToBch = (sats: BigNumber) => {
-    return sats.dividedBy(10000000).decimalPlaces(8);
+    this.bchBalance$.next(convertSatsToBch(value).toString());
   };
 }

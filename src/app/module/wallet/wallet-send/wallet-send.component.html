@@ -44,12 +44,23 @@
       <div class="wallet-send__list">
         <h3>Available BCH / Tokens</h3>
 
+        <app-coin-card *ngIf="bchDetails$ | async as bchDetails"
+                       [item]="bchDetails"
+                       class="mb-md">
+          <div checkbox
+               class="wallet-send__check wallet-send__check--selected">
+            <div>
+            </div>
+          </div>
+
+        </app-coin-card>
+
         <app-coin-card *ngFor="let token of tokens$ | async"
                        [item]="token"
                        class="mb-md">
 
           <div checkbox
-               class="wallet-send__check wallet-send__check--selected">
+               class="wallet-send__check">
             <div>
             </div>
           </div>

@@ -3,16 +3,24 @@
 
   <ng-content select="[checkbox]"></ng-content>
 
-  <div class="coin-card__icon">
+  <div *ngIf="item.id"
+       class="coin-card__icon">
     <svg [attr.data-jdenticon-value]="item.id">
     </svg>
   </div>
+
+  <img *ngIf="!item.id"
+       src="assets/bch.png"
+       class="coin-card__bch">
 
   <div class="coin-card__left">
     <p class="coin-card__left--name">
       {{item.name}}
     </p>
-    <p>{{item.balance}} {{item.symbol}}</p>
+
+    <p>
+      {{item.balance}} {{item.symbol}}
+    </p>
   </div>
 
   <div class="coin-card__right">
