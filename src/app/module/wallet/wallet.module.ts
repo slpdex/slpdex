@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ButtonModule } from '../../button/button.module';
 import { CoinCardModule } from '../../coin-card/coin-card.module';
 import { ModalModule } from '../../modal/modal.module';
+import { PipeModule } from '../../pipe/pipe.module';
 import { WidgetModule } from '../../widget/widget.module';
 import { WrapperModule } from '../../wrapper/wrapper.module';
 import { WalletCreateComponent } from './wallet-create/wallet-create.component';
@@ -23,6 +24,7 @@ import { WalletSendComponent } from './wallet-send/wallet-send.component';
     CommonModule,
     WalletRoutingModule,
     WrapperModule,
+    PipeModule,
     FormsModule,
     ModalModule,
     WidgetModule,

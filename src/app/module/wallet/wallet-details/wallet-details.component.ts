@@ -115,8 +115,8 @@ export class WalletDetailsComponent implements OnInit, OnDestroy {
 
   private setBchBalance = () => {
     const value = new BigNumber(this.wallet.nonTokenBalance());
-
-    this.bchBalance$.next(convertSatsToBch(value).toString());
+    const bchBalance = convertSatsToBch(value).toFixed(8);
+    this.bchBalance$.next(bchBalance);
   };
 
   // private setTransactions = () => {
