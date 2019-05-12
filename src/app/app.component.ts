@@ -1,7 +1,11 @@
-import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
-import { routeAnimations } from './route-animations';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CashContractsService } from './cash-contracts.service';
+import { routeAnimations } from './route-animations';
 
 @Component({
   selector: 'app-root',
@@ -10,12 +14,12 @@ import { CashContractsService } from './cash-contracts.service';
   animations: [routeAnimations],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements AfterViewInit {
   title = 'slpdex';
 
   constructor(private cashContractsService: CashContractsService) {}
 
-  ngOnInit() {
+  ngAfterViewInit() {
     this.cashContractsService.init();
   }
 

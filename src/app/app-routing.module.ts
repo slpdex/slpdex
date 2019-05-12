@@ -1,20 +1,18 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { LandingComponent } from './module/landing/landing.component';
-import { OfferComponent } from './shared/offer/offer.component';
 import { SLPRoutes } from './slp-routes';
 
 const routes: Routes = [
   {
     path: SLPRoutes.landing,
-    component: LandingComponent,
+    loadChildren: './module/landing/landing.module#LandingModule',
     data: {
       animation: 'landing',
     },
   },
   {
     path: SLPRoutes.offer,
-    component: OfferComponent,
+    loadChildren: './module/offer/offer.module#OfferModule',
     data: {
       animation: SLPRoutes.offer,
     },

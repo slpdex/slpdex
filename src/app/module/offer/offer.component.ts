@@ -5,8 +5,8 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
+import * as anime from 'animejs';
 import { AnimeAnimParams } from 'animejs';
-import anime from 'animejs/lib/anime.es.js';
 
 @Component({
   selector: 'app-offer',
