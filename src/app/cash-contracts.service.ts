@@ -50,15 +50,24 @@ export class CashContractsService {
   };
 
   sendBch = (address: string, amount: number) => {
+    console.log(address, amount);
+
     this.walletSubject.pipe(take(1)).subscribe(async wallet => {
-      const item = cb.sendToAddressTx(
-        wallet,
-        address,
+      console.log(wallet);
+
+      const sats = Math.floor(
         convertBchToSats(new BigNumber(amount)).toNumber(),
       );
+
+      console.log(sats);
+
+      const item = cb.sendToAddressTx(wallet, address, sats);
+
+      console.log(item);
+
       const broadcast = await item.broadcast();
 
-      console.log(item.hex);
+      console.log(item);
       console.log(broadcast);
     });
   };
