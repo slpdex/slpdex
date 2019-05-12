@@ -1,3 +1,4 @@
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared/shared.module';
@@ -22,6 +23,7 @@ import { CoinCardModule } from '../../coin-card/coin-card.module';
     CommonModule,
     WalletRoutingModule,
     SharedModule,
+    FormsModule,
     ModalModule,
     WidgetModule,
     CoinCardModule,

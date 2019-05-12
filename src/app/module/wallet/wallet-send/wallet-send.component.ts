@@ -31,6 +31,9 @@ export class WalletSendComponent implements OnInit, OnDestroy {
   bchDetails$ = new BehaviorSubject<TokenDetails>(null);
   tokens$ = new BehaviorSubject<TokenDetails[]>([]);
 
+  selectedAddress = '';
+  selectedAmount = 0;
+
   private destroy$ = new Subject();
 
   constructor(private cashContractsService: CashContractsService) {}
@@ -58,6 +61,7 @@ export class WalletSendComponent implements OnInit, OnDestroy {
             name: bchItem.name,
             balance: bchItem.balance,
           });
+          this.selectedAmount = bchItem.balance;
         }
 
         const tokenIds = await wallet.tokenIds();
@@ -87,5 +91,17 @@ export class WalletSendComponent implements OnInit, OnDestroy {
     const length = id.length;
 
     return `${id.slice(0, 5)}...${id.slice(length - 4, length)}`;
+  };
+
+  send = () => {
+    this.selected$.pipe(take(1)).subscribe(selected => {
+      if (selected.isToken) {
+      } else {
+        this.cashContractsService.sendBch(
+          this.selectedAddress,
+          this.selectedAmount,
+        );
+      }
+    });
   };
 }

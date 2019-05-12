@@ -22,14 +22,15 @@
 
           <input type="text"
                  placeholder="Address"
-                 class="wallet-send__address">
+                 class="wallet-send__address"
+                 [(ngModel)]="selectedAddress">
 
           <div class="wallet-send__amount">
             <input type="number"
                    placeholder="Amount"
-                   [value]="(selected$ | async).balance"
                    [min]="0"
-                   [max]="(selected$ | async).balance">
+                   [max]="(selected$ | async).balance"
+                   [(ngModel)]="selectedAmount">
 
             <p>
               Max: {{(selected$ | async).balance || 0}}
@@ -40,7 +41,8 @@
 
         <app-button button-full
                     button-lg
-                    class="wallet-send__widget--button">
+                    class="wallet-send__widget--button"
+                    (click)="send()">
           Send
         </app-button>
 

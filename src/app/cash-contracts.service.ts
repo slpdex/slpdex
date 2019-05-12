@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
+import BigNumber from 'bignumber.js';
 import * as cb from 'cashcontracts-bch';
 import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { convertBchToSats } from './helpers';
 
 @Injectable({
   providedIn: 'root',
@@ -35,6 +37,7 @@ export class CashContractsService {
       const wallet = await cb.Wallet.loadFromStorage();
 
       wallet.addReceivedTxListener(() => {
+        console.log('addReceivedTxListener');
         this.loadWallet();
       });
 
@@ -48,7 +51,11 @@ export class CashContractsService {
 
   sendBch = (address: string, amount: number) => {
     this.walletSubject.pipe(take(1)).subscribe(async wallet => {
-      const item = cb.sendToAddressTx(wallet, address, amount);
+      const item = cb.sendToAddressTx(
+        wallet,
+        address,
+        convertBchToSats(new BigNumber(amount)).toNumber(),
+      );
       const broadcast = await item.broadcast();
 
       console.log(item.hex);
