@@ -18,9 +18,7 @@ export class CoinCardComponent implements OnInit, AfterViewInit {
 
   constructor() {}
 
-  ngOnInit() {
-    console.log(this.item);
-  }
+  ngOnInit() {}
 
   ngAfterViewInit() {
     window['jdenticon']();

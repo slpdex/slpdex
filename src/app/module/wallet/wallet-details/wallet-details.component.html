@@ -45,29 +45,17 @@
       <div class="wallet-details__tokens">
         <h3>Tokens</h3>
 
-        <div *ngFor="let token of (tokens$ | async); trackBy: trackById"
-             class="wallet-details__widget wallet-details__token">
+        <app-coin-card *ngFor="let token of (tokens$ | async); trackBy: trackById"
+                       [item]="token"
+                       class="mb-sm">
 
-          <div class="wallet-details__token--icon">
-          </div>
-
-          <div>
-            <p class="wallet-details__token--name">
-              {{token.name}}
-            </p>
-
-            <p>
-              {{token.balance}} {{token.symbol}}
-            </p>
-          </div>
-
-          <a [routerLink]="'../' + slpRoutes.walletSend"
-             class="wallet-details__token--send"
+          <a right
+             class="wallet-details__token--send ml-md"
              (click)="openSendToken(token)">
             Send
           </a>
 
-        </div>
+        </app-coin-card>
 
       </div>
 

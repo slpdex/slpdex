@@ -11,7 +11,7 @@ import { TokenDetails } from 'cashcontracts';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { CashContractsService } from '../../../cash-contracts.service';
-import { convertSatsToBch } from '../../../helpers';
+import { convertSatsToBch, generateShortId } from '../../../helpers';
 
 export interface WalletSendSelected {
   name: string;
@@ -103,7 +103,7 @@ export class WalletSendComponent implements OnInit, OnDestroy {
           return {
             ...wallet.tokenDetails(id),
             balance: wallet.tokenBalance(id),
-            shortId: this.generateShortId(id),
+            shortId: generateShortId(id),
           } as TokenDetailsExtended;
         });
 
@@ -139,12 +139,6 @@ export class WalletSendComponent implements OnInit, OnDestroy {
     });
 
     this.selectedAmount = token.balance;
-  };
-
-  generateShortId = (id: string) => {
-    const length = id.length;
-
-    return `${id.slice(0, 5)}...${id.slice(length - 4, length)}`;
   };
 
   send = () => {

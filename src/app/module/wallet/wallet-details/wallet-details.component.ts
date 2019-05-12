@@ -11,7 +11,7 @@ import { EndpointsService } from '../../../endpoints.service';
 import { Router } from '@angular/router';
 import { SLPRoutes } from '../../../slp-routes';
 import BigNumber from 'bignumber.js';
-import { convertSatsToBch } from '../../../helpers';
+import { convertSatsToBch, generateShortId } from '../../../helpers';
 import { WalletSendSelected } from '../wallet-send/wallet-send.component';
 import { CashContractsService } from '../../../cash-contracts.service';
 
@@ -101,12 +101,12 @@ export class WalletDetailsComponent implements OnInit, OnDestroy {
 
   private setTokens = () => {
     const tokenIds = this.wallet.tokenIds();
-    console.log(tokenIds);
 
     const tokens = tokenIds.map(tokenId => {
       return {
         ...this.wallet.tokenDetails(tokenId),
         balance: this.wallet.tokenBalance(tokenId),
+        shortId: generateShortId(tokenId),
       };
     });
 
