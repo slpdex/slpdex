@@ -4,21 +4,21 @@
   <ng-content select="[checkbox]"></ng-content>
 
   <div class="coin-card__icon">
-    <svg data-jdenticon-value="user127">
+    <svg [attr.data-jdenticon-value]="item.id">
     </svg>
   </div>
 
   <div class="coin-card__left">
     <p class="coin-card__left--name">
-      Bitcoin Cash
+      {{item.name}}
     </p>
-    <p>1234 BCH</p>
+    <p>{{item.balance}} {{item.symbol}}</p>
   </div>
 
   <div class="coin-card__right">
 
     <p class="coin-card__right--address">
-      qqf04...4xrn
+      {{item.shortId}}
     </p>
 
     <ng-content select="[right]"></ng-content>

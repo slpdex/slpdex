@@ -6,6 +6,7 @@ import {
   AfterViewInit,
 } from '@angular/core';
 import { Observable } from 'rxjs';
+import { TokenDetails } from 'cashcontracts-bch';
 
 @Component({
   selector: 'app-coin-card',
@@ -14,13 +15,13 @@ import { Observable } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CoinCardComponent implements OnInit, AfterViewInit {
-  @Input() name: Observable<string>;
-  @Input() symbol: Observable<string>;
-  @Input() balance: Observable<string>;
+  @Input() item: TokenDetails;
 
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log(this.item);
+  }
 
   ngAfterViewInit() {
     window['jdenticon']();
