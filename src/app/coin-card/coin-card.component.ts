@@ -3,6 +3,7 @@ import {
   OnInit,
   ChangeDetectionStrategy,
   Input,
+  AfterViewInit,
 } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -12,7 +13,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./coin-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CoinCardComponent implements OnInit {
+export class CoinCardComponent implements OnInit, AfterViewInit {
   @Input() name: Observable<string>;
   @Input() symbol: Observable<string>;
   @Input() balance: Observable<string>;
@@ -20,4 +21,8 @@ export class CoinCardComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {}
+
+  ngAfterViewInit() {
+    window['jdenticon']();
+  }
 }
