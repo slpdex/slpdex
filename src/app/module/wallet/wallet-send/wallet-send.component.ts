@@ -3,13 +3,20 @@ import {
   Component,
   OnDestroy,
   OnInit,
+  Input,
 } from '@angular/core';
 import BigNumber from 'bignumber.js';
 import { TokenDetails } from 'cashcontracts-bch';
-import { Subject, BehaviorSubject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Subject, BehaviorSubject, Observable } from 'rxjs';
+import { takeUntil, take } from 'rxjs/operators';
 import { CashContractsService } from '../../../cash-contracts.service';
 import { convertSatsToBch } from '../../../helpers';
+
+export interface WalletSendSelected {
+  name: string;
+  balance: number;
+  isToken?: boolean;
+}
 
 @Component({
   selector: 'app-wallet-send',
@@ -18,10 +25,13 @@ import { convertSatsToBch } from '../../../helpers';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WalletSendComponent implements OnInit, OnDestroy {
-  destroy$ = new Subject();
+  @Input() selected: WalletSendSelected;
+  selected$ = new BehaviorSubject<WalletSendSelected>({} as WalletSendSelected);
 
   bchDetails$ = new BehaviorSubject<TokenDetails>(null);
   tokens$ = new BehaviorSubject<TokenDetails[]>([]);
+
+  private destroy$ = new Subject();
 
   constructor(private cashContractsService: CashContractsService) {}
 
@@ -33,13 +43,22 @@ export class WalletSendComponent implements OnInit, OnDestroy {
           return;
         }
 
-        this.bchDetails$.next({
+        const bchItem = {
           name: 'Bitcoin Cash',
           symbol: 'BCH',
           balance: convertSatsToBch(
             new BigNumber(wallet.nonTokenBalance()),
           ).toNumber(),
-        } as TokenDetails & { balance: number });
+        } as TokenDetails & { balance: number };
+
+        this.bchDetails$.next(bchItem);
+
+        if (!this.selected) {
+          this.selected$.next({
+            name: bchItem.name,
+            balance: bchItem.balance,
+          });
+        }
 
         const tokenIds = await wallet.tokenIds();
 
@@ -60,7 +79,9 @@ export class WalletSendComponent implements OnInit, OnDestroy {
     this.destroy$.unsubscribe();
   }
 
-  send = () => {};
+  selectBch = () => {};
+
+  selectToken = (token: TokenDetails) => {};
 
   generateShortId = (id: string) => {
     const length = id.length;

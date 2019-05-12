@@ -15,7 +15,7 @@
       <app-widget class="wallet-send__widget">
 
         <h4>
-          BCH
+          {{(selected$ | async).name}}
         </h4>
 
         <div class="wallet-send__select">
@@ -26,16 +26,21 @@
 
           <div class="wallet-send__amount">
             <input type="number"
-                   placeholder="Amount">
+                   placeholder="Amount"
+                   [value]="(selected$ | async).balance"
+                   [min]="0"
+                   [max]="(selected$ | async).balance">
 
-            <p>Max: 1234</p>
+            <p>
+              Max: {{(selected$ | async).balance || 0}}
+            </p>
           </div>
 
         </div>
 
         <app-button button-full
                     button-lg
-                    class="mt-xl">
+                    class="wallet-send__widget--button">
           Send
         </app-button>
 
@@ -46,7 +51,8 @@
 
         <app-coin-card *ngIf="bchDetails$ | async as bchDetails"
                        [item]="bchDetails"
-                       class="mb-md">
+                       class="mb-md"
+                       (click)="selectBch()">
           <div checkbox
                class="wallet-send__check wallet-send__check--selected">
             <div>
@@ -57,7 +63,8 @@
 
         <app-coin-card *ngFor="let token of tokens$ | async"
                        [item]="token"
-                       class="mb-md">
+                       class="mb-md"
+                       (click)="selectToken(token)">
 
           <div checkbox
                class="wallet-send__check">
