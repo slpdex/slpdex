@@ -34,9 +34,10 @@ $wallet-send-width: 800px;
     max-width: $wallet-send-width;
     width: 100%;
 
-    h4 {
+    h2 {
       font-size: 30px;
-      margin-bottom: 10px;
+      font-weight: 600;
+      margin-bottom: 20px;
     }
 
     &--button {

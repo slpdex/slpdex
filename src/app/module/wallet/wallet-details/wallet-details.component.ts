@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { SLPRoutes } from '../../../slp-routes';
 import BigNumber from 'bignumber.js';
 import { convertSatsToBch } from '../../../helpers';
+import { WalletSendSelected } from '../wallet-send/wallet-send.component';
 
 @Component({
   selector: 'app-wallet-details',
@@ -75,6 +76,29 @@ export class WalletDetailsComponent implements OnInit, OnDestroy {
 
     this.setBchBalance();
     this.setTokens();
+  };
+
+  openSendToken = (token: {
+    balance: number;
+    id: string;
+    timestamp: string;
+    symbol: string;
+    name: string;
+    documentUri: string;
+    documentHash: string;
+    decimals: number;
+    initialTokenQty: number;
+  }) => {
+    this.router.navigate([`${SLPRoutes.wallet}/${SLPRoutes.walletSend}`], {
+      state: {
+        selected: {
+          name: token.name,
+          balance: token.balance,
+          tokenId: token.id,
+          isToken: true,
+        } as WalletSendSelected,
+      },
+    });
   };
 
   private setTokens = () => {

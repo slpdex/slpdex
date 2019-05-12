@@ -73,7 +73,8 @@
             </div>
 
             <a [routerLink]="'../' + slpRoutes.walletSend"
-               class="wallet-details__token--send">
+               class="wallet-details__token--send"
+               (click)="openSendToken(token)">
               Send
             </a>
 

@@ -3,15 +3,15 @@ import {
   Component,
   OnDestroy,
   OnInit,
-  Input,
 } from '@angular/core';
+import { Router } from '@angular/router';
 import BigNumber from 'bignumber.js';
+import * as cb from 'cashcontracts-bch';
 import { TokenDetails } from 'cashcontracts-bch';
-import { Subject, BehaviorSubject, Observable } from 'rxjs';
-import { takeUntil, take } from 'rxjs/operators';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
 import { CashContractsService } from '../../../cash-contracts.service';
 import { convertSatsToBch } from '../../../helpers';
-import * as cb from 'cashcontracts-bch';
 
 export interface WalletSendSelected {
   name: string;
@@ -32,7 +32,7 @@ interface TokenDetailsExtended extends TokenDetails {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WalletSendComponent implements OnInit, OnDestroy {
-  @Input() selected: WalletSendSelected;
+  selected: WalletSendSelected;
   selected$ = new BehaviorSubject<WalletSendSelected>({} as WalletSendSelected);
 
   bchDetails$ = new BehaviorSubject<TokenDetailsExtended>(null);
@@ -45,7 +45,18 @@ export class WalletSendComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject();
 
-  constructor(private cashContractsService: CashContractsService) {}
+  constructor(
+    private cashContractsService: CashContractsService,
+    private router: Router,
+  ) {
+    const state = this.router.getCurrentNavigation().extras.state;
+
+    console.log(state);
+
+    if (state) {
+      this.selected = this.router.getCurrentNavigation().extras.state.selected;
+    }
+  }
 
   ngOnInit() {
     this.cashContractsService.listenWallet
@@ -67,7 +78,18 @@ export class WalletSendComponent implements OnInit, OnDestroy {
 
         this.bchDetails$.next(bchItem);
 
-        if (!this.selected) {
+        console.log(this.selected);
+
+        if (this.selected && this.selected.name) {
+          this.selected$.next({
+            name: this.selected.name,
+            balance: this.selected.balance,
+            isToken: true,
+            tokenId: this.selected.tokenId,
+          });
+
+          this.selectedAmount = this.selected.balance;
+        } else {
           this.selected$.next({
             name: bchItem.name,
             balance: bchItem.balance,
