@@ -4,15 +4,16 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import * as cb from 'cashcontracts-bch';
-import { BehaviorSubject, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import * as cc from 'cashcontracts';
+import { BehaviorSubject, Subject, forkJoin, combineLatest } from 'rxjs';
+import { takeUntil, take } from 'rxjs/operators';
 import { EndpointsService } from '../../../endpoints.service';
 import { Router } from '@angular/router';
 import { SLPRoutes } from '../../../slp-routes';
 import BigNumber from 'bignumber.js';
 import { convertSatsToBch } from '../../../helpers';
 import { WalletSendSelected } from '../wallet-send/wallet-send.component';
+import { CashContractsService } from '../../../cash-contracts.service';
 
 @Component({
   selector: 'app-wallet-details',
@@ -21,62 +22,55 @@ import { WalletSendSelected } from '../wallet-send/wallet-send.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WalletDetailsComponent implements OnInit, OnDestroy {
-  isLoading = true;
-
   bchBalance$ = new BehaviorSubject('0.00000000');
   usdPrice$ = new BehaviorSubject<string>('0');
 
-  cashAddress$ = new Subject();
-  slpAddress$ = new Subject();
-  transactions$ = new Subject();
-  tokens$ = new Subject();
+  transactions$ = new BehaviorSubject([]);
+  tokens$ = new BehaviorSubject([]);
 
   slpRoutes = { ...SLPRoutes };
 
   private destroy$ = new Subject();
 
   private usdPrice = 0;
-  private wallet: cb.Wallet;
+  private wallet: cc.Wallet;
 
   constructor(
     private endpointsService: EndpointsService,
     private router: Router,
+    private cashContractsService: CashContractsService,
   ) {}
 
   ngOnInit() {
-    this.loadWallet();
+    this.cashContractsService.listenWallet
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(wallet => {
+        if (!wallet) {
+          return;
+        }
 
-    this.bchBalance$.pipe(takeUntil(this.destroy$)).subscribe(bch => {
-      const usdPriceForBch = new BigNumber(this.usdPrice * +bch);
-      this.usdPrice$.next(usdPriceForBch.decimalPlaces(5).toString());
-    });
+        this.wallet = wallet;
+        this.setBchBalance();
+        this.setTokens();
+      });
+
+    this.endpointsService
+      .getBchUsdPrice()
+      .pipe(take(1))
+      .subscribe(usdPrice => {
+        this.usdPrice = +usdPrice.ticker.price;
+
+        this.bchBalance$.pipe(takeUntil(this.destroy$)).subscribe(bch => {
+          const usdPriceForBch = new BigNumber(this.usdPrice * +bch);
+          this.usdPrice$.next(usdPriceForBch.decimalPlaces(5).toString());
+        });
+      });
   }
 
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.unsubscribe();
   }
-
-  loadWallet = async () => {
-    const values = await Promise.all([
-      cb.Wallet.loadFromStorage(),
-      this.endpointsService.getBchUsdPrice().toPromise(),
-    ]);
-
-    this.isLoading = false;
-
-    this.wallet = values[0];
-    this.usdPrice = +values[1].ticker.price;
-    console.log(this.wallet);
-
-    this.cashAddress$.next(this.wallet.cashAddr());
-    this.slpAddress$.next(this.wallet.slpAddr());
-
-    // this.setTransactions();
-
-    this.setBchBalance();
-    this.setTokens();
-  };
 
   openSendToken = (token: {
     balance: number;
@@ -101,6 +95,10 @@ export class WalletDetailsComponent implements OnInit, OnDestroy {
     });
   };
 
+  trackById = (index: number, token) => {
+    return token.id;
+  };
+
   private setTokens = () => {
     const tokenIds = this.wallet.tokenIds();
     console.log(tokenIds);
@@ -115,17 +113,17 @@ export class WalletDetailsComponent implements OnInit, OnDestroy {
     this.tokens$.next(tokens.toArray());
   };
 
-  private setTransactions = () => {
-    const utxos = this.wallet['utxos'];
-
-    if (utxos && utxos._tail && utxos._tail.array && utxos._tail.array) {
-      this.transactions$.next(utxos._tail.array);
-    }
-  };
-
   private setBchBalance = () => {
     const value = new BigNumber(this.wallet.nonTokenBalance());
 
     this.bchBalance$.next(convertSatsToBch(value).toString());
   };
+
+  // private setTransactions = () => {
+  //   const utxos = this.wallet['utxos'];
+
+  //   if (utxos && utxos._tail && utxos._tail.array && utxos._tail.array) {
+  //     this.transactions$.next(utxos._tail.array);
+  //   }
+  // };
 }

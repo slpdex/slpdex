@@ -15,24 +15,15 @@
       <div class="wallet-details__main">
 
         <div class="wallet-details--bch">
-
-          <p *ngIf="!isLoading">
+          <p>
             {{bchBalance$ | async}} BCH
           </p>
-
-          <div *ngIf="isLoading"
-               class="placeholder placeholder--header">
-          </div>
         </div>
 
         <div class="wallet-details--usd">
-          <p *ngIf="!isLoading">
+          <p>
             {{usdPrice$ | async}} USD
           </p>
-
-          <div *ngIf="isLoading"
-               class="placeholder placeholder--text-small">
-          </div>
         </div>
 
         <div class="wallet-details__main__buttons">
@@ -54,33 +45,30 @@
       <div class="wallet-details__tokens">
         <h3>Tokens</h3>
 
-        <ng-container *ngIf="tokens$ | async as tokens">
+        <div *ngFor="let token of (tokens$ | async); trackBy: trackById"
+             class="wallet-details__widget wallet-details__token">
 
-          <div *ngFor="let token of tokens"
-               class="wallet-details__widget wallet-details__token">
-
-            <div class="wallet-details__token--icon">
-            </div>
-
-            <div>
-              <p class="wallet-details__token--name">
-                {{token.name}}
-              </p>
-
-              <p>
-                {{token.balance}} {{token.symbol}}
-              </p>
-            </div>
-
-            <a [routerLink]="'../' + slpRoutes.walletSend"
-               class="wallet-details__token--send"
-               (click)="openSendToken(token)">
-              Send
-            </a>
-
+          <div class="wallet-details__token--icon">
           </div>
 
-        </ng-container>
+          <div>
+            <p class="wallet-details__token--name">
+              {{token.name}}
+            </p>
+
+            <p>
+              {{token.balance}} {{token.symbol}}
+            </p>
+          </div>
+
+          <a [routerLink]="'../' + slpRoutes.walletSend"
+             class="wallet-details__token--send"
+             (click)="openSendToken(token)">
+            Send
+          </a>
+
+        </div>
+
       </div>
 
       <div class="wallet-details__transactions">
