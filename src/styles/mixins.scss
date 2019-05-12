@@ -1,27 +1,27 @@
 @mixin generate-size-helpers($pre, $prop) {
   @each $value in $cui-sizes {
     .#{$pre}t-#{nth($value, 1)} {
-      #{$prop}-top: #{nth($value, 2)} !important;
+      #{$prop}-top: #{nth($value, 2)}px !important;
     }
     .#{$pre}r-#{nth($value, 1)} {
-      #{$prop}-right: #{nth($value, 2)} !important;
+      #{$prop}-right: #{nth($value, 2)}px !important;
     }
     .#{$pre}b-#{nth($value, 1)} {
-      #{$prop}-bottom: #{nth($value, 2)} !important;
+      #{$prop}-bottom: #{nth($value, 2)}px !important;
     }
     .#{$pre}l-#{nth($value, 1)} {
-      #{$prop}-left: #{nth($value, 2)} !important;
+      #{$prop}-left: #{nth($value, 2)}px !important;
     }
     .#{$pre}x-#{nth($value, 1)} {
-      #{$prop}-left: #{nth($value, 2)} !important;
-      #{$prop}-right: #{nth($value, 2)} !important;
+      #{$prop}-left: #{nth($value, 2)}px !important;
+      #{$prop}-right: #{nth($value, 2)}px !important;
     }
     .#{$pre}y-#{nth($value, 1)} {
-      #{$prop}-bottom: #{nth($value, 2)} !important;
-      #{$prop}-top: #{nth($value, 2)} !important;
+      #{$prop}-bottom: #{nth($value, 2)}px !important;
+      #{$prop}-top: #{nth($value, 2)}px !important;
     }
     .#{$pre}-#{nth($value, 1)} {
-      #{$prop}: #{nth($value, 2)} !important;
+      #{$prop}: #{nth($value, 2)}px !important;
     }
   }
 }
