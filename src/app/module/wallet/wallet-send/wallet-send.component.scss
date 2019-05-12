@@ -1,0 +1,102 @@
+@import 'helpers';
+
+$wallet-send-width: 800px;
+
+.wallet-send {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+
+  input {
+    background: darken(white, 5%);
+    border: 0;
+    border-radius: 4px;
+    font-size: 18px;
+    height: 30px;
+    padding: 20px 10px;
+    width: 100%;
+
+    &:focus {
+      outline: 0;
+    }
+  }
+
+  &--title {
+    color: white;
+    margin-bottom: 40px;
+  }
+
+  &__widget {
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 50px;
+    max-width: $wallet-send-width;
+    width: 100%;
+
+    h4 {
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
+  }
+
+  &__select {
+    display: flex;
+    width: 100%;
+
+    p {
+      color: $color-green;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 5px;
+      text-align: right;
+    }
+  }
+
+  &__address {
+    flex: 1;
+  }
+
+  &__amount {
+    flex: 0 0 auto;
+    margin-left: 10px;
+    width: 160px;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    max-width: $wallet-send-width;
+    width: 100%;
+
+    h3 {
+      color: white;
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+  }
+
+  &__check {
+    align-items: center;
+    border: 3px solid darken(white, 10%);
+    border-radius: 100%;
+    display: flex;
+    height: 22px;
+    justify-content: center;
+    margin-right: 30px;
+    width: 22px;
+
+    &--selected {
+      border-color: $color-green;
+
+      div {
+        background: $color-green;
+        border-radius: 100%;
+        content: '';
+        height: 8px;
+        width: 8px;
+      }
+    }
+  }
+}

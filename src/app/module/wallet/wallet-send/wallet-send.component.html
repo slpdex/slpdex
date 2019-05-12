@@ -1,0 +1,73 @@
+<app-modal>
+
+  <app-wrapper>
+
+    <app-modal-heading>
+      Send
+    </app-modal-heading>
+
+    <div class="wallet-send">
+
+      <p class="wallet-send--title">
+        Praesent egestas tristique nibh.
+      </p>
+
+      <app-widget class="wallet-send__widget">
+
+        <h4>
+          BCH
+        </h4>
+
+        <div class="wallet-send__select">
+
+          <input type="text"
+                 placeholder="Address"
+                 class="wallet-send__address">
+
+          <div class="wallet-send__amount">
+            <input type="number"
+                   placeholder="Amount">
+
+            <p>Max: 1234</p>
+          </div>
+
+        </div>
+
+        <app-button button-full
+                    button-lg
+                    class="mt-xl">
+          Send
+        </app-button>
+
+      </app-widget>
+
+      <div class="wallet-send__list">
+        <h3>Available BCH / Tokens</h3>
+
+        <app-coin-card class="mb-md">
+
+          <div checkbox
+               class="wallet-send__check wallet-send__check--selected">
+            <div>
+            </div>
+          </div>
+
+        </app-coin-card>
+
+        <app-coin-card>
+
+          <div checkbox
+               class="wallet-send__check">
+            <div>
+            </div>
+          </div>
+
+        </app-coin-card>
+
+      </div>
+
+    </div>
+
+  </app-wrapper>
+
+</app-modal>

@@ -40,12 +40,13 @@
         </div>
 
         <div class="wallet-details__main__buttons">
-          <a class="wallet-details__send">
+          <a [routerLink]="'../' + slpRoutes.walletSend"
+             class="wallet-details__token--send">
             Send
           </a>
 
-          <a class="wallet-details__receive"
-             (click)="receive()">
+          <a [routerLink]="'../' + slpRoutes.walletReceive"
+             class="wallet-details__receive">
             Receive
           </a>
         </div>
@@ -75,7 +76,8 @@
               </p>
             </div>
 
-            <a class="wallet-details__token--send">
+            <a [routerLink]="'../' + slpRoutes.walletSend"
+               class="wallet-details__token--send">
               Send
             </a>
 

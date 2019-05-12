@@ -29,6 +29,8 @@ export class WalletDetailsComponent implements OnInit, OnDestroy {
   transactions$ = new Subject();
   tokens$ = new Subject();
 
+  slpRoutes = { ...SLPRoutes };
+
   private destroy$ = new Subject();
 
   private usdPrice = 0;
@@ -72,10 +74,6 @@ export class WalletDetailsComponent implements OnInit, OnDestroy {
 
     this.setBchBalance();
     this.setTokens();
-  };
-
-  receive = () => {
-    this.router.navigate([`${SLPRoutes.wallet}/${SLPRoutes.walletReceive}`]);
   };
 
   private setTokens = () => {

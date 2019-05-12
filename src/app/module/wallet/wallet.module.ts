@@ -6,13 +6,26 @@ import { WalletDetailsComponent } from './wallet-details/wallet-details.componen
 import { WalletRoutingModule } from './wallet-routing.module';
 import { WalletReceiveComponent } from './wallet-receive/wallet-receive.component';
 import { ModalModule } from '../../modal/modal.module';
+import { WalletSendComponent } from './wallet-send/wallet-send.component';
+import { WidgetModule } from '../../widget/widget.module';
+import { ButtonModule } from '../../button/button.module';
+import { CoinCardModule } from '../../coin-card/coin-card.module';
 
 @NgModule({
   declarations: [
     WalletCreateComponent,
     WalletDetailsComponent,
     WalletReceiveComponent,
+    WalletSendComponent,
   ],
-  imports: [CommonModule, WalletRoutingModule, SharedModule, ModalModule],
+  imports: [
+    CommonModule,
+    WalletRoutingModule,
+    SharedModule,
+    ModalModule,
+    WidgetModule,
+    CoinCardModule,
+    ButtonModule,
+  ],
 })
 export class WalletModule {}

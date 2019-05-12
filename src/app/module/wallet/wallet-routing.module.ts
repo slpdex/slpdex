@@ -5,6 +5,7 @@ import { WalletCreateComponent } from './wallet-create/wallet-create.component';
 import { WalletDetailsComponent } from './wallet-details/wallet-details.component';
 import { WalletReceiveComponent } from './wallet-receive/wallet-receive.component';
 import { WalletGuard } from './wallet.guard';
+import { WalletSendComponent } from './wallet-send/wallet-send.component';
 
 const routes: Routes = [
   {
@@ -12,17 +13,22 @@ const routes: Routes = [
     redirectTo: SLPRoutes.walletDetails,
   },
   {
+    path: SLPRoutes.walletCreate,
+    component: WalletCreateComponent,
+  },
+  {
     path: SLPRoutes.walletDetails,
     component: WalletDetailsComponent,
     canActivate: [WalletGuard],
   },
   {
-    path: SLPRoutes.walletCreate,
-    component: WalletCreateComponent,
-  },
-  {
     path: SLPRoutes.walletReceive,
     component: WalletReceiveComponent,
+    canActivate: [WalletGuard],
+  },
+  {
+    path: SLPRoutes.walletSend,
+    component: WalletSendComponent,
     canActivate: [WalletGuard],
   },
 ];
