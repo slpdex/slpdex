@@ -24,7 +24,8 @@
         <div class="wallet-receive__address">
           <input #bchInput
                  type="text"
-                 [value]="cashAddr$ | async">
+                 [value]="cashAddr$ | async"
+                 disabled="true">
           <a class="wallet-receive__copy"
              (click)="copyBch()">
             Copy
@@ -45,7 +46,8 @@
         <div class="wallet-receive__address">
           <input #slpInput
                  type="text"
-                 [value]="slpAddr$ | async">
+                 [value]="slpAddr$ | async"
+                 disabled="true">
           <a class="wallet-receive__copy"
              (click)="copySlp()">
             Copy

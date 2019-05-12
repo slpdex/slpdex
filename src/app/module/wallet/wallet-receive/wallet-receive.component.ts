@@ -1,13 +1,15 @@
 import {
-  Component,
-  OnInit,
   ChangeDetectionStrategy,
-  ViewChild,
+  Component,
   ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
 } from '@angular/core';
 import QRCode from 'qrcode';
-import * as cc from 'cashcontracts';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { CashContractsService } from '../../../cash-contracts.service';
 
 @Component({
   selector: 'app-wallet-receive',
@@ -15,36 +17,49 @@ import { Subject } from 'rxjs';
   styleUrls: ['./wallet-receive.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class WalletReceiveComponent implements OnInit {
-  bchDataUrl$ = new Subject<string>();
-  cashAddr$ = new Subject<string>();
+export class WalletReceiveComponent implements OnInit, OnDestroy {
+  bchDataUrl$ = new BehaviorSubject<string>('');
+  cashAddr$ = new BehaviorSubject<string>('');
 
-  slpDataUrl$ = new Subject<string>();
-  slpAddr$ = new Subject<string>();
+  slpDataUrl$ = new BehaviorSubject<string>('');
+  slpAddr$ = new BehaviorSubject<string>('');
+
+  private destroy$ = new Subject();
 
   @ViewChild('bchInput') bchInput: ElementRef<HTMLInputElement>;
   @ViewChild('slpInput') slpInput: ElementRef<HTMLInputElement>;
 
-  constructor() {}
+  constructor(private cashContractsService: CashContractsService) {}
 
   ngOnInit() {
     this.loadWallet();
   }
 
-  loadWallet = async () => {
-    const wallet = await cc.Wallet.loadFromStorage();
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.unsubscribe();
+  }
 
-    const cashAddr = wallet.cashAddr();
-    const slpAddr = wallet.slpAddr();
+  loadWallet = () => {
+    this.cashContractsService.listenWallet
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(async wallet => {
+        if (!wallet) {
+          return;
+        }
 
-    this.cashAddr$.next(cashAddr);
-    this.slpAddr$.next(slpAddr);
+        const cashAddr = wallet.cashAddr();
+        const slpAddr = wallet.slpAddr();
 
-    const bchDataUrl = await QRCode.toDataURL(cashAddr);
-    const slpDataUrl = await QRCode.toDataURL(slpAddr);
+        this.cashAddr$.next(cashAddr);
+        this.slpAddr$.next(slpAddr);
 
-    this.bchDataUrl$.next(bchDataUrl);
-    this.slpDataUrl$.next(slpDataUrl);
+        const bchDataUrl = await QRCode.toDataURL(cashAddr);
+        const slpDataUrl = await QRCode.toDataURL(slpAddr);
+
+        this.bchDataUrl$.next(bchDataUrl);
+        this.slpDataUrl$.next(slpDataUrl);
+      });
   };
 
   copyBch = () => {
