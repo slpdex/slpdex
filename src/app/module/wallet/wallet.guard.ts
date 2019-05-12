@@ -1,21 +1,32 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
+import { take } from 'rxjs/operators';
+import { CashContractsService } from '../../cash-contracts.service';
 import { SLPRoutes } from '../../slp-routes';
-import * as cb from 'cashcontracts-bch';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WalletGuard implements CanActivate {
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private cashContractsService: CashContractsService,
+  ) {}
+
   canActivate() {
     return this.checkIfUserHasWallet();
   }
 
   checkIfUserHasWallet = () => {
-    if (!cb.Wallet.isSecretInStorage()) {
-      this.router.navigate([`${SLPRoutes.wallet}/${SLPRoutes.walletCreate}`]);
-    }
+    this.cashContractsService.listenIsSecretInStorage
+      .pipe(take(1))
+      .subscribe(isInStorage => {
+        if (!isInStorage) {
+          this.router.navigate([
+            `${SLPRoutes.wallet}/${SLPRoutes.walletCreate}`,
+          ]);
+        }
+      });
 
     return true;
   };

@@ -6,7 +6,7 @@ import {
   ElementRef,
 } from '@angular/core';
 import QRCode from 'qrcode';
-import * as cb from 'cashcontracts-bch';
+import * as cc from 'cashcontracts';
 import { Subject } from 'rxjs';
 
 @Component({
@@ -32,7 +32,7 @@ export class WalletReceiveComponent implements OnInit {
   }
 
   loadWallet = async () => {
-    const wallet = await cb.Wallet.loadFromStorage();
+    const wallet = await cc.Wallet.loadFromStorage();
 
     const cashAddr = wallet.cashAddr();
     const slpAddr = wallet.slpAddr();

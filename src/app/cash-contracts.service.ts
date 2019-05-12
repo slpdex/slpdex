@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import BigNumber from 'bignumber.js';
-import * as cb from 'cashcontracts-bch';
+import * as cc from 'cashcontracts';
 import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { convertBchToSats } from './helpers';
@@ -10,7 +10,7 @@ import { convertBchToSats } from './helpers';
 })
 export class CashContractsService {
   private isSecretInStorageSubject = new BehaviorSubject<boolean>(false);
-  private walletSubject = new BehaviorSubject<cb.Wallet>(null);
+  private walletSubject = new BehaviorSubject<cc.Wallet>(null);
 
   get listenIsSecretInStorage() {
     return this.isSecretInStorageSubject.asObservable();
@@ -23,7 +23,7 @@ export class CashContractsService {
   constructor() {}
 
   init = () => {
-    this.isSecretInStorageSubject.next(cb.Wallet.isSecretInStorage());
+    this.isSecretInStorageSubject.next(cc.Wallet.isSecretInStorage());
 
     this.loadWallet();
   };
@@ -34,7 +34,7 @@ export class CashContractsService {
         return;
       }
 
-      const wallet = await cb.Wallet.loadFromStorage();
+      const wallet = await cc.Wallet.loadFromStorage();
 
       wallet.addReceivedTxListener(() => {
         console.log('addReceivedTxListener');
@@ -46,7 +46,7 @@ export class CashContractsService {
   };
 
   getIsSecretInStorage = () => {
-    this.isSecretInStorageSubject.next(cb.Wallet.isSecretInStorage());
+    this.isSecretInStorageSubject.next(cc.Wallet.isSecretInStorage());
   };
 
   sendBch = (address: string, amount: number) => {
@@ -61,7 +61,7 @@ export class CashContractsService {
 
       console.log(sats);
 
-      const item = cb.sendToAddressTx(wallet, address, sats);
+      const item = cc.sendToAddressTx(wallet, address, sats);
 
       console.log(item);
 
@@ -82,7 +82,7 @@ export class CashContractsService {
 
       console.log(sats);
 
-      const item = cb.sendTokensToAddressTx(wallet, address, tokenId, sats);
+      const item = cc.sendTokensToAddressTx(wallet, address, tokenId, sats);
 
       const broadcast = await item.broadcast();
 

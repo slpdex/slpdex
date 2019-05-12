@@ -5,7 +5,7 @@ import {
   Input,
   OnInit,
 } from '@angular/core';
-import { TokenDetails } from 'cashcontracts-bch';
+import { TokenDetails } from 'cashcontracts';
 
 @Component({
   selector: 'app-coin-card',

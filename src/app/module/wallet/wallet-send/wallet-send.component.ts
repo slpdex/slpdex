@@ -6,8 +6,8 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import BigNumber from 'bignumber.js';
-import * as cb from 'cashcontracts-bch';
-import { TokenDetails } from 'cashcontracts-bch';
+import * as cc from 'cashcontracts';
+import { TokenDetails } from 'cashcontracts';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { CashContractsService } from '../../../cash-contracts.service';
@@ -41,7 +41,7 @@ export class WalletSendComponent implements OnInit, OnDestroy {
   selectedAddress = '';
   selectedAmount = 0;
 
-  wallet: cb.Wallet;
+  wallet: cc.Wallet;
 
   private destroy$ = new Subject();
 

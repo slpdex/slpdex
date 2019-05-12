@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import * as cb from 'cashcontracts-bch';
+import * as cc from 'cashcontracts';
 import { Router } from '@angular/router';
 import { SLPRoutes } from '../../../slp-routes';
 
@@ -13,13 +13,13 @@ export class WalletCreateComponent implements OnInit {
   constructor(private router: Router) {}
 
   ngOnInit() {
-    if (cb.Wallet.isSecretInStorage()) {
+    if (cc.Wallet.isSecretInStorage()) {
       this.navigateToWallet();
     }
   }
 
   create = async () => {
-    cb.Wallet.storeRandomSecret();
+    cc.Wallet.storeRandomSecret();
     this.navigateToWallet();
   };
 
