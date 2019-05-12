@@ -1,0 +1,27 @@
+@import 'helpers';
+
+.coin-card {
+  align-items: center;
+  display: flex;
+
+  &__icon {
+    margin-right: 20px;
+  }
+
+  &__left {
+    &--name {
+      font-weight: 600;
+    }
+  }
+
+  &__right {
+    align-items: center;
+    display: flex;
+    margin-left: auto;
+
+    &--address {
+      border-bottom: 1px solid $color-gray;
+      font-weight: 500;
+    }
+  }
+}

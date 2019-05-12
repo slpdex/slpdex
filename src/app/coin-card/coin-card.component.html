@@ -1,0 +1,26 @@
+<app-widget class="coin-card"
+            widget-small>
+
+  <ng-content select="[checkbox]"></ng-content>
+
+  <div class="coin-card__icon">
+    icon
+  </div>
+
+  <div class="coin-card__left">
+    <p class="coin-card__left--name">
+      Bitcoin Cash
+    </p>
+    <p>1234 BCH</p>
+  </div>
+
+  <div class="coin-card__right">
+
+    <p class="coin-card__right--address">
+      qqf04...4xrn
+    </p>
+
+    <ng-content select="[right]"></ng-content>
+  </div>
+
+</app-widget>
