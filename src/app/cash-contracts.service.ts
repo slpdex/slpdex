@@ -45,4 +45,14 @@ export class CashContractsService {
   getIsSecretInStorage = () => {
     this.isSecretInStorageSubject.next(cb.Wallet.isSecretInStorage());
   };
+
+  sendBch = (address: string, amount: number) => {
+    this.walletSubject.pipe(take(1)).subscribe(async wallet => {
+      const item = cb.sendToAddressTx(wallet, address, amount);
+      const broadcast = await item.broadcast();
+
+      console.log(item.hex);
+      console.log(broadcast);
+    });
+  };
 }
