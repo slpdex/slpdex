@@ -71,4 +71,23 @@ export class CashContractsService {
       console.log(broadcast);
     });
   };
+
+  sendToken = (address: string, amount: number, tokenId: string) => {
+    console.log(address, amount, tokenId);
+
+    this.walletSubject.pipe(take(1)).subscribe(async wallet => {
+      const sats = Math.floor(
+        convertBchToSats(new BigNumber(amount)).toNumber(),
+      );
+
+      console.log(sats);
+
+      const item = cb.sendTokensToAddressTx(wallet, address, tokenId, sats);
+
+      const broadcast = await item.broadcast();
+
+      console.log(item);
+      console.log(broadcast);
+    });
+  };
 }

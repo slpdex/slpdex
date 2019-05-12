@@ -56,7 +56,8 @@
                        class="mb-md"
                        (click)="selectBch()">
           <div checkbox
-               class="wallet-send__check wallet-send__check--selected">
+               class="wallet-send__check"
+               [class.wallet-send__check--selected]="!(selected$ | async).isToken">
             <div>
             </div>
           </div>
@@ -69,7 +70,8 @@
                        (click)="selectToken(token)">
 
           <div checkbox
-               class="wallet-send__check">
+               class="wallet-send__check"
+               [class.wallet-send__check--selected]="token.id === (selected$ | async).tokenId">
             <div>
             </div>
           </div>

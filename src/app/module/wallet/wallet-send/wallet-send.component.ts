@@ -11,11 +11,18 @@ import { Subject, BehaviorSubject, Observable } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
 import { CashContractsService } from '../../../cash-contracts.service';
 import { convertSatsToBch } from '../../../helpers';
+import * as cb from 'cashcontracts-bch';
 
 export interface WalletSendSelected {
   name: string;
   balance: number;
+  tokenId?: string;
   isToken?: boolean;
+}
+
+interface TokenDetailsExtended extends TokenDetails {
+  balance: number;
+  shortId: string;
 }
 
 @Component({
@@ -28,11 +35,13 @@ export class WalletSendComponent implements OnInit, OnDestroy {
   @Input() selected: WalletSendSelected;
   selected$ = new BehaviorSubject<WalletSendSelected>({} as WalletSendSelected);
 
-  bchDetails$ = new BehaviorSubject<TokenDetails>(null);
-  tokens$ = new BehaviorSubject<TokenDetails[]>([]);
+  bchDetails$ = new BehaviorSubject<TokenDetailsExtended>(null);
+  tokens$ = new BehaviorSubject<TokenDetailsExtended[]>([]);
 
   selectedAddress = '';
   selectedAmount = 0;
+
+  wallet: cb.Wallet;
 
   private destroy$ = new Subject();
 
@@ -46,13 +55,15 @@ export class WalletSendComponent implements OnInit, OnDestroy {
           return;
         }
 
+        this.wallet = wallet;
+
         const bchItem = {
           name: 'Bitcoin Cash',
           symbol: 'BCH',
           balance: convertSatsToBch(
             new BigNumber(wallet.nonTokenBalance()),
           ).toNumber(),
-        } as TokenDetails & { balance: number };
+        } as TokenDetailsExtended;
 
         this.bchDetails$.next(bchItem);
 
@@ -71,7 +82,7 @@ export class WalletSendComponent implements OnInit, OnDestroy {
             ...wallet.tokenDetails(id),
             balance: wallet.tokenBalance(id),
             shortId: this.generateShortId(id),
-          } as TokenDetails;
+          } as TokenDetailsExtended;
         });
 
         this.tokens$.next(tokens.toArray());
@@ -83,9 +94,30 @@ export class WalletSendComponent implements OnInit, OnDestroy {
     this.destroy$.unsubscribe();
   }
 
-  selectBch = () => {};
+  selectBch = () => {
+    const balance = convertSatsToBch(
+      new BigNumber(this.wallet.nonTokenBalance()),
+    ).toNumber();
 
-  selectToken = (token: TokenDetails) => {};
+    this.selected$.next({
+      name: 'Bitcoin Cash',
+      balance,
+      isToken: false,
+    });
+
+    this.selectedAmount = balance;
+  };
+
+  selectToken = (token: TokenDetailsExtended) => {
+    this.selected$.next({
+      name: token.name,
+      balance: token.balance,
+      isToken: true,
+      tokenId: token.id,
+    });
+
+    this.selectedAmount = token.balance;
+  };
 
   generateShortId = (id: string) => {
     const length = id.length;
@@ -96,6 +128,11 @@ export class WalletSendComponent implements OnInit, OnDestroy {
   send = () => {
     this.selected$.pipe(take(1)).subscribe(selected => {
       if (selected.isToken) {
+        this.cashContractsService.sendToken(
+          this.selectedAddress,
+          this.selectedAmount,
+          selected.tokenId,
+        );
       } else {
         this.cashContractsService.sendBch(
           this.selectedAddress,
