@@ -1,11 +1,10 @@
 import {
-  Component,
-  OnInit,
-  ChangeDetectionStrategy,
-  Input,
   AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnInit,
 } from '@angular/core';
-import { Observable } from 'rxjs';
 import { TokenDetails } from 'cashcontracts-bch';
 
 @Component({
@@ -15,7 +14,7 @@ import { TokenDetails } from 'cashcontracts-bch';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CoinCardComponent implements OnInit, AfterViewInit {
-  @Input() item: TokenDetails;
+  @Input() item: TokenDetails & { shortId: string; balance: number };
 
   constructor() {}
 
