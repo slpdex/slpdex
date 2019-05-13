@@ -5,5 +5,12 @@
   "background_color": "#82cc8e",
   "display": "standalone",
   "scope": "/",
-  "start_url": "/"
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/assets/slpdex_192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ]
 }
