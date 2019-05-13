@@ -73,11 +73,7 @@ export class CashContractsService {
     console.log(address, amount, tokenId);
 
     this.walletSubject.pipe(take(1)).subscribe(async wallet => {
-      const sats = Math.floor(convertBchToSats(amount));
-
-      console.log(sats);
-
-      const item = cc.sendTokensToAddressTx(wallet, address, tokenId, sats);
+      const item = cc.sendTokensToAddressTx(wallet, address, tokenId, amount);
 
       const broadcast = await item.broadcast();
 
