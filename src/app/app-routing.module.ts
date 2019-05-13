@@ -5,28 +5,28 @@ import { SLPRoutes } from './slp-routes';
 const routes: Routes = [
   {
     path: SLPRoutes.landing,
-    loadChildren: './module/landing/landing.module#LandingModule',
+    loadChildren: () => import('./module/landing/landing.module').then(m => m.LandingModule),
     data: {
       animation: 'landing',
     },
   },
   {
     path: SLPRoutes.offer,
-    loadChildren: './module/offer/offer.module#OfferModule',
+    loadChildren: () => import('./module/offer/offer.module').then(m => m.OfferModule),
     data: {
       animation: SLPRoutes.offer,
     },
   },
   {
     path: SLPRoutes.tokens,
-    loadChildren: './module/tokens/tokens.module#TokensModule',
+    loadChildren: () => import('./module/tokens/tokens.module').then(m => m.TokensModule),
     data: {
       animation: SLPRoutes.tokens,
     },
   },
   {
     path: SLPRoutes.balance,
-    loadChildren: './module/balance/balance.module#BalanceModule',
+    loadChildren: () => import('./module/balance/balance.module').then(m => m.BalanceModule),
     data: {
       animation: SLPRoutes.balance,
     },
@@ -34,7 +34,7 @@ const routes: Routes = [
 
   {
     path: SLPRoutes.wallet,
-    loadChildren: './module/wallet/wallet.module#WalletModule',
+    loadChildren: () => import('./module/wallet/wallet.module').then(m => m.WalletModule),
     data: {
       animation: SLPRoutes.wallet,
     },
