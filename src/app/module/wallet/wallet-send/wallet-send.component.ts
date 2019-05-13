@@ -99,6 +99,7 @@ export class WalletSendComponent implements OnInit, OnDestroy {
             ...wallet.tokenDetails(id),
             balance: wallet.tokenBalance(id),
             shortId: generateShortId(id),
+            isToken: true,
           } as TokenDetailsExtended;
         });
 
