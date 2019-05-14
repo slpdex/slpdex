@@ -73,7 +73,8 @@ export class WalletSendComponent implements OnInit, OnDestroy {
 
         this.bchDetails$.next(bchItem);
 
-        if (this.selected && this.selected.name) {
+        const tokenIsPreSelectedElseBch = this.selected && this.selected.name;
+        if (tokenIsPreSelectedElseBch) {
           this.selected$.next({
             name: this.selected.name,
             balance: this.selected.balance,
@@ -91,18 +92,7 @@ export class WalletSendComponent implements OnInit, OnDestroy {
           this.selectedAmount = bchItem.balance;
         }
 
-        const tokenIds = await wallet.tokenIds();
-
-        const tokens = tokenIds.map(id => {
-          return {
-            ...wallet.tokenDetails(id),
-            balance: wallet.tokenBalance(id),
-            shortId: generateShortId(id),
-            isToken: true,
-          } as TokenDetailsExtended;
-        });
-
-        this.tokens$.next(tokens.toArray());
+        this.setTokens();
       });
   }
 
@@ -150,5 +140,20 @@ export class WalletSendComponent implements OnInit, OnDestroy {
         );
       }
     });
+  };
+
+  private setTokens = async () => {
+    const tokenIds = await this.wallet.tokenIds();
+
+    const tokens = tokenIds.map(id => {
+      return {
+        ...this.wallet.tokenDetails(id),
+        balance: this.wallet.tokenBalance(id),
+        shortId: generateShortId(id),
+        isToken: true,
+      } as TokenDetailsExtended;
+    });
+
+    this.tokens$.next(tokens.toArray());
   };
 }
