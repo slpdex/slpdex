@@ -108,7 +108,7 @@ export class WalletSendComponent implements OnInit, OnDestroy {
   };
 
   send = () => {
-    if (!this.selectedAddress || this.selectedAmount) {
+    if (!this.selectedAddress || !this.selectedAmount) {
       return;
     }
 
