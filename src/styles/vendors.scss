@@ -1,0 +1,15 @@
+@import 'helpers', 'simplebar/dist/simplebar.css', 'noty/src/noty.scss',
+  'noty/src/themes/metroui.scss';
+
+.noty_layout {
+  a {
+    border-bottom: 1px solid $color-green;
+    color: $color-green !important;
+    font-weight: 600;
+  }
+}
+
+.noty_bar {
+  border-radius: 4px;
+  font-weight: 500;
+}

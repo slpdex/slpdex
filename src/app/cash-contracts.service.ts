@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import * as cc from 'cashcontracts';
 import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { convertBchToSats } from './helpers';
+import { convertBchToSats, generateShortId } from './helpers';
+import { NotificationService } from './notification.service';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +20,7 @@ export class CashContractsService {
     return this.walletSubject.asObservable();
   }
 
-  constructor() {}
+  constructor(private notificationService: NotificationService) {}
 
   init = () => {
     this.isSecretInStorageSubject.next(cc.Wallet.isSecretInStorage());
@@ -36,8 +37,11 @@ export class CashContractsService {
       const wallet = await cc.Wallet.loadFromStorage();
 
       wallet.addReceivedTxListener(() => {
-        console.log('addReceivedTxListener');
-        this.loadWallet();
+        this.notificationService.showNotification(
+          'Incoming transaction detected',
+        );
+
+        this.walletSubject.next(wallet);
       });
 
       this.walletSubject.next(wallet);
@@ -50,6 +54,11 @@ export class CashContractsService {
 
   sendBch = (address: string, amount: number) => {
     console.log(address, amount);
+    this.notificationService.showNotification(
+      `Trying to send ${amount} BCH to <a href="${address}">${generateShortId(
+        address,
+      )}</a>`,
+    );
 
     this.walletSubject.pipe(take(1)).subscribe(async wallet => {
       console.log(wallet);
@@ -58,7 +67,11 @@ export class CashContractsService {
 
       console.log(sats);
 
-      const item = cc.sendToAddressTx(wallet, address, sats);
+      const satsMinusFee = sats - cc.feeSendNonToken(wallet, sats);
+
+      console.log(satsMinusFee);
+
+      const item = cc.sendToAddressTx(wallet, address, satsMinusFee);
 
       console.log(item);
 

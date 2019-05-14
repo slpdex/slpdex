@@ -9,6 +9,7 @@ export const convertBchToSats = (bch: number) => {
 };
 
 export const generateShortId = (id: string) => {
+  id = id.replace('bitcoincash:', '').replace('simpleledger:', '');
   const length = id.length;
 
   return `${id.slice(0, 5)}...${id.slice(length - 4, length)}`;
