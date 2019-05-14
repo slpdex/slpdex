@@ -28,9 +28,12 @@
   width: 100%;
 
   &__top {
-    animation: animateHeaderBar .6s ease forwards 1s;
     display: flex;
     opacity: 0;
+
+    &--animate {
+      animation: animateHeaderBar .6s ease forwards;
+    }
 
     &--bar {
       align-items: center;

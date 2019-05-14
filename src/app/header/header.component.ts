@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  ChangeDetectorRef,
+} from '@angular/core';
 import * as moment from 'moment';
 import { Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -12,14 +17,23 @@ import { SLPRoutes } from '../slp-routes';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent implements OnInit {
+  hasLoaded = false;
   routes = { ...SLPRoutes };
   timeSinceLastBlock$ = new Subject<string>();
 
-  constructor(private endpointsService: EndpointsService) {}
+  constructor(
+    private endpointsService: EndpointsService,
+    private changeDetectorRef: ChangeDetectorRef,
+  ) {}
 
   ngOnInit() {
     this.getTimeSinceLastBlock();
     setInterval(() => this.getTimeSinceLastBlock(), 20000);
+
+    window.onload = e => {
+      this.hasLoaded = true;
+      this.changeDetectorRef.markForCheck();
+    };
   }
 
   getTimeSinceLastBlock = () => {

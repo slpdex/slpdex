@@ -1,5 +1,6 @@
 <div class="header">
-  <div class="header__top">
+  <div [class.header__top--animate]="hasLoaded"
+       class="header__top">
     <div class="header__top--bar">
       <p>{{timeSinceLastBlock$ | async}} since last block</p>
 
