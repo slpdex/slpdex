@@ -11,6 +11,7 @@ import { NotificationService } from './notification.service';
 export class CashContractsService {
   private isSecretInStorageSubject = new BehaviorSubject<boolean>(false);
   private walletSubject = new BehaviorSubject<cc.Wallet>(null);
+  private wallet: cc.Wallet;
 
   get listenIsSecretInStorage() {
     return this.isSecretInStorageSubject.asObservable();
@@ -34,18 +35,22 @@ export class CashContractsService {
         return;
       }
 
-      const wallet = await cc.Wallet.loadFromStorage();
+      this.wallet = await cc.Wallet.loadFromStorage();
 
-      wallet.addReceivedTxListener(() => {
+      this.wallet.addReceivedTxListener(() => {
         this.notificationService.showNotification(
           'Incoming transaction detected',
         );
 
-        this.walletSubject.next(wallet);
+        this.emitWallet();
       });
 
-      this.walletSubject.next(wallet);
+      this.emitWallet();
     });
+  };
+
+  private emitWallet = () => {
+    this.walletSubject.next(this.wallet);
   };
 
   getIsSecretInStorage = () => {
@@ -55,7 +60,7 @@ export class CashContractsService {
   sendBch = (address: string, amount: number) => {
     console.log(address, amount);
     this.notificationService.showNotification(
-      `Trying to send ${amount} BCH to <a href="${address}">${generateShortId(
+      `Trying to send ${amount} BCH to <a href="https://explorer.bitcoin.com/bch/address/${address}">${generateShortId(
         address,
       )}</a>`,
     );
@@ -77,21 +82,48 @@ export class CashContractsService {
 
       const broadcast = await item.broadcast();
 
-      console.log(item);
-      console.log(broadcast);
+      const tx = broadcast.replace(/"/g, '');
+
+      this.notificationService.showNotification(
+        `Successfully broadcasted transaction to network. TX:
+        <a href="https://explorer.bitcoin.com/bch/tx/${tx}">
+      ${tx.slice(0, 10)}...
+        </a>`,
+      );
+
+      this.emitWallet();
     });
   };
 
-  sendToken = (address: string, amount: number, tokenId: string) => {
+  sendToken = (
+    address: string,
+    amount: number,
+    tokenId: string,
+    name: string,
+  ) => {
     console.log(address, amount, tokenId);
+
+    this.notificationService.showNotification(
+      `Trying to send ${amount} ${name} to <a href="https://explorer.bitcoin.com/bch/address/${address}">${generateShortId(
+        address,
+      )}</a>`,
+    );
 
     this.walletSubject.pipe(take(1)).subscribe(async wallet => {
       const item = cc.sendTokensToAddressTx(wallet, address, tokenId, amount);
 
       const broadcast = await item.broadcast();
 
-      console.log(item);
-      console.log(broadcast);
+      const tx = broadcast.replace(/"/g, '');
+
+      this.notificationService.showNotification(
+        `Successfully broadcasted transaction to network. TX:
+        <a href="https://explorer.bitcoin.com/bch/tx/${tx}">
+      ${tx.slice(0, 10)}...
+        </a>`,
+      );
+
+      this.emitWallet();
     });
   };
 }
