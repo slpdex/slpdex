@@ -26,24 +26,37 @@
                  [(ngModel)]="selectedAddress">
 
           <div class="wallet-send__amount">
-            <input type="number"
-                   placeholder="Amount"
-                   [min]="0"
-                   [max]="(selected$ | async).balance"
-                   [(ngModel)]="selectedAmount">
+            <div class="wallet-send__amount__input-wrapper">
+              <input type="number"
+                     placeholder="Amount"
+                     [min]="0"
+                     [max]="(selected$ | async).balance"
+                     [(ngModel)]="selectedAmount"
+                     (ngModelChange)="setFee()">
 
-            <p>
-              Max:
+              <p *ngIf="!(selected$ | async).isToken"
+                 class="wallet-send__amount__input-wrapper--usd">
+                {{(selectedAmount * usd) | usdFormatter}} USD
+              </p>
+            </div>
 
-              <ng-container *ngIf="(selected$ | async).isToken; else bch">
-                {{(selected$ | async).balance || 0}}
-              </ng-container>
+            <div class="wallet-send__amount--bottom">
+              <p>Fee: {{fee | usdFormatter}} USD</p>
 
-              <ng-template #bch>
-                {{((selected$ | async).balance | bchSeparator) || 0}}
-              </ng-template>
+              <p (click)="setMax()">
+                Max:
 
-            </p>
+                <ng-container *ngIf="(selected$ | async).isToken; else bch">
+                  {{(selected$ | async).balance || 0}}
+                </ng-container>
+
+                <ng-template #bch>
+                  {{((selected$ | async).balance | bchSeparator) || 0}}
+                </ng-template>
+
+              </p>
+
+            </div>
           </div>
 
         </div>

@@ -49,10 +49,6 @@ export class CashContractsService {
     });
   };
 
-  private emitWallet = () => {
-    this.walletSubject.next(this.wallet);
-  };
-
   getIsSecretInStorage = () => {
     this.isSecretInStorageSubject.next(cc.Wallet.isSecretInStorage());
   };
@@ -125,5 +121,17 @@ export class CashContractsService {
 
       this.emitWallet();
     });
+  };
+
+  getBchFee = (amount: number) => {
+    return cc.feeSendNonToken(this.wallet, amount);
+  };
+
+  getTokenFee = (tokenId: string, amount: number) => {
+    return cc.feeSendToken(this.wallet, tokenId, amount);
+  };
+
+  private emitWallet = () => {
+    this.walletSubject.next(this.wallet);
   };
 }
