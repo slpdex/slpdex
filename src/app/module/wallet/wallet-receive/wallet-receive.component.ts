@@ -49,8 +49,8 @@ export class WalletReceiveComponent implements OnInit, OnDestroy {
         this.cashAddr$.next(cashAddr);
         this.slpAddr$.next(slpAddr);
 
-        const bchDataUrl = await QRCode.toDataURL(cashAddr);
-        const slpDataUrl = await QRCode.toDataURL(slpAddr);
+        const bchDataUrl = await QRCode.toDataURL(cashAddr, { margin: 2 });
+        const slpDataUrl = await QRCode.toDataURL(slpAddr, { margin: 2 });
 
         this.bchDataUrl$.next(bchDataUrl);
         this.slpDataUrl$.next(slpDataUrl);

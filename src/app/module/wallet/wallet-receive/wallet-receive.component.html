@@ -12,9 +12,9 @@
         <p>Sed aliquam ultrices mauris. Curabitur ullamcorper ultricies nisi. Praesent egestas neque eu enim.</p>
       </div>
 
-      <h3>BCH address</h3>
+      <app-widget class="wallet-receive__widget">
 
-      <div class="wallet-receive__widget">
+        <h3>BCH address</h3>
 
         <div class="wallet-receive__qr">
           <img *ngIf="bchDataUrl$ | async as bchDataUrl"
@@ -26,19 +26,18 @@
                  type="text"
                  [value]="cashAddr$ | async"
                  disabled="true">
-          <a class="wallet-receive__copy"
-             appCopy
-             [copyInputElement]="bchInput"
-             [copyNotificationText]="'Copied address to clipboard'">
+          <app-button appCopy
+                      [copyInputElement]="bchInput"
+                      [copyNotificationText]="'Copied address to clipboard'">
             Copy
-          </a>
+          </app-button>
         </div>
 
-      </div>
+      </app-widget>
 
-      <h3>SLP address</h3>
+      <app-widget class="wallet-receive__widget">
 
-      <div class="wallet-receive__widget">
+        <h3>SLP address</h3>
 
         <div class="wallet-receive__qr">
           <img *ngIf="slpDataUrl$ | async as slpDataUrl"
@@ -50,15 +49,13 @@
                  type="text"
                  [value]="slpAddr$ | async"
                  disabled="true">
-          <a class="wallet-receive__copy"
-             appCopy
-             [copyInputElement]="slpInput"
-             [copyNotificationText]="'Copied address to clipboard'">
+          <app-button appCopy
+                      [copyInputElement]="slpInput"
+                      [copyNotificationText]="'Copied address to clipboard'">
             Copy
-          </a>
+          </app-button>
         </div>
-
-      </div>
+      </app-widget>
 
     </div>
 
