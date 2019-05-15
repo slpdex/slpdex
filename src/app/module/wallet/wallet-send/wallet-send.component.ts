@@ -11,7 +11,11 @@ import { BehaviorSubject, combineLatest, Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { CashContractsService } from '../../../cash-contracts.service';
 import { EndpointsService } from '../../../endpoints.service';
-import { convertSatsToBch, generateShortId } from '../../../helpers';
+import {
+  convertSatsToBch,
+  generateShortId,
+  convertBchToSats,
+} from '../../../helpers';
 
 export interface WalletSendSelected {
   name: string;
@@ -142,13 +146,12 @@ export class WalletSendComponent implements OnInit, OnDestroy {
       if (selected.isToken) {
         sats = this.cashContractsService.getTokenFee(
           selected.tokenId,
-          this.selectedAmount,
+          this.selectedAmount || 0,
         );
-
-        console.log(sats);
       } else {
-        sats = this.cashContractsService.getBchFee(this.selectedAmount);
-        console.log(sats);
+        sats = this.cashContractsService.getBchFee(
+          convertBchToSats(this.selectedAmount || 0),
+        );
       }
 
       this.fee = convertSatsToBch(sats) * this.usd;
