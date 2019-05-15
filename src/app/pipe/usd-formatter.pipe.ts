@@ -6,6 +6,6 @@ import BigNumber from 'bignumber.js';
 })
 export class UsdFormatterPipe implements PipeTransform {
   transform(value: string, args?: any): any {
-    return new BigNumber(value).toFixed(2);
+    return new BigNumber(value).toFixed(3);
   }
 }
