@@ -25,6 +25,8 @@ export class WalletDetailsComponent implements OnInit, OnDestroy {
   bchBalance$ = new BehaviorSubject(+'0.00000000');
   usdPrice$ = new BehaviorSubject<string>('0');
 
+  isLoading = true;
+
   transactions$ = new BehaviorSubject([]);
   tokens$ = new BehaviorSubject([]);
 
@@ -48,6 +50,8 @@ export class WalletDetailsComponent implements OnInit, OnDestroy {
         if (!wallet) {
           return;
         }
+
+        this.isLoading = false;
 
         this.wallet = wallet;
         this.setBchBalance();
