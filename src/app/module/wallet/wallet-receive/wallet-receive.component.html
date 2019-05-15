@@ -27,7 +27,9 @@
                  [value]="cashAddr$ | async"
                  disabled="true">
           <a class="wallet-receive__copy"
-             (click)="copyBch()">
+             appCopy
+             [copyInputElement]="bchInput"
+             [copyNotificationText]="'Copied address to clipboard'">
             Copy
           </a>
         </div>
@@ -49,7 +51,9 @@
                  [value]="slpAddr$ | async"
                  disabled="true">
           <a class="wallet-receive__copy"
-             (click)="copySlp()">
+             appCopy
+             [copyInputElement]="slpInput"
+             [copyNotificationText]="'Copied address to clipboard'">
             Copy
           </a>
         </div>

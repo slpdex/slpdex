@@ -1,16 +1,13 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  ElementRef,
   OnDestroy,
   OnInit,
-  ViewChild,
 } from '@angular/core';
 import QRCode from 'qrcode';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { CashContractsService } from '../../../cash-contracts.service';
-import { NotificationService } from '../../../notification.service';
 
 @Component({
   selector: 'app-wallet-receive',
@@ -27,13 +24,7 @@ export class WalletReceiveComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject();
 
-  @ViewChild('bchInput') bchInput: ElementRef<HTMLInputElement>;
-  @ViewChild('slpInput') slpInput: ElementRef<HTMLInputElement>;
-
-  constructor(
-    private cashContractsService: CashContractsService,
-    private notificationService: NotificationService,
-  ) {}
+  constructor(private cashContractsService: CashContractsService) {}
 
   ngOnInit() {
     this.loadWallet();
@@ -64,23 +55,5 @@ export class WalletReceiveComponent implements OnInit, OnDestroy {
         this.bchDataUrl$.next(bchDataUrl);
         this.slpDataUrl$.next(slpDataUrl);
       });
-  };
-
-  copyBch = () => {
-    this.bchInput.nativeElement.disabled = false;
-    this.bchInput.nativeElement.select();
-    this.bchInput.nativeElement.disabled = true;
-    document.execCommand('copy');
-
-    this.notificationService.showNotification('Copied address to clipboard');
-  };
-
-  copySlp = () => {
-    this.slpInput.nativeElement.disabled = false;
-    this.slpInput.nativeElement.select();
-    this.slpInput.nativeElement.disabled = true;
-    document.execCommand('copy');
-
-    this.notificationService.showNotification('Copied address to clipboard');
   };
 }
