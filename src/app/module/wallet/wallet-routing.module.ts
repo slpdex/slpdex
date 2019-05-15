@@ -6,6 +6,7 @@ import { WalletDetailsComponent } from './wallet-details/wallet-details.componen
 import { WalletReceiveComponent } from './wallet-receive/wallet-receive.component';
 import { WalletGuard } from './wallet.guard';
 import { WalletSendComponent } from './wallet-send/wallet-send.component';
+import { WalletExportComponent } from './wallet-export/wallet-export.component';
 
 const routes: Routes = [
   {
@@ -29,6 +30,11 @@ const routes: Routes = [
   {
     path: SLPRoutes.walletSend,
     component: WalletSendComponent,
+    canActivate: [WalletGuard],
+  },
+  {
+    path: SLPRoutes.walletExport,
+    component: WalletExportComponent,
     canActivate: [WalletGuard],
   },
 ];

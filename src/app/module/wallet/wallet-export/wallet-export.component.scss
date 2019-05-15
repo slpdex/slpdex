@@ -1,0 +1,58 @@
+@import 'helpers';
+
+.wallet-export {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+
+  &--title {
+    color: white;
+    margin-bottom: 40px;
+  }
+
+  &__content {
+    margin: 0 auto;
+    max-width: 800px;
+    width: 100%;
+
+    input {
+      background: 0;
+      border: 0;
+      font-size: 18px;
+      margin-right: 10px;
+      width: 100%;
+
+      &:focus {
+        outline: 0;
+      }
+    }
+  }
+
+  &__row {
+    flex-direction: column;
+    margin-bottom: 40px;
+
+    h3 {
+      font-size: 30px;
+      margin-bottom: 50px;
+      text-align: center;
+    }
+
+    svg {
+      fill: $color-gray;
+      height: 60px;
+      margin: 0 auto;
+      margin-bottom: 10px;
+      width: 60px;
+    }
+
+    &--bottom {
+      background: darken(white, 5%);
+      border-radius: 4px;
+      display: flex;
+      flex-shrink: 0;
+      height: 60px;
+      padding: 10px 20px;
+    }
+  }
+}

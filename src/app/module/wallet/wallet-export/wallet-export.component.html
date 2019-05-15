@@ -1,0 +1,68 @@
+<app-modal>
+
+  <app-wrapper>
+
+    <app-modal-heading>
+      Export keys
+    </app-modal-heading>
+
+    <div class="wallet-export">
+      <p class="wallet-export--title">
+        Etiam feugiat lorem non metus. Maecenas vestibulum mollis diam.
+      </p>
+
+      <div class="wallet-export__content">
+
+        <app-widget class="wallet-export__row">
+
+          <svg>
+            <use xlink:href="#key"></use>
+          </svg>
+
+          <h3>
+            Public
+          </h3>
+
+          <div class="wallet-export__row--bottom">
+            <input #public
+                   type="text"
+                   [value]="publicKey$ | async">
+
+            <app-button appCopy
+                        [copyInputElement]="public"
+                        [copyNotificationText]="'Copied public key'">
+              Copy
+            </app-button>
+          </div>
+        </app-widget>
+
+        <app-widget class="wallet-export__row">
+
+          <svg>
+            <use xlink:href="#key"></use>
+          </svg>
+
+          <h3>
+            Private
+          </h3>
+
+          <div class="wallet-export__row--bottom">
+            <input #private
+                   type="text"
+                   [value]="privateKey$ | async">
+
+            <app-button appCopy
+                        [copyInputElement]="private"
+                        [copyNotificationText]="'Copied private key'">
+              Copy
+            </app-button>
+          </div>
+        </app-widget>
+
+      </div>
+
+    </div>
+
+  </app-wrapper>
+
+</app-modal>
