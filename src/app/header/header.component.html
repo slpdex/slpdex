@@ -2,7 +2,12 @@
   <div [class.header__top--animate]="hasLoaded"
        class="header__top">
     <div class="header__top--bar">
-      <p>{{timeSinceLastBlock$ | async}} since last block</p>
+      <a href="https://explorer.bitcoin.com/bch/blocks"
+         aria-label="Bitcoin.com block explorer"
+         target="_blank"
+         rel="noreferrer">
+        {{timeSinceLastBlock$ | async}} since last block
+      </a>
 
       <span class="header__top--divider"></span>
 

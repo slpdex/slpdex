@@ -46,6 +46,10 @@
       font-weight: 600;
       margin-left: auto;
       padding: 3px 15px;
+
+      a {
+        color: $color-green-light;
+      }
     }
 
     &--github {
