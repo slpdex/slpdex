@@ -139,7 +139,7 @@ export class WalletSendComponent implements OnInit, OnDestroy {
     });
   };
 
-  private setFee = () => {
+  setFee = () => {
     this.selected$.pipe(take(1)).subscribe(selected => {
       let sats = 0;
 
