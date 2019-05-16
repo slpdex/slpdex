@@ -43,7 +43,7 @@
           </svg>
 
           <h3>
-            Private
+            Private key (WIF)
           </h3>
 
           <p>
@@ -51,21 +51,19 @@
           </p>
 
           <div class="wallet-export__qr">
-
             <img *ngIf="privateWifQr"
                  [src]="privateWifQr"
                  alt="">
-
           </div>
 
           <div class="wallet-export__row--bottom">
-            <input #private
+            <input #wif
                    type="text"
-                   [value]="privateKey$ | async">
+                   [value]="privateWif$ | async">
 
             <app-button appCopy
-                        [copyInputElement]="private"
-                        [copyNotificationText]="'Copied private key'">
+                        [copyInputElement]="wif"
+                        [copyNotificationText]="'Copied private key (WIF)'">
               Copy
             </app-button>
           </div>

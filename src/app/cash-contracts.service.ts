@@ -146,7 +146,7 @@ export class CashContractsService {
   };
 
   getWif = () => {
-    // return new cc.PrivateKey(localStorage.getItem('secret') as Uint8Array, this.wallet.);
+    return this.wallet.privateKey().wif();
   };
 
   private emitWallet = () => {

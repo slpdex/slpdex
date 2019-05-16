@@ -17,7 +17,7 @@ import { generateBase64QrCode } from '../../../helpers';
 })
 export class WalletExportComponent implements OnInit, OnDestroy {
   publicKey$ = new BehaviorSubject<string>('');
-  privateKey$ = new BehaviorSubject<string>('');
+  privateWif$ = new BehaviorSubject<string>('');
 
   privateWifQr: string;
 
@@ -35,10 +35,10 @@ export class WalletExportComponent implements OnInit, OnDestroy {
 
         this.publicKey$.next(wallet.cashAddr());
 
-        const privateKey = localStorage.getItem('secret');
+        const wif = this.cashContractsService.getWif();
 
-        this.privateKey$.next(privateKey);
-        this.privateWifQr = await generateBase64QrCode(privateKey);
+        this.privateWif$.next(wif);
+        this.privateWifQr = await generateBase64QrCode(wif);
       });
   }
 
