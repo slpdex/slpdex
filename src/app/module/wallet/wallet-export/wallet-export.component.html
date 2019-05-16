@@ -51,7 +51,7 @@
           </p>
 
           <div class="wallet-export__qr">
-            <img *ngIf="privateWifQr"
+            <img *ngIf="privateWifQr$ | async as privateWifQr"
                  [src]="privateWifQr"
                  alt="">
           </div>
