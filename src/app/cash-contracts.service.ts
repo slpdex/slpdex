@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import * as cc from 'cashcontracts';
 import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { convertBchToSats, generateShortId } from './helpers';
+import { convertBchToSats, generateShortId, convertSatsToBch } from './helpers';
 import { NotificationService } from './notification.service';
 
 @Injectable({
@@ -37,10 +37,24 @@ export class CashContractsService {
 
       this.wallet = await cc.Wallet.loadFromStorage();
 
-      this.wallet.addReceivedTxListener(() => {
-        this.notificationService.showNotification(
-          'Incoming transaction detected',
-        );
+      this.wallet.addReceivedTxListener(direction => {
+        if (direction.direction === 'incoming') {
+          let msg: string;
+
+          if (direction.nonTokenDelta) {
+            msg = `${convertSatsToBch(direction.nonTokenDelta)} BCH`;
+          } else {
+            direction.tokenDelta.forEach((value, key) => {
+              const tokenName = this.wallet.tokenDetails(key).name;
+
+              msg = `${value} ${tokenName}`;
+            });
+          }
+
+          this.notificationService.showNotification(
+            `Incoming transaction detected - ${msg}`,
+          );
+        }
 
         this.emitWallet();
       });
