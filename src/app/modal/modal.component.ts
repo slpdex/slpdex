@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  HostListener,
+} from '@angular/core';
 
 @Component({
   selector: 'app-modal',
@@ -7,6 +12,12 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ModalComponent implements OnInit {
+  @HostListener('document:keyup', ['$event']) keyup(event: KeyboardEvent) {
+    if (event.key === 'Escape') {
+      this.goBack();
+    }
+  }
+
   constructor() {}
 
   ngOnInit() {}
