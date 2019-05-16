@@ -145,6 +145,10 @@ export class CashContractsService {
     return cc.feeSendToken(this.wallet, tokenId, amount);
   };
 
+  getWif = () => {
+    // return new cc.PrivateKey(localStorage.getItem('secret') as Uint8Array, this.wallet.);
+  };
+
   private emitWallet = () => {
     this.walletSubject.next(this.wallet);
   };

@@ -34,7 +34,14 @@
 
     h3 {
       font-size: 30px;
-      margin-bottom: 40px;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    p {
+      color: #faa352;
+      font-weight: 600;
+      margin-bottom: 10px;
       text-align: center;
     }
 
@@ -52,8 +59,21 @@
       display: flex;
       flex-shrink: 0;
       height: 60px;
+      margin-top: 30px;
       padding: 10px 20px;
       width: 100%;
+    }
+  }
+
+  &__qr {
+    display: flex;
+    height: 240px;
+    justify-content: center;
+    margin: 40px 0 0;
+
+    img {
+      height: 100%;
+      width: auto;
     }
   }
 }

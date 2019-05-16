@@ -4,10 +4,10 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import QRCode from 'qrcode';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { CashContractsService } from '../../../cash-contracts.service';
+import { generateBase64QrCode } from '../../../helpers';
 
 @Component({
   selector: 'app-wallet-receive',
@@ -49,8 +49,8 @@ export class WalletReceiveComponent implements OnInit, OnDestroy {
         this.cashAddr$.next(cashAddr);
         this.slpAddr$.next(slpAddr);
 
-        const bchDataUrl = await QRCode.toDataURL(cashAddr, { margin: 2 });
-        const slpDataUrl = await QRCode.toDataURL(slpAddr, { margin: 2 });
+        const bchDataUrl = await generateBase64QrCode(cashAddr);
+        const slpDataUrl = await generateBase64QrCode(slpAddr);
 
         this.bchDataUrl$.next(bchDataUrl);
         this.slpDataUrl$.next(slpDataUrl);

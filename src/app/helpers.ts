@@ -1,4 +1,5 @@
 import BigNumber from 'bignumber.js';
+import QRCode from 'qrcode';
 
 export const convertSatsToBch = (sats: number) => {
   return +new BigNumber(sats).dividedBy(100000000).toFixed(8);
@@ -13,4 +14,8 @@ export const generateShortId = (id: string) => {
   const length = id.length;
 
   return `${id.slice(0, 5)}...${id.slice(length - 4, length)}`;
+};
+
+export const generateBase64QrCode = async (value: string): Promise<string> => {
+  return QRCode.toDataURL(value, { margin: 0 });
 };

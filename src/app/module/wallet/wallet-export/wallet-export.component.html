@@ -46,6 +46,18 @@
             Private
           </h3>
 
+          <p>
+            Exporting into a non-SLP wallet might burn all tokens
+          </p>
+
+          <div class="wallet-export__qr">
+
+            <img *ngIf="privateWifQr"
+                 [src]="privateWifQr"
+                 alt="">
+
+          </div>
+
           <div class="wallet-export__row--bottom">
             <input #private
                    type="text"

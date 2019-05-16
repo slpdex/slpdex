@@ -7,6 +7,7 @@ import {
 import { BehaviorSubject, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { CashContractsService } from '../../../cash-contracts.service';
+import { generateBase64QrCode } from '../../../helpers';
 
 @Component({
   selector: 'app-wallet-export',
@@ -18,6 +19,8 @@ export class WalletExportComponent implements OnInit, OnDestroy {
   publicKey$ = new BehaviorSubject<string>('');
   privateKey$ = new BehaviorSubject<string>('');
 
+  privateWifQr: string;
+
   private destroy$ = new Subject();
 
   constructor(private cashContractsService: CashContractsService) {}
@@ -25,13 +28,17 @@ export class WalletExportComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.cashContractsService.listenWallet
       .pipe(takeUntil(this.destroy$))
-      .subscribe(wallet => {
+      .subscribe(async wallet => {
         if (!wallet) {
           return;
         }
 
         this.publicKey$.next(wallet.cashAddr());
-        this.privateKey$.next(localStorage.getItem('secret'));
+
+        const privateKey = localStorage.getItem('secret');
+
+        this.privateKey$.next(privateKey);
+        this.privateWifQr = await generateBase64QrCode(privateKey);
       });
   }
 
