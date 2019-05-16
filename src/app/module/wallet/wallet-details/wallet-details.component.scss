@@ -27,21 +27,10 @@ h3 {
     &--right {
       display: flex;
       margin-left: auto;
-    }
 
-    a {
-      align-items: center;
-      background: white;
-      border-radius: 4px;
-      cursor: pointer;
-      display: flex;
-      font-size: 15px;
-      font-weight: 500;
-      height: 30px;
-      justify-content: center;
-      margin-left: 10px;
-      padding: 0 30px;
-      user-select: none;
+      app-button {
+        margin-left: 10px;
+      }
     }
   }
 
@@ -49,11 +38,11 @@ h3 {
     display: flex;
     flex-direction: column;
     height: 240px;
+    width: 100%;
 
     &__buttons {
       display: flex;
       justify-content: center;
-      margin-bottom: 20px;
       margin-top: auto;
 
       a {
@@ -86,24 +75,6 @@ h3 {
   &__token {
     align-items: center;
     display: flex;
-
-    &--send {
-      background: $color-green;
-      border-radius: 4px;
-      color: white;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 500;
-      margin-left: auto;
-      padding: 5px 10px;
-      user-select: none;
-    }
-  }
-
-  &__widget {
-    background: white;
-    border-radius: 4px;
-    padding: 15px 20px;
   }
 
   &__transactions {
@@ -112,7 +83,6 @@ h3 {
 
   &__transaction-empty {
     align-items: center;
-    display: flex;
     flex-direction: column;
 
     svg {

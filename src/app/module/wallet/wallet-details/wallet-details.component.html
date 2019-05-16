@@ -5,15 +5,18 @@
       <h2>Wallet</h2>
 
       <div class="wallet-details__header--right">
-        <a>Import</a>
+        <app-button button-white>
+          Import
+        </app-button>
 
-        <a [routerLink]="'../' + slpRoutes.walletExport">
+        <app-button button-white
+                    [routerLink]="'../' + slpRoutes.walletExport">
           Export
-        </a>
+        </app-button>
       </div>
     </div>
 
-    <div class="wallet-details__widget">
+    <app-widget>
 
       <div class="wallet-details__main">
 
@@ -30,18 +33,22 @@
         </div>
 
         <div class="wallet-details__main__buttons">
-          <a [routerLink]="'../' + slpRoutes.walletSend"
-             class="wallet-details__token--send">
+          <app-button [routerLink]="'../' + slpRoutes.walletSend"
+                      button-md
+                      class="mr-lg">
             Send
-          </a>
+          </app-button>
 
-          <a [routerLink]="'../' + slpRoutes.walletReceive"
-             class="wallet-details__receive">
+          <app-button [routerLink]="'../' + slpRoutes.walletReceive"
+                      button-md
+                      class="ml-lg">
             Receive
-          </a>
+          </app-button>
         </div>
+
       </div>
-    </div>
+
+    </app-widget>
 
     <div class="wallet-details__content">
 
@@ -52,35 +59,35 @@
                        [item]="token"
                        class="mb-sm">
 
-          <a right
-             class="wallet-details__token--send ml-md"
-             (click)="openSendToken(token)">
+          <app-button right
+                      class="ml-md"
+                      (click)="openSendToken(token)">
             Send
-          </a>
+          </app-button>
 
         </app-coin-card>
 
-        <div *ngIf="!(tokens$ | async).length && !isLoading"
-             class="wallet-details__widget wallet-details__transaction-empty">
+        <app-widget *ngIf="!(tokens$ | async).length && !isLoading"
+                    class="wallet-details__transaction-empty">
           <svg>
             <use xlink:href="#empty"></use>
           </svg>
 
           <p>No tokens yet</p>
-        </div>
+        </app-widget>
 
       </div>
 
       <div class="wallet-details__transactions">
         <h3>Transactions</h3>
 
-        <div class="wallet-details__widget wallet-details__transaction-empty">
+        <app-widget class="wallet-details__transaction-empty">
           <svg>
             <use xlink:href="#empty"></use>
           </svg>
 
           <p>No transactions yet</p>
-        </div>
+        </app-widget>
 
       </div>
 
