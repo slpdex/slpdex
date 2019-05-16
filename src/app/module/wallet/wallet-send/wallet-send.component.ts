@@ -12,9 +12,9 @@ import { take, takeUntil } from 'rxjs/operators';
 import { CashContractsService } from '../../../cash-contracts.service';
 import { EndpointsService } from '../../../endpoints.service';
 import {
+  convertBchToSats,
   convertSatsToBch,
   generateShortId,
-  convertBchToSats,
 } from '../../../helpers';
 
 export interface WalletSendSelected {
@@ -64,10 +64,14 @@ export class WalletSendComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    combineLatest(
-      this.cashContractsService.listenWallet,
-      this.endpointsService.getBchUsdPrice(),
-      (wallet, usd) => {
+    combineLatest([
+      this.cashContractsService.listenWallet.pipe(takeUntil(this.destroy$)),
+      this.endpointsService.getBchUsdPrice().pipe(take(1)),
+    ])
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(values => {
+        const [wallet, usd] = values;
+
         this.wallet = wallet;
         this.usd = +usd.ticker.price || 0;
 
@@ -75,10 +79,7 @@ export class WalletSendComponent implements OnInit, OnDestroy {
           this.handleWallet();
           this.setTokens();
         }
-      },
-    )
-      .pipe(takeUntil(this.destroy$))
-      .subscribe();
+      });
   }
 
   ngOnDestroy() {
@@ -192,6 +193,8 @@ export class WalletSendComponent implements OnInit, OnDestroy {
 
   private setTokens = async () => {
     const tokenIds = await this.wallet.tokenIds();
+
+    console.log(tokenIds);
 
     const tokens = tokenIds.map(id => {
       return {
