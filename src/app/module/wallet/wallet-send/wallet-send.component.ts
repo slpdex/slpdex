@@ -194,8 +194,6 @@ export class WalletSendComponent implements OnInit, OnDestroy {
   private setTokens = async () => {
     const tokenIds = await this.wallet.tokenIds();
 
-    console.log(tokenIds);
-
     const tokens = tokenIds.map(id => {
       return {
         ...this.wallet.tokenDetails(id),

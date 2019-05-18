@@ -15,7 +15,7 @@
       <app-widget class="wallet-send__widget">
 
         <h2>
-          {{(selected$ | async).name}}
+          {{(selected$ | async).name || '&nbsp;'}}
         </h2>
 
         <div class="wallet-send__select">
