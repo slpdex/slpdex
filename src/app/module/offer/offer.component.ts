@@ -5,7 +5,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import * as anime from 'animejs';
+import anime from 'animejs/lib/anime.es.js';
 import { AnimeAnimParams } from 'animejs';
 
 @Component({
