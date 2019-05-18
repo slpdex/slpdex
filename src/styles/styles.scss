@@ -1,4 +1,4 @@
-@import 'vendors', 'helpers';
+@import 'vendors', 'helpers', 'animations';
 
 * {
   box-sizing: border-box;
@@ -41,15 +41,7 @@ a {
   }
 }
 
-@keyframes PulseAnimation {
-  0% {
-    background-position: 200% 50%;
-  }
-  75%,
-  100% {
-    background-position: -100% 50%;
-  }
-}
+
 
 .placeholder {
   animation: PulseAnimation 2s infinite;

@@ -3,11 +3,11 @@ import { RouterModule, Routes } from '@angular/router';
 import { SLPRoutes } from '../../slp-routes';
 import { WalletCreateComponent } from './wallet-create/wallet-create.component';
 import { WalletDetailsComponent } from './wallet-details/wallet-details.component';
-import { WalletReceiveComponent } from './wallet-receive/wallet-receive.component';
-import { WalletGuard } from './wallet.guard';
-import { WalletSendComponent } from './wallet-send/wallet-send.component';
 import { WalletExportComponent } from './wallet-export/wallet-export.component';
+import { WalletReceiveComponent } from './wallet-receive/wallet-receive.component';
+import { WalletSendComponent } from './wallet-send/wallet-send.component';
 import { WalletComponent } from './wallet.component';
+import { WalletGuard } from './wallet.guard';
 
 const routes: Routes = [
   {

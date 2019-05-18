@@ -25,3 +25,11 @@
     }
   }
 }
+
+@mixin fadeIn() {
+  animation: fadeIn .2s ease forwards;
+}
+
+@mixin fadeInSlide() {
+  animation: fadeInSlide .6s cubic-bezier(.4, 0, .2, 1) forwards;
+}
