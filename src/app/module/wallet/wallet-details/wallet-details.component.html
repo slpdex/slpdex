@@ -68,7 +68,7 @@
 
         </app-coin-card>
 
-        <app-widget *ngIf="!(tokens$ | async).length && !(isLoading | async)"
+        <app-widget *ngIf="!(tokens$ | async).length && !(isLoading$ | async)"
                     class="wallet-details__transaction-empty">
           <svg>
             <use xlink:href="#empty"></use>
