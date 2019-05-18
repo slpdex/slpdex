@@ -7,35 +7,38 @@ import { WalletReceiveComponent } from './wallet-receive/wallet-receive.componen
 import { WalletGuard } from './wallet.guard';
 import { WalletSendComponent } from './wallet-send/wallet-send.component';
 import { WalletExportComponent } from './wallet-export/wallet-export.component';
+import { WalletComponent } from './wallet.component';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: SLPRoutes.walletDetails,
-  },
-  {
-    path: SLPRoutes.walletCreate,
-    component: WalletCreateComponent,
-  },
-  {
-    path: SLPRoutes.walletDetails,
-    component: WalletDetailsComponent,
-    canActivate: [WalletGuard],
-  },
-  {
-    path: SLPRoutes.walletReceive,
-    component: WalletReceiveComponent,
-    canActivate: [WalletGuard],
-  },
-  {
-    path: SLPRoutes.walletSend,
-    component: WalletSendComponent,
-    canActivate: [WalletGuard],
-  },
-  {
-    path: SLPRoutes.walletExport,
-    component: WalletExportComponent,
-    canActivate: [WalletGuard],
+    component: WalletComponent,
+    children: [
+      {
+        path: SLPRoutes.walletCreate,
+        component: WalletCreateComponent,
+      },
+      {
+        path: '',
+        component: WalletDetailsComponent,
+        canActivate: [WalletGuard],
+      },
+      {
+        path: SLPRoutes.walletReceive,
+        component: WalletReceiveComponent,
+        canActivate: [WalletGuard],
+      },
+      {
+        path: SLPRoutes.walletSend,
+        component: WalletSendComponent,
+        canActivate: [WalletGuard],
+      },
+      {
+        path: SLPRoutes.walletExport,
+        component: WalletExportComponent,
+        canActivate: [WalletGuard],
+      },
+    ],
   },
 ];
 

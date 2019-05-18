@@ -5,12 +5,13 @@
       <h2>Wallet</h2>
 
       <div class="wallet-details__header--right">
-        <app-button button-white>
+        <app-button button-white
+                    [routerLink]="slpRoutes.walletCreate">
           Import
         </app-button>
 
         <app-button button-white
-                    [routerLink]="'../' + slpRoutes.walletExport">
+                    [routerLink]="slpRoutes.walletExport">
           Export
         </app-button>
       </div>
@@ -33,13 +34,13 @@
         </div>
 
         <div class="wallet-details__main__buttons">
-          <app-button [routerLink]="'../' + slpRoutes.walletSend"
+          <app-button [routerLink]="slpRoutes.walletSend"
                       button-md
                       class="mr-lg">
             Send
           </app-button>
 
-          <app-button [routerLink]="'../' + slpRoutes.walletReceive"
+          <app-button [routerLink]="slpRoutes.walletReceive"
                       button-md
                       class="ml-lg">
             Receive
@@ -67,7 +68,7 @@
 
         </app-coin-card>
 
-        <app-widget *ngIf="!(tokens$ | async).length && !isLoading"
+        <app-widget *ngIf="!(tokens$ | async).length && !(isLoading | async)"
                     class="wallet-details__transaction-empty">
           <svg>
             <use xlink:href="#empty"></use>

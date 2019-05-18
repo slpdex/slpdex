@@ -4,71 +4,75 @@
   display: flex;
 }
 
-.wallet {
+.wallet-create {
   align-items: center;
   display: flex;
-  height: calc(100vh - #{$header-height} - 60px);
-  justify-content: center;
+  flex-direction: column;
 
-  &__none {
-    align-items: center;
+  h2 {
+    color: white;
+    font-size: 40px;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  h3 {
+    font-size: 20px;
+    font-weight: 500;
+    padding: 40px;
+    text-align: center;
+  }
+
+  &--title {
+    color: white;
+    margin-bottom: 40px;
+  }
+
+  &--or {
+    color: white;
+    font-size: 20px;
+    font-weight: 600;
+    padding: 0 40px;
+  }
+
+  &__content {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    width: 100%;
+    margin: 0 auto;
+    max-width: 800px;
+  }
 
-    h2 {
-      color: white;
-      font-size: 40px;
+  &__boxes {
+    align-items: center;
+    display: flex;
+
+    app-widget {
+      cursor: pointer;
+    }
+  }
+
+  &__warning {
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: 40px;
+
+    p {
+      color: $color-orange;
+      text-align: center;
+    }
+
+    &--heading {
+      font-size: 30px;
+      font-weight: 600;
       margin-bottom: 10px;
     }
 
     &--title {
-      color: white;
-      margin-bottom: 60px;
+      margin-bottom: 20px;
     }
 
-    &--selection {
-      align-items: center;
-      display: flex;
-      justify-content: center;
-      margin-bottom: 60px;
-      width: 100%;
-    }
-
-    &--box {
-      align-items: center;
-      background: rgba(white, .9);
-      border-radius: 4px;
-      cursor: pointer;
-      display: flex;
-      font-size: 26px;
-      height: 200px;
-      justify-content: center;
-      max-width: 400px;
-      text-align: center;
-      width: 100%;
-    }
-
-    &--or {
-      color: white;
-      font-size: 18px;
-      font-weight: 600;
-      padding: 0 50px;
-    }
-  }
-
-  &__info {
-    background: lighten($color-green, 18%);
-    border-radius: 4px;
-    color: white;
-    margin-bottom: 20px;
-    max-width: 600px;
-    padding: 30px 20px;
-
-    p {
-      margin-bottom: 10px;
-      text-align: center;
+    app-button {
+      margin-top: 20px;
     }
   }
 }

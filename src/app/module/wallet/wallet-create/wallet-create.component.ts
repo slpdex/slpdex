@@ -1,7 +1,8 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import * as cc from 'cashcontracts';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { CashContractsService } from '../../../cash-contracts.service';
 import { SLPRoutes } from '../../../slp-routes';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-wallet-create',
@@ -10,20 +11,29 @@ import { SLPRoutes } from '../../../slp-routes';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WalletCreateComponent implements OnInit {
-  constructor(private router: Router) {}
+  isSecretInStorage = false;
+  slpRoutes = { ...SLPRoutes };
+
+  constructor(
+    private router: Router,
+    private cashContractsService: CashContractsService,
+  ) {}
 
   ngOnInit() {
-    if (cc.Wallet.isSecretInStorage()) {
-      this.navigateToWallet();
-    }
+    this.cashContractsService.listenIsSecretInStorage
+      .pipe(take(1))
+      .subscribe(isSecretInStorage => {
+        this.isSecretInStorage = isSecretInStorage;
+      });
   }
 
-  create = async () => {
-    cc.Wallet.storeRandomSecret();
+  create = () => {
+    localStorage.removeItem('secret');
+    this.cashContractsService.generateNewWallet();
     this.navigateToWallet();
   };
 
-  navigateToWallet = () => {
-    this.router.navigate([`${SLPRoutes.wallet}/${SLPRoutes.walletDetails}`]);
+  private navigateToWallet = () => {
+    this.router.navigate([SLPRoutes.wallet]);
   };
 }

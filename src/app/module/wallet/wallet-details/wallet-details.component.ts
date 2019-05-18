@@ -24,8 +24,7 @@ import { WalletSendSelected } from '../wallet-send/wallet-send.component';
 export class WalletDetailsComponent implements OnInit, OnDestroy {
   bchBalance$ = new BehaviorSubject(+'0.00000000');
   usdPrice$ = new BehaviorSubject<string>('0');
-
-  isLoading = true;
+  isLoading$ = new BehaviorSubject<boolean>(true);
 
   transactions$ = new BehaviorSubject([]);
   tokens$ = new BehaviorSubject([]);
@@ -51,7 +50,7 @@ export class WalletDetailsComponent implements OnInit, OnDestroy {
           return;
         }
 
-        this.isLoading = false;
+        this.isLoading$.next(false);
 
         this.wallet = wallet;
         this.setBchBalance();

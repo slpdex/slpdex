@@ -1,39 +1,47 @@
 <app-wrapper>
 
-  <div class="wallet">
+  <div class="wallet-create">
 
-    <div class="wallet__none">
-      <h2>Connect to wallet</h2>
-      <p class="wallet__none--title">
-        Proin viverra, ligula sit amet ultrices semper, Nunc nulla. Sed lectus.
-      </p>
+    <h2>Create wallet</h2>
 
-      <div class="wallet__none--selection">
+    <p class="wallet-create--title">
+      Proin viverra, ligula sit amet ultrices semper, Nunc nulla. Sed lectus.
+    </p>
 
-        <div class="wallet__none--box"
-             (click)="create()">
-          Create a new wallet
-        </div>
+    <div class="wallet-create__content">
 
-        <p class="wallet__none--or">OR</p>
+      <app-widget *ngIf="isSecretInStorage"
+                  class="wallet-create__warning">
 
-        <div class="wallet__none--box">
-          Import private key
-        </div>
-
-      </div>
-
-      <div class="wallet__info">
-        <p>
-          A fee wallet is...
+        <p class="wallet-create__warning--heading">
+          You already have a wallet
         </p>
 
-        <p>Etiam iaculis nunc ac metus. Aenean commodo ligula eget dolor Phasellus magna. Nam commodo suscipit quam.
-          Etiam ultricies nisi
-          vel augue.</p>
+        <p class="wallet-create__warning--title">
+          Make sure you backup your existing wallet before creating a new
+        </p>
 
-        <p>Etiam iaculis nunc ac metus. Aenean commodo ligula vel augue.</p>
+        <app-button [routerLink]="'../' + slpRoutes.walletExport"
+                    button-orange
+                    button-md>
+          Export
+        </app-button>
+      </app-widget>
 
+      <div class="wallet-create__boxes">
+        <app-widget (click)="create()">
+          <h3>
+            Create a new wallet
+          </h3>
+        </app-widget>
+
+        <p class="wallet-create--or">OR</p>
+
+        <app-widget>
+          <h3>
+            Import private key
+          </h3>
+        </app-widget>
       </div>
 
     </div>

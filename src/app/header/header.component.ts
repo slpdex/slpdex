@@ -1,8 +1,8 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   OnInit,
-  ChangeDetectorRef,
 } from '@angular/core';
 import * as moment from 'moment';
 import { Subject } from 'rxjs';

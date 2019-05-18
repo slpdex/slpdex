@@ -63,10 +63,6 @@ export class CashContractsService {
     });
   };
 
-  getIsSecretInStorage = () => {
-    this.isSecretInStorageSubject.next(cc.Wallet.isSecretInStorage());
-  };
-
   sendBch = (address: string, amount: number) => {
     console.log(address, amount);
     this.notificationService.showNotification(
@@ -147,6 +143,15 @@ export class CashContractsService {
 
   getWif = () => {
     return this.wallet.privateKey().wif();
+  };
+
+  generateNewWallet = () => {
+    cc.Wallet.storeRandomSecret();
+    this.loadIsSecretInStorage();
+  };
+
+  loadIsSecretInStorage = () => {
+    this.isSecretInStorageSubject.next(cc.Wallet.isSecretInStorage());
   };
 
   private emitWallet = () => {
