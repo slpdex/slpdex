@@ -11,10 +11,9 @@ import { CoinCard } from '../../../coin-card/coin-card.component';
 import { EndpointsService } from '../../../endpoints.service';
 import { getJdenticon } from '../../../helpers';
 import { AllTokens } from '../../../queries/allTokensQuery';
+import { SLPRoutes } from '../../../slp-routes';
 
-interface TokensList extends CoinCard {
-  isSelected?: boolean;
-}
+interface TokensList extends CoinCard {}
 
 @Component({
   selector: 'app-tokens-list',
@@ -24,6 +23,7 @@ interface TokensList extends CoinCard {
 })
 export class TokensListComponent implements OnInit, OnDestroy {
   tokens$ = new BehaviorSubject<TokensList[]>([]);
+  slpRoutes = { ...SLPRoutes };
 
   private destroy$ = new Subject();
 
@@ -58,8 +58,6 @@ export class TokensListComponent implements OnInit, OnDestroy {
         id: token.slp.detail.tokenIdHex,
         name: token.slp.detail.name,
         symbol: token.slp.detail.symbol,
-        isToken: true,
-        isSelected: index === 0,
         icon: this.domSanitizer.bypassSecurityTrustHtml(
           getJdenticon(token.slp.detail.tokenIdHex),
         ),
