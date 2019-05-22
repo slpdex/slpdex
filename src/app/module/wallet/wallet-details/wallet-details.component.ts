@@ -10,8 +10,9 @@ import * as cc from 'cashcontracts';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { CashContractsService } from '../../../cash-contracts.service';
+import { CoinCard } from '../../../coin-card/coin-card.component';
 import { EndpointsService } from '../../../endpoints.service';
-import { convertSatsToBch, generateShortId } from '../../../helpers';
+import { convertSatsToBch } from '../../../helpers';
 import { SLPRoutes } from '../../../slp-routes';
 import { WalletSendSelected } from '../wallet-send/wallet-send.component';
 
@@ -27,7 +28,7 @@ export class WalletDetailsComponent implements OnInit, OnDestroy {
   isLoading$ = new BehaviorSubject<boolean>(true);
 
   transactions$ = new BehaviorSubject([]);
-  tokens$ = new BehaviorSubject([]);
+  tokens$ = new BehaviorSubject<CoinCard[]>([]);
 
   slpRoutes = { ...SLPRoutes };
 
@@ -111,7 +112,6 @@ export class WalletDetailsComponent implements OnInit, OnDestroy {
         ...this.wallet.tokenDetails(tokenId),
         balance: this.wallet.tokenBalance(tokenId),
         isToken: true,
-        shortId: generateShortId(tokenId),
       };
     });
 

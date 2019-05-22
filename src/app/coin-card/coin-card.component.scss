@@ -1,5 +1,9 @@
 @import 'helpers';
 
+:host {
+  display: block;
+}
+
 .coin-card {
   align-items: center;
   cursor: pointer;

@@ -1,12 +1,11 @@
 <app-widget class="coin-card"
-            widget-small>
+            widget-sm>
 
   <ng-content select="[checkbox]"></ng-content>
 
   <div *ngIf="item.id"
-       class="coin-card__icon">
-    <svg [attr.data-jdenticon-value]="item.id">
-    </svg>
+       class="coin-card__icon"
+       [innerHTML]="item.icon">
   </div>
 
   <img *ngIf="!item.id"

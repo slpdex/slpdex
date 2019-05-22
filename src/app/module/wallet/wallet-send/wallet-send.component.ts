@@ -6,27 +6,18 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import * as cc from 'cashcontracts';
-import { TokenDetails } from 'cashcontracts';
 import { BehaviorSubject, combineLatest, Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { CashContractsService } from '../../../cash-contracts.service';
+import { CoinCard } from '../../../coin-card/coin-card.component';
 import { EndpointsService } from '../../../endpoints.service';
-import {
-  convertBchToSats,
-  convertSatsToBch,
-  generateShortId,
-} from '../../../helpers';
+import { convertBchToSats, convertSatsToBch } from '../../../helpers';
 
 export interface WalletSendSelected {
   name: string;
   balance: number;
   isToken: boolean;
   tokenId?: string;
-}
-
-interface TokenDetailsExtended extends TokenDetails {
-  balance: number;
-  shortId: string;
 }
 
 @Component({
@@ -39,8 +30,8 @@ export class WalletSendComponent implements OnInit, OnDestroy {
   initSelected: WalletSendSelected;
   selected$ = new BehaviorSubject<WalletSendSelected>({} as WalletSendSelected);
 
-  bchDetails$ = new BehaviorSubject<TokenDetailsExtended>(null);
-  tokens$ = new BehaviorSubject<TokenDetailsExtended[]>([]);
+  bchDetails$ = new BehaviorSubject<CoinCard>(null);
+  tokens$ = new BehaviorSubject<CoinCard[]>([]);
 
   selectedAddress = '';
   selectedAmount = 0;
@@ -100,7 +91,7 @@ export class WalletSendComponent implements OnInit, OnDestroy {
     this.setFee();
   };
 
-  selectToken = (token: TokenDetailsExtended) => {
+  selectToken = (token: CoinCard) => {
     this.selected$.next({
       name: token.name,
       balance: token.balance,
@@ -160,11 +151,11 @@ export class WalletSendComponent implements OnInit, OnDestroy {
   };
 
   private handleWallet = () => {
-    const bchItem = {
+    const bchItem: CoinCard = {
       name: 'Bitcoin Cash',
       symbol: 'BCH',
       balance: convertSatsToBch(this.wallet.nonTokenBalance()),
-    } as TokenDetailsExtended;
+    };
 
     this.bchDetails$.next(bchItem);
 
@@ -198,9 +189,8 @@ export class WalletSendComponent implements OnInit, OnDestroy {
       return {
         ...this.wallet.tokenDetails(id),
         balance: this.wallet.tokenBalance(id),
-        shortId: generateShortId(id),
         isToken: true,
-      } as TokenDetailsExtended;
+      } as CoinCard;
     });
 
     this.tokens$.next(tokens.toArray());

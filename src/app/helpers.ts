@@ -19,3 +19,8 @@ export const generateShortId = (id: string) => {
 export const generateBase64QrCode = async (value: string): Promise<string> => {
   return QRCode.toDataURL(value, { margin: 0 });
 };
+
+export const getJdenticon = (id: string) => {
+  // tslint:disable-next-line: no-string-literal
+  return window['jdenticon'].toSvg(id, 30);
+};
