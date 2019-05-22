@@ -1,39 +1,70 @@
 @import 'helpers';
 
 .tokens-list {
-  &__list {
-    height: 100%;
-    margin-bottom: 30px;
-    overflow: auto;
+  display: flex;
+  flex-direction: column;
+
+  p {
+    font-size: 14px;
   }
 
-  &__item {
-    &--name {
-      font-weight: 700;
-    }
-
-    &--symbol {
-      background: $color-green-light;
-      border-radius: 4px;
-      color: white;
-      display: inline-flex;
-      font-size: 14px;
-      font-weight: 600;
-      margin-top: 5px;
-      padding: 2px 4px;
-    }
-  }
-
-  &__card {
-    background: white;
+  &__row {
+    border-bottom: 1px solid darken(white, 10%);
     border-radius: 4px;
     cursor: pointer;
-    margin-bottom: 10px;
-    padding: 10px 20px;
+    display: flex;
+    padding: 10px;
 
-    &--active {
-      background: $color-green;
-      color: white;
+    &:not(.tokens-list__top):hover {
+      background: darken(white, 2%);
+      transition: .4s background ease;
     }
+  }
+
+  &__col {
+    align-items: center;
+    display: flex;
+    flex: 1;
+  }
+
+  &__icon {
+    align-items: center;
+    background: darken(white, 5%);
+    border-radius: 100%;
+    display: flex;
+    height: 40px;
+    justify-content: center;
+    margin-right: 15px;
+    width: 40px;
+
+    svg {
+      height: 30px;
+      width: 30px;
+    }
+  }
+
+  &__price {
+    &--positive {
+      color: $color-green;
+    }
+  }
+
+  &--heading {
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+
+  &--label {
+    font-weight: 600;
+  }
+
+  &--count {
+    flex: 0 0 auto;
+    width: 50px;
+  }
+
+  &--name {
+    flex: 0 0 auto;
+    width: 30%;
   }
 }

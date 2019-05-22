@@ -1,23 +1,77 @@
-<div #list
-     class="tokens-list__list">
+<div class="tokens-list">
 
-  <ng-container *ngIf="tokens.length && selectedSymbol">
-    <div *ngFor="let token of tokens"
-         class="tokens-list__item">
+  <div class="tokens-list__row tokens-list__top">
+    <div class="tokens-list__col tokens-list--count">
+      <p class="tokens-list--label">
+        #
+      </p>
+    </div>
 
-      <div [class.tokens-list__card--active]="token.slp.detail.symbol === selectedSymbol"
-           (click)="select(token)"
-           class="tokens-list__card">
-        <p class="tokens-list__item--name">
-          {{token.slp.detail.name}}
+    <div class="tokens-list__col tokens-list--name">
+      <p class="tokens-list--label">
+        NAME
+      </p>
+    </div>
+
+    <div class="tokens-list__col">
+      <p class="tokens-list--label">
+        PRICE
+      </p>
+    </div>
+
+    <div class="tokens-list__col">
+      <p class="tokens-list--label">
+        VOLUME
+      </p>
+    </div>
+
+    <div class="tokens-list__col">
+      <p class="tokens-list--label">
+        LAST 24H
+      </p>
+    </div>
+  </div>
+
+  <div *ngFor="let token of tokens$ | async let i = index"
+       class="tokens-list__row">
+
+    <div class="tokens-list__col tokens-list--count">
+      {{i + 1}}
+    </div>
+
+    <div class="tokens-list__col tokens-list--name">
+
+      <div class="tokens-list__icon"
+           [innerHTML]="token.icon">
+      </div>
+
+      <div>
+        <p class="tokens-list--heading">
+          {{token.name}}
         </p>
-        <p *ngIf="token.slp.detail.symbol"
-           class="tokens-list__item--symbol">
-          {{token.slp.detail.symbol}}
+
+        <p>
+          {{token.symbol}}
         </p>
       </div>
 
     </div>
-  </ng-container>
+
+    <div class="tokens-list__col">
+      123
+    </div>
+
+    <div class="tokens-list__col">
+      456
+    </div>
+
+    <div class="tokens-list__col">
+
+      <p class="tokens-list__price--positive">
+        13.37%
+      </p>
+    </div>
+
+  </div>
 
 </div>

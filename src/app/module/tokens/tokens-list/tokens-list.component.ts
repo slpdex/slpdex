@@ -1,18 +1,20 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  OnChanges,
+  OnDestroy,
   OnInit,
-  Output,
-  SimpleChanges,
-  ViewChild,
 } from '@angular/core';
-import SimpleBar from 'simplebar';
-import { AllTokensToken } from '../../../queries/allTokensQuery';
+import { DomSanitizer } from '@angular/platform-browser';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { take } from 'rxjs/operators';
+import { CoinCard } from '../../../coin-card/coin-card.component';
+import { EndpointsService } from '../../../endpoints.service';
+import { getJdenticon } from '../../../helpers';
+import { AllTokens } from '../../../queries/allTokensQuery';
+
+interface TokensList extends CoinCard {
+  isSelected?: boolean;
+}
 
 @Component({
   selector: 'app-tokens-list',
@@ -20,31 +22,50 @@ import { AllTokensToken } from '../../../queries/allTokensQuery';
   styleUrls: ['./tokens-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TokensListComponent implements OnInit, OnChanges, AfterViewInit {
-  @Input() tokens: AllTokensToken[] = [];
+export class TokensListComponent implements OnInit, OnDestroy {
+  tokens$ = new BehaviorSubject<TokensList[]>([]);
 
-  @Output() selectToken = new EventEmitter<AllTokensToken>();
+  private destroy$ = new Subject();
 
-  selectedSymbol = '';
+  constructor(
+    private endpointsService: EndpointsService,
+    private domSanitizer: DomSanitizer,
+  ) {}
 
-  @ViewChild('list') list: ElementRef<HTMLElement>;
-
-  constructor() {}
-
-  ngOnInit() {}
-
-  ngAfterViewInit(): void {
-    const simpleBar = new SimpleBar(this.list.nativeElement);
+  ngOnInit() {
+    this.endpointsService
+      .getAllTokens()
+      .pipe(take(1))
+      .subscribe(data => {
+        this.renderTokens(data);
+      });
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes && changes.tokens && this.tokens.length) {
-      this.selectedSymbol = this.tokens[0].slp.detail.symbol;
-    }
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.unsubscribe();
   }
 
-  select = (token: AllTokensToken) => {
-    this.selectToken.emit(token);
-    this.selectedSymbol = token.slp.detail.symbol;
+  selectToken = (token: TokensList) => {};
+
+  private renderTokens = (data: AllTokens) => {
+    const tokens = data.t.filter(item => {
+      return item.slp.detail.name && item.slp.detail.symbol;
+    });
+
+    const cards: TokensList[] = tokens.map((token, index) => {
+      return {
+        id: token.slp.detail.tokenIdHex,
+        name: token.slp.detail.name,
+        symbol: token.slp.detail.symbol,
+        isToken: true,
+        isSelected: index === 0,
+        icon: this.domSanitizer.bypassSecurityTrustHtml(
+          getJdenticon(token.slp.detail.tokenIdHex),
+        ),
+      } as TokensList;
+    });
+
+    this.tokens$.next(cards);
   };
 }

@@ -1,16 +1,21 @@
 <app-wrapper>
 
-  <input type="text"
-         placeholder="Search"
-         class="tokens__search">
+  <div class="tokens">
 
-  <div class="tokens__content">
-    <app-tokens-list [tokens]="tokens"
-                     (selectToken)="selectToken($event)">
-    </app-tokens-list>
+    <app-widget>
+      <div class="tokens__filter">
+        <svg>
+          <use xlink:href="#search"></use>
+        </svg>
 
-    <app-tokens-details [token]="selectedToken">
-    </app-tokens-details>
+        <!-- <input type="text"
+             placeholder="Search tokens..."> -->
+      </div>
+
+      <app-tokens-list>
+      </app-tokens-list>
+
+    </app-widget>
   </div>
 
 </app-wrapper>

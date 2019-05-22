@@ -1,38 +1,38 @@
 @import 'helpers';
 
 :host {
+  @include fadeIn();
   display: block;
 }
 
 .tokens {
-  &__search {
-    background: lighten($color-green-light, 10%);
-    border: 0;
-    border-radius: 4px;
-    color: white;
-    font-weight: 600;
-    height: 40px;
-    margin-bottom: 10px;
-    outline: 0;
-    padding: 10px;
-    width: 30%;
+  display: flex;
+  flex-direction: column;
 
-    &::placeholder {
-      color: white;
-      font-weight: 600;
-    }
+  app-widget {
+    flex-direction: column;
   }
 
-  &__content {
+  &__filter {
     display: flex;
-    height: calc(100vh - #{$header-height} - 100px);
+    margin-bottom: 20px;
+    width: 100%;
 
-    app-tokens-list {
-      width: 30%;
-    }
+    // input {
+    //   background: rgba(white, .4);
+    //   border: 0;
+    //   border-radius: 4px;
+    //   color: white;
+    //   height: 40px;
+    //   outline: 0;
+    //   padding: 10px 15px;
+    //   width: 100%;
+    // }
 
-    app-tokens-details {
-      width: 70%;
+    svg {
+      fill: $color-gray;
+      height: 30px;
+      width: 30px;
     }
   }
 }
