@@ -42,6 +42,14 @@
     }
   }
 
+  &[button-sm] {
+    .button {
+      font-size: 12px;
+      height: 30px;
+      padding: 5px 15px;
+    }
+  }
+
   &[button-white] {
     .button {
       background: white;
@@ -52,6 +60,13 @@
   &[button-orange] {
     .button {
       background: $color-orange;
+      color: white;
+    }
+  }
+
+  &[button-red] {
+    .button {
+      background: #da4e4e;
       color: white;
     }
   }
