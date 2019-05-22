@@ -1,16 +1,19 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  Input,
-  OnChanges,
+  OnDestroy,
   OnInit,
-  SimpleChanges,
 } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { EndpointsService } from '../../../endpoints.service';
-import { AllTokensToken } from '../../../queries/allTokensQuery';
 import { TokenDetailsC } from '../../../queries/tokenDetailsQuery';
+
+interface TokensDetails extends TokenDetailsC {
+  timeSinceLastTrade: string;
+}
 
 @Component({
   selector: 'app-tokens-details',
@@ -18,36 +21,45 @@ import { TokenDetailsC } from '../../../queries/tokenDetailsQuery';
   styleUrls: ['./tokens-details.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TokensDetailsComponent implements OnInit, OnChanges {
-  @Input() token: AllTokensToken;
+export class TokensDetailsComponent implements OnInit, OnDestroy {
+  tokenDetails$ = new BehaviorSubject<TokensDetails>(null);
 
-  tokenDetails: TokenDetailsC;
-  timeSinceLastTrade: string;
+  tests = [1, 2, 3, 4, 5];
 
-  constructor(private endpointsService: EndpointsService) {}
+  private destroy$ = new Subject();
 
-  ngOnInit() {}
+  constructor(
+    private endpointsService: EndpointsService,
+    private route: ActivatedRoute,
+  ) {}
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes && changes.token) {
-      this.getTokenDetails();
-    }
+  ngOnInit() {
+    this.route.params.pipe(take(1)).subscribe(params => {
+      this.getTokenDetails(params.symbol);
+    });
   }
 
-  getTokenDetails = () => {
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.unsubscribe();
+  }
+
+  private getTokenDetails = (symbol: string) => {
     this.endpointsService
       .getTokenDetails('TTTT')
       .pipe(take(1))
       .subscribe(data => {
-        if (data.c && data.c.length) {
-          this.tokenDetails = data.c[0];
-
-          this.timeSinceLastTrade = moment
-            .unix(this.tokenDetails.lastTrade.timestamp)
-            .fromNow();
-        } else {
-          this.tokenDetails = null;
+        if (!data.c || !data.c.length) {
+          return;
         }
+        const timeSinceLastTrade = moment
+          .unix(data.c[0].lastTrade.timestamp)
+          .fromNow();
+
+        this.tokenDetails$.next({
+          ...data.c[0],
+          timeSinceLastTrade,
+        });
       });
   };
 }

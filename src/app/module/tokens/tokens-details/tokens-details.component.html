@@ -1,41 +1,140 @@
-<ng-container *ngIf="token && tokenDetails">
-  <div class="tokens-details__header">
+<app-wrapper>
 
-    <div class="tokens-details__header--top">
-      <h2>
-        {{token.slp.detail.name}}
-        -
-        {{token.slp.detail.symbol}}
-      </h2>
+  <ng-container *ngIf="tokenDetails$ | async as token">
+
+    <p class="bread">
+      Tokens / {{token.slp.detail.symbol}}
+    </p>
+
+    <div class="tokens-details">
+
+      <div class="tokens-details__left">
+
+        <app-widget class="tokens-details__header mb-lg">
+          <h2>
+            {{token.slp.detail.name}}
+          </h2>
+
+          <p class="tokens-details__header--symbol">
+            {{token.slp.detail.symbol}}
+          </p>
+        </app-widget>
+
+        <app-widget class="tokens-details__chart mb-lg">
+          <p>CHART COMING SOON</p>
+        </app-widget>
+
+        <app-widget class="tokens-details__orders">
+          My open orders
+        </app-widget>
+      </div>
+
+      <app-widget class="tokens-details__right">
+
+        <div class="tokens-details__book">
+          Orderbook
+        </div>
+
+        <div class="tokens-details__sell">
+          Sell box
+        </div>
+      </app-widget>
+
     </div>
 
-    <div class="tokens-details__header--bottom">
-      <p>Open offers: {{tokenDetails.numberOfOpenOffers}}</p>
-      <p>Closed offers: {{tokenDetails.numberOfClosedOffers}}</p>
-      <p>Last trade: {{timeSinceLastTrade}}</p>
+  </ng-container>
+
+  <!-- <div *ngIf="tokenDetails$ | async as token"
+       class="tokens-details">
+
+    <app-widget class="tokens-details__header"
+                widget-sm>
+
+      <div class="tokens-details__header--bottom">
+        <p>Open offers: {{token.numberOfOpenOffers}}</p>
+        <p>Closed offers: {{token.numberOfClosedOffers}}</p>
+        <p>Last trade: {{token.timeSinceLastTrade}}</p>
+      </div>
     </div>
-  </div>
 
-  <!-- <div class="tokens-details__content">
+    <div class="tokens-details__content">
 
-    <p>Open offers</p>
+      <app-widget class="tokens-details__open"
+                  widget-sm>
 
-    <div class="token-details__open">
+        <h3 class="mt-sm">Open Offers</h3>
 
-      <ng-container *ngIf="tokenDetails.slp.detail.outputs?.length">
-        <div *ngFor="let item of tokenDetails.slp.detail.outputs"
-             class="token-details__open--item">
+        <app-widget *ngFor="let test of tests"
+                    class="mb-sm"
+                    widget-sm>
+          <div>
+            <h4>221 TTTT</h4>
+
+            <p>
+              0.0001 BCH / 1337$
+            </p>
+          </div>
+
+          <app-button button-sm>
+            BUY
+          </app-button>
+        </app-widget>
+
+      </app-widget>
+
+      <app-widget class="tokens-details__history"
+                  widget-sm>
+
+        <h3 class="mt-sm">History</h3>
+
+        <app-widget *ngFor="let test of tests"
+                    widget-sm
+                    class="mb-sm">
+          <div class="tokens-details__history--top">
+            <h4>221 TTTT</h4>
+
+            <p>1 hour ago</p>
+          </div>
 
           <p>
-            {{item.address}}
-            {{item.amount}}
+            0.0001 BCH / 1337$
           </p>
+        </app-widget>
 
-        </div>
-      </ng-container>
-
+      </app-widget>
     </div>
 
-  </div> -->
+    <app-widget class="tokens-details__buy">
 
-</ng-container>
+      <h3>Create SELL Offer</h3>
+
+      <div class="tokens-details__buy__input">
+        <input type="text"
+               value="123">
+
+        <div class="tokens-details__buy__input--right">
+          <app-button button-white
+                      button-sm>
+            TTTT
+          </app-button>
+        </div>
+      </div>
+
+      <svg class="tokens-details__for">
+        <use xlink:href="#exchange"></use>
+      </svg>
+
+      <div class="tokens-details__buy__input">
+        <input type="text"
+               value="123">
+      </div>
+
+      <app-button class="mt-lg"
+                  button-md
+                  button-red>
+        Create Offer
+      </app-button>
+    </app-widget>
+
+  </div> -->
+</app-wrapper>
