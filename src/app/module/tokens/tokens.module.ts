@@ -8,12 +8,14 @@ import { TokensDetailsComponent } from './tokens-details/tokens-details.componen
 import { TokensListComponent } from './tokens-list/tokens-list.component';
 import { TokensRoutingModule } from './tokens-routing.module';
 import { TokensComponent } from './tokens.component';
+import { TokensDetailsOrderbookComponent } from './tokens-details/tokens-details-orderbook/tokens-details-orderbook.component';
 
 @NgModule({
   declarations: [
     TokensComponent,
     TokensListComponent,
     TokensDetailsComponent,
+    TokensDetailsOrderbookComponent,
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,30 @@
+<app-button button-md
+            button-disabled>
+  BUY
+</app-button>
+
+<div class="orderbook">
+
+  <div class="orderbook__header">
+    <p>PRICE</p>
+    <p>AMOUNT</p>
+  </div>
+
+  <div class="orderbook__list"
+       #list>
+
+    <div *ngFor="let test of tests"
+         class="orderbook__item"
+         [class.orderbook__item--selected]="test"
+         (click)="select()">
+      <p class="orderbook__item--price">
+        0.23423134
+      </p>
+
+      <p class="orderbook__item--amount">
+        123
+      </p>
+    </div>
+  </div>
+
+</div>

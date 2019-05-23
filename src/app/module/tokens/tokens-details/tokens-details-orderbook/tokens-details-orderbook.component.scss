@@ -1,0 +1,54 @@
+@import 'helpers';
+
+:host {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+app-button {
+  margin-bottom: 20px;
+}
+
+.orderbook {
+  flex: 1;
+  overflow: hidden;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+
+    p {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 0 10px;
+    }
+  }
+
+  &__list {
+    height: 100%;
+    overflow: auto;
+  }
+
+  &__item {
+    align-items: center;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    font-size: 14px;
+    justify-content: space-between;
+    padding: 5px 10px;
+    width: 100%;
+
+    &:nth-child(odd) {
+      background: darken(white, 5%);
+    }
+
+    &--selected {
+      background: $color-green;
+      color: white;
+    }
+  }
+}
