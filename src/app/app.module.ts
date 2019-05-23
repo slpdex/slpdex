@@ -7,6 +7,8 @@ import { AppComponent } from './app.component';
 import { HeaderModule } from './header/header.module';
 import { LandingModule } from './module/landing/landing.module';
 import { SvgsComponent } from './svgs/svgs.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [AppComponent, SvgsComponent],
@@ -17,9 +19,9 @@ import { SvgsComponent } from './svgs/svgs.component';
     HeaderModule,
     LandingModule,
     HttpClientModule,
-    // ServiceWorkerModule.register('ngsw-worker.js', {
-    //   enabled: environment.production,
-    // }),
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent],
