@@ -36,7 +36,54 @@
         </div>
 
         <div class="tokens-details__sell">
-          Sell box
+
+          <div class="tokens-details__sell__box">
+            <p class="tokens-details__sell--label">
+              Amount
+            </p>
+
+            <div class="input">
+              <input type="number"
+                     value="0"
+                     input>
+
+              <p>
+                {{token.slp.detail.symbol}}
+              </p>
+            </div>
+          </div>
+
+          <div class="tokens-details__sell__box">
+            <p class="tokens-details__sell--label">
+              Price
+            </p>
+
+            <div class="input">
+              <input type="number"
+                     value="0">
+
+              <p>BCH</p>
+            </div>
+          </div>
+
+          <div class="tokens-details__sell__box">
+            <p class="tokens-details__sell--label">
+              Total
+            </p>
+
+            <div class="input">
+              <input type="number"
+                     value="0"
+                     input>
+
+              <p>BCH</p>
+            </div>
+          </div>
+
+          <app-button button-md
+                      button-red>
+            SELL
+          </app-button>
         </div>
       </app-widget>
 
@@ -44,97 +91,4 @@
 
   </ng-container>
 
-  <!-- <div *ngIf="tokenDetails$ | async as token"
-       class="tokens-details">
-
-    <app-widget class="tokens-details__header"
-                widget-sm>
-
-      <div class="tokens-details__header--bottom">
-        <p>Open offers: {{token.numberOfOpenOffers}}</p>
-        <p>Closed offers: {{token.numberOfClosedOffers}}</p>
-        <p>Last trade: {{token.timeSinceLastTrade}}</p>
-      </div>
-    </div>
-
-    <div class="tokens-details__content">
-
-      <app-widget class="tokens-details__open"
-                  widget-sm>
-
-        <h3 class="mt-sm">Open Offers</h3>
-
-        <app-widget *ngFor="let test of tests"
-                    class="mb-sm"
-                    widget-sm>
-          <div>
-            <h4>221 TTTT</h4>
-
-            <p>
-              0.0001 BCH / 1337$
-            </p>
-          </div>
-
-          <app-button button-sm>
-            BUY
-          </app-button>
-        </app-widget>
-
-      </app-widget>
-
-      <app-widget class="tokens-details__history"
-                  widget-sm>
-
-        <h3 class="mt-sm">History</h3>
-
-        <app-widget *ngFor="let test of tests"
-                    widget-sm
-                    class="mb-sm">
-          <div class="tokens-details__history--top">
-            <h4>221 TTTT</h4>
-
-            <p>1 hour ago</p>
-          </div>
-
-          <p>
-            0.0001 BCH / 1337$
-          </p>
-        </app-widget>
-
-      </app-widget>
-    </div>
-
-    <app-widget class="tokens-details__buy">
-
-      <h3>Create SELL Offer</h3>
-
-      <div class="tokens-details__buy__input">
-        <input type="text"
-               value="123">
-
-        <div class="tokens-details__buy__input--right">
-          <app-button button-white
-                      button-sm>
-            TTTT
-          </app-button>
-        </div>
-      </div>
-
-      <svg class="tokens-details__for">
-        <use xlink:href="#exchange"></use>
-      </svg>
-
-      <div class="tokens-details__buy__input">
-        <input type="text"
-               value="123">
-      </div>
-
-      <app-button class="mt-lg"
-                  button-md
-                  button-red>
-        Create Offer
-      </app-button>
-    </app-widget>
-
-  </div> -->
 </app-wrapper>

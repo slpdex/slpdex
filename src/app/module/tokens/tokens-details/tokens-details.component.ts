@@ -10,6 +10,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { EndpointsService } from '../../../endpoints.service';
 import { TokenDetailsC } from '../../../queries/tokenDetailsQuery';
+import { SLPRoutes } from '../../../slp-routes';
 
 interface TokensDetails extends TokenDetailsC {
   timeSinceLastTrade: string;
@@ -25,6 +26,8 @@ export class TokensDetailsComponent implements OnInit, OnDestroy {
   tokenDetails$ = new BehaviorSubject<TokensDetails>(null);
 
   tests = [1, 2, 3, 4, 5];
+
+  slpRoutes = { ...SLPRoutes };
 
   private destroy$ = new Subject();
 

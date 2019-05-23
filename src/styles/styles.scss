@@ -1,4 +1,4 @@
-@import 'vendors', 'helpers', 'animations';
+@import 'vendors', 'helpers', 'animations', 'input';
 
 * {
   box-sizing: border-box;
@@ -40,8 +40,6 @@ a {
     text-decoration: none;
   }
 }
-
-
 
 .placeholder {
   animation: PulseAnimation 2s infinite;
