@@ -3,7 +3,7 @@
   <ng-container *ngIf="tokenDetails$ | async as token">
 
     <p class="bread">
-      Tokens / {{token.slp.detail.symbol}}
+      <a [routerLink]="'/' + slpRoutes.tokens">Tokens</a> / {{token.slp.detail.symbol}}
     </p>
 
     <div class="tokens-details">
