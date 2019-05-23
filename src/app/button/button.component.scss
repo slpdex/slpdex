@@ -57,6 +57,14 @@
     }
   }
 
+  &[button-disabled] {
+    .button {
+      background: darken(white, 30%);
+      color: white;
+      cursor: default;
+    }
+  }
+
   &[button-orange] {
     .button {
       background: $color-orange;
