@@ -143,13 +143,7 @@ export class CashContractsService {
 
     try {
       const tx1 = await offer[0].broadcast();
-
-      this.notificationService.showNotification(
-        `Successfully broadcasted offer1 to network. TX:
-        <a href="https://explorer.bitcoin.com/bch/tx/${tx1}">
-      ${tx1.slice(0, 10)}...
-        </a>`,
-      );
+      console.log(tx1);
     } catch (e) {
       console.log(e);
       return;
@@ -157,9 +151,10 @@ export class CashContractsService {
 
     try {
       const tx2 = await offer[1].broadcast();
+      console.log(tx2);
 
       this.notificationService.showNotification(
-        `Successfully broadcasted offer2 to network. TX:
+        `Successfully broadcasted offer to network. TX:
         <a href="https://explorer.bitcoin.com/bch/tx/${tx2}">
       ${tx2.slice(0, 10)}...
         </a>`,
