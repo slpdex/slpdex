@@ -30,7 +30,7 @@
     "@angular/service-worker": "~8.0.0-rc.5",
     "animejs": "^3.0.1",
     "bignumber.js": "^8.1.1",
-    "cashcontracts": "^0.1.15",
+    "cashcontracts": "^0.1.16",
     "core-js": "^3.1.2",
     "js-base64": "^2.5.1",
     "moment": "^2.24.0",
