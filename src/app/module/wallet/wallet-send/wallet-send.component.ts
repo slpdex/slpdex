@@ -79,7 +79,7 @@ export class WalletSendComponent implements OnInit, OnDestroy {
   }
 
   selectBch = () => {
-    const balance = convertSatsToBch(this.wallet.nonTokenBalance());
+    const balance = +convertSatsToBch(this.wallet.nonTokenBalance());
 
     this.selected$.next({
       name: 'Bitcoin Cash',
@@ -146,7 +146,7 @@ export class WalletSendComponent implements OnInit, OnDestroy {
         );
       }
 
-      this.fee = convertSatsToBch(sats) * this.usd;
+      this.fee = +convertSatsToBch(sats) * this.usd;
     });
   };
 
@@ -154,7 +154,7 @@ export class WalletSendComponent implements OnInit, OnDestroy {
     const bchItem: CoinCard = {
       name: 'Bitcoin Cash',
       symbol: 'BCH',
-      balance: convertSatsToBch(this.wallet.nonTokenBalance()),
+      balance: +convertSatsToBch(this.wallet.nonTokenBalance()),
     };
 
     this.bchDetails$.next(bchItem);
