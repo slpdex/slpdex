@@ -46,8 +46,6 @@ export class TokensListComponent implements OnInit, OnDestroy {
     this.destroy$.unsubscribe();
   }
 
-  selectToken = (token: TokensList) => {};
-
   private renderTokens = (data: AllTokens) => {
     const tokens = data.t.filter(item => {
       return item.slp.detail.name && item.slp.detail.symbol;
