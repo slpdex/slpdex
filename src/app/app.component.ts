@@ -4,7 +4,6 @@ import {
   Component,
 } from '@angular/core';
 import { CashContractsService } from './cash-contracts.service';
-import { UpdateService } from './update.service';
 import { SwUpdate } from '@angular/service-worker';
 
 @Component({
@@ -24,7 +23,7 @@ export class AppComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.cashContractsService.init();
 
-    if (this.swUpdate.available) {
+    if (this.swUpdate.activated) {
       this.swUpdate.available.subscribe(async () => {
         await this.swUpdate.activateUpdate();
         window.location.reload();
