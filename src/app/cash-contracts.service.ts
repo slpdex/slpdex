@@ -66,28 +66,15 @@ export class CashContractsService {
   sendBch = (address: string, amount: number) => {
     console.log(address, amount);
     this.notificationService.showNotification(
-      `Trying to send ${amount} BCH to <a href="https://explorer.bitcoin.com/bch/address/${address}">${generateShortId(
-        address,
-      )}</a>`,
+      `Trying to send ${amount} BCH to <a href="https://explorer.bitcoin.com/bch/address/${address}">
+      ${generateShortId(address)}</a>`,
     );
 
     this.walletSubject.pipe(take(1)).subscribe(async wallet => {
-      console.log(wallet);
-
       const sats = convertBchToSats(amount);
-
-      console.log(sats);
-
       const satsMinusFee = sats - cc.feeSendNonToken(wallet, sats);
-
-      console.log(satsMinusFee);
-
       const item = cc.sendToAddressTx(wallet, address, satsMinusFee);
-
-      console.log(item);
-
       const broadcast = await item.broadcast();
-
       const tx = broadcast.replace(/"/g, '');
 
       this.notificationService.showNotification(
@@ -110,16 +97,13 @@ export class CashContractsService {
     console.log(address, amount, tokenId);
 
     this.notificationService.showNotification(
-      `Trying to send ${amount} ${name} to <a href="https://explorer.bitcoin.com/bch/address/${address}">${generateShortId(
-        address,
-      )}</a>`,
+      `Trying to send ${amount} ${name} to <a href="https://explorer.bitcoin.com/bch/address/${address}">
+      ${generateShortId(address)}</a>`,
     );
 
     this.walletSubject.pipe(take(1)).subscribe(async wallet => {
       const item = cc.sendTokensToAddressTx(wallet, address, tokenId, amount);
-
       const broadcast = await item.broadcast();
-
       const tx = broadcast.replace(/"/g, '');
 
       this.notificationService.showNotification(
@@ -152,6 +136,37 @@ export class CashContractsService {
 
   loadIsSecretInStorage = () => {
     this.isSecretInStorageSubject.next(cc.Wallet.isSecretInStorage());
+  };
+
+  createSellOffer = async (params: cc.TradeOfferParams) => {
+    const offer = cc.createAdvancedTradeOfferTxs(this.wallet, params);
+
+    try {
+      const tx1 = await offer[0].broadcast();
+
+      this.notificationService.showNotification(
+        `Successfully broadcasted offer1 to network. TX:
+        <a href="https://explorer.bitcoin.com/bch/tx/${tx1}">
+      ${tx1.slice(0, 10)}...
+        </a>`,
+      );
+    } catch (e) {
+      console.log(e);
+      return;
+    }
+
+    try {
+      const tx2 = await offer[1].broadcast();
+
+      this.notificationService.showNotification(
+        `Successfully broadcasted offer2 to network. TX:
+        <a href="https://explorer.bitcoin.com/bch/tx/${tx2}">
+      ${tx2.slice(0, 10)}...
+        </a>`,
+      );
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   private emitWallet = () => {

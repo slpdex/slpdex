@@ -34,7 +34,7 @@
 
   <div *ngFor="let token of tokens$ | async let i = index"
        class="tokens-list__row"
-       [routerLink]="['./', token.symbol]">
+       [routerLink]="['./', token.id]">
 
     <div class="tokens-list__col tokens-list--count">
       {{i + 1}}

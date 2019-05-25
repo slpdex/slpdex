@@ -43,9 +43,10 @@
 
             <div class="input">
               <input type="number"
-                     value="0"
-                     input>
-
+                     [max]="totalTokenBalance"
+                     [min]="0"
+                     (keyup)="calculateTotal()"
+                     [(ngModel)]="selectedTokenAmount">
               <p>
                 {{token.slp.detail.symbol}}
               </p>
@@ -59,7 +60,8 @@
 
             <div class="input">
               <input type="number"
-                     value="0">
+                     (keyup)="calculateTotal()"
+                     [(ngModel)]="selectedBchPrice">
 
               <p>BCH</p>
             </div>
@@ -72,7 +74,8 @@
 
             <div class="input">
               <input type="number"
-                     value="0"
+                     [value]="totalTokenBalance"
+                     disabled
                      input>
 
               <p>BCH</p>
@@ -80,7 +83,8 @@
           </div>
 
           <app-button button-md
-                      button-red>
+                      button-red
+                      (click)="sell()">
             SELL
           </app-button>
         </div>

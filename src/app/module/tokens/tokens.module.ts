@@ -9,6 +9,7 @@ import { TokensListComponent } from './tokens-list/tokens-list.component';
 import { TokensRoutingModule } from './tokens-routing.module';
 import { TokensComponent } from './tokens.component';
 import { TokensDetailsOrderbookComponent } from './tokens-details/tokens-details-orderbook/tokens-details-orderbook.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { TokensDetailsOrderbookComponent } from './tokens-details/tokens-details
     CommonModule,
     TokensRoutingModule,
     WrapperModule,
+    FormsModule,
     CoinCardModule,
     WidgetModule,
     ButtonModule,

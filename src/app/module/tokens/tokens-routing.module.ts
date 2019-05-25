@@ -9,7 +9,7 @@ const routes: Routes = [
     component: TokensComponent,
   },
   {
-    path: ':symbol',
+    path: ':id',
     component: TokensDetailsComponent,
   },
 ];
