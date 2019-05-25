@@ -15,6 +15,20 @@ app-button {
   flex: 1;
   overflow: hidden;
 
+  &__amount {
+    align-items: center;
+    display: flex;
+    margin-bottom: 20px;
+
+    &--label {
+      flex-shrink: 0;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      width: 80px;
+    }
+  }
+
   &__header {
     display: flex;
     justify-content: space-between;
