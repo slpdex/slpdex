@@ -18,6 +18,10 @@
     &:focus {
       outline: 0;
     }
+
+    &:disabled {
+      background: darken(white, 15%);
+    }
   }
 
   p {
