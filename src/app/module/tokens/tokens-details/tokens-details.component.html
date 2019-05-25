@@ -32,7 +32,7 @@
       <app-widget widget-sm
                   class="tokens-details__right">
 
-        <app-tokens-details-orderbook>
+        <app-tokens-details-orderbook [token$]="tokenDetails$">
         </app-tokens-details-orderbook>
 
         <app-tokens-details-sell [token$]="tokenDetails$">

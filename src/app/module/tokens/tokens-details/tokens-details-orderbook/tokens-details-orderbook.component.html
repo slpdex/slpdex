@@ -17,7 +17,9 @@
            (keyup)="changeAmount()"
            [(ngModel)]="selectedAmount">
 
-    <p>BCH</p>
+    <p>
+      {{(token$ | async).slp.detail.symbol}}
+    </p>
   </div>
 </div>
 

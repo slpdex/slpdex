@@ -5,14 +5,12 @@ import {
   OnInit,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Wallet } from 'cashcontracts';
 import * as moment from 'moment';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { EndpointsService } from '../../../endpoints.service';
 import { TokenDetailsC } from '../../../queries/tokenDetailsQuery';
 import { SLPRoutes } from '../../../slp-routes';
-import { MarketService } from '../../../market.service';
 
 export interface TokensDetails extends TokenDetailsC {
   timeSinceLastTrade: string;

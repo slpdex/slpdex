@@ -1,21 +1,20 @@
 import {
-  Component,
-  OnInit,
   ChangeDetectionStrategy,
-  OnDestroy,
   ChangeDetectorRef,
+  Component,
   Input,
+  OnDestroy,
+  OnInit,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { take, takeUntil } from 'rxjs/operators';
-import { convertSatsToBch, convertBchToSats } from '../../../../helpers';
-import BigNumber from 'bignumber.js';
-import { CashContractsService } from '../../../../cash-contracts.service';
-import { Subject } from 'rxjs';
 import { Wallet } from 'cashcontracts';
-import { TokensDetails } from '../tokens-details.component';
-import { NotificationService } from '../../../../notification.service';
+import { Subject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
+import { CashContractsService } from '../../../../cash-contracts.service';
 import { EndpointsService } from '../../../../endpoints.service';
+import { convertBchToSats, convertSatsToBch } from '../../../../helpers';
+import { NotificationService } from '../../../../notification.service';
+import { TokensDetails } from '../tokens-details.component';
 
 @Component({
   selector: 'app-tokens-details-sell',

@@ -6,6 +6,7 @@ import {
   OnDestroy,
   OnInit,
   ViewChild,
+  Input,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Subject } from 'rxjs';
@@ -15,6 +16,7 @@ import { TokenOffer } from 'slpdex-market/dist/token';
 import { MarketService } from '../../../../market.service';
 import { EndpointsService } from '../../../../endpoints.service';
 import { convertSatsToBch } from '../../../../helpers';
+import { TokensDetails } from '../tokens-details.component';
 
 export interface TokenOfferExtended extends TokenOffer {
   selected?: boolean;
@@ -29,6 +31,8 @@ export interface TokenOfferExtended extends TokenOffer {
 })
 export class TokensDetailsOrderbookComponent
   implements OnInit, OnDestroy, AfterViewInit {
+  @Input() token$: TokensDetails;
+
   openOffers$ = new BehaviorSubject<TokenOfferExtended[]>([]);
   selectedOffer$ = new Subject<TokenOfferExtended>();
 
