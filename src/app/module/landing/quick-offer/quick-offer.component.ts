@@ -19,8 +19,8 @@ import { SLPRoutes } from '../../../slp-routes';
 export class QuickOfferComponent implements OnInit {
   animateButton = false;
 
-  @ViewChild('button') button: ElementRef<HTMLElement>;
-  @ViewChild('dummy') dummy: ElementRef<HTMLElement>;
+  @ViewChild('button', { static: false }) button: ElementRef<HTMLElement>;
+  @ViewChild('dummy', { static: false }) dummy: ElementRef<HTMLElement>;
 
   constructor(private router: Router) {}
 

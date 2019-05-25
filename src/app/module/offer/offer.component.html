@@ -1,4 +1,49 @@
-<div #offer
+<app-modal>
+
+  <app-wrapper>
+
+    <div *ngIf="offer$ | async as offer"
+         class="offer">
+
+      <app-widget class="offer__trade">
+
+        <app-icon [icon]="'lock'"
+                  icon-green
+                  icon-circle>
+        </app-icon>
+
+        <div class="offer__trade--wrapper">
+          <app-offer-item [item]="offer.from">
+          </app-offer-item>
+
+          <app-icon [icon]="'arrow'"
+                    class="offer__trade--arrow">
+          </app-icon>
+
+          <app-offer-item [item]="offer.to">
+          </app-offer-item>
+        </div>
+
+      </app-widget>
+
+      <div class="offer__divider"></div>
+
+      <app-widget>
+        <div class="offer__loading">
+          <div class="offer__spinner">
+
+          </div>
+        </div>
+
+      </app-widget>
+
+    </div>
+
+  </app-wrapper>
+
+</app-modal>
+
+<!-- <div #offer
      class="offer">
 
   <div class="offer__send">
@@ -29,4 +74,4 @@
     <p>Waiting for offer to be created</p>
   </div>
 
-</div>
+</div> -->
