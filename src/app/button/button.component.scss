@@ -1,5 +1,20 @@
 @import 'helpers';
 
+.button {
+  @include mat-elevation(2);
+  align-items: center;
+  background: $color-green;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  font-weight: 500;
+  justify-content: center;
+  outline: 0;
+  padding: 5px 20px;
+  width: 100%;
+}
+
 :host {
   display: flex;
   user-select: none;
@@ -8,21 +23,6 @@
   &:focus,
   &:active {
     outline: 0;
-  }
-
-  .button {
-    @include mat-elevation(2);
-    align-items: center;
-    background: $color-green;
-    border-radius: 4px;
-    color: white;
-    cursor: pointer;
-    display: flex;
-    font-weight: 500;
-    justify-content: center;
-    outline: 0;
-    padding: 5px 20px;
-    width: 100%;
   }
 
   &[button-full] {
@@ -57,14 +57,6 @@
     }
   }
 
-  &[button-disabled] {
-    .button {
-      background: darken(white, 30%);
-      color: white;
-      cursor: default;
-    }
-  }
-
   &[button-orange] {
     .button {
       background: $color-orange;
@@ -76,6 +68,14 @@
     .button {
       background: #da4e4e;
       color: white;
+    }
+  }
+
+  &[disabled='true'] {
+    .button {
+      background: darken(white, 30%) !important;
+      color: white !important;
+      cursor: default !important;
     }
   }
 }
