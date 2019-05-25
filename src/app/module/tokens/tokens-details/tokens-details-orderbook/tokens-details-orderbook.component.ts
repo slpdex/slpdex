@@ -1,18 +1,14 @@
 import {
-  Component,
-  OnInit,
-  ChangeDetectionStrategy,
-  ViewChild,
-  ElementRef,
   AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
   OnDestroy,
+  OnInit,
+  ViewChild,
 } from '@angular/core';
-
-import SimpleBar from 'simplebar';
-import { ActivatedRoute } from '@angular/router';
-import { take, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { CashContractsService } from '../../../../cash-contracts.service';
+import SimpleBar from 'simplebar';
 
 @Component({
   selector: 'app-tokens-details-orderbook',

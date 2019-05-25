@@ -11,6 +11,8 @@ import { TokensComponent } from './tokens.component';
 import { TokensDetailsOrderbookComponent } from './tokens-details/tokens-details-orderbook/tokens-details-orderbook.component';
 import { FormsModule } from '@angular/forms';
 import { TokensDetailsSellComponent } from './tokens-details/tokens-details-sell/tokens-details-sell.component';
+import { UsdFormatterPipe } from '../../pipe/usd-formatter.pipe';
+import { PipeModule } from '../../pipe/pipe.module';
 
 @NgModule({
   declarations: [
@@ -24,6 +26,7 @@ import { TokensDetailsSellComponent } from './tokens-details/tokens-details-sell
     CommonModule,
     TokensRoutingModule,
     WrapperModule,
+    PipeModule,
     FormsModule,
     CoinCardModule,
     WidgetModule,

@@ -23,30 +23,35 @@
   <div class="input">
     <input type="number"
            (keyup)="calculateTotal()"
-           [(ngModel)]="selectedBchPrice">
+           [ngModel]="selectedBchPrice | number:'1.8-8'"
+           (ngModelChange)="priceChanged($event)">
 
     <p>BCH</p>
   </div>
 </div>
 
-<div class="sell__box">
+<div class="sell__box mb-xs">
   <p class="sell--label">
     Total
   </p>
 
   <div class="input">
     <input type="number"
-           [value]="totalTokenBalance"
-           disabled
+           [value]="totalPrice | number:'1.8-8'"
            input>
 
     <p>BCH</p>
   </div>
+
 </div>
+<p class="sell__usd">
+  {{(totalPrice * usdPrice) | usdFormatter}} USD
+
+</p>
 
 <app-button button-md
             button-red
-            disabled
+            [attr.disabled]="!selectedTokenAmount"
             (click)="sell()">
   SELL
 </app-button>
