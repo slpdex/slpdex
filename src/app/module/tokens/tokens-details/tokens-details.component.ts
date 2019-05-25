@@ -12,6 +12,7 @@ import { take } from 'rxjs/operators';
 import { EndpointsService } from '../../../endpoints.service';
 import { TokenDetailsC } from '../../../queries/tokenDetailsQuery';
 import { SLPRoutes } from '../../../slp-routes';
+import { MarketService } from '../../../market.service';
 
 export interface TokensDetails extends TokenDetailsC {
   timeSinceLastTrade: string;
@@ -30,8 +31,6 @@ export class TokensDetailsComponent implements OnInit, OnDestroy {
 
   slpRoutes = { ...SLPRoutes };
 
-  private wallet: Wallet;
-
   private destroy$ = new Subject();
 
   constructor(
@@ -42,7 +41,8 @@ export class TokensDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.activatedRoute.params.pipe(take(1)).subscribe(params => {
-      this.getTokenDetails(params.id);
+      const tokenId = params.id;
+      this.getTokenDetails(tokenId);
     });
   }
 
