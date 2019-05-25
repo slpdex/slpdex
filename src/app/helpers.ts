@@ -2,7 +2,7 @@ import BigNumber from 'bignumber.js';
 import QRCode from 'qrcode';
 
 export const convertSatsToBch = (sats: number) => {
-  return +new BigNumber(sats).dividedBy(100000000).toFixed(8);
+  return new BigNumber(sats).div(100000000).toFormat(8);
 };
 
 export const convertBchToSats = (bch: number) => {
