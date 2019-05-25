@@ -1,0 +1,52 @@
+<div class="sell__box">
+  <p class="sell--label">
+    Amount
+  </p>
+
+  <div class="input">
+    <input type="number"
+           [max]="totalTokenBalance"
+           [min]="0"
+           (keyup)="calculateTotal()"
+           [(ngModel)]="selectedTokenAmount">
+    <p>
+      {{(token$ | async).slp.detail.symbol}}
+    </p>
+  </div>
+</div>
+
+<div class="sell__box">
+  <p class="sell--label">
+    Price
+  </p>
+
+  <div class="input">
+    <input type="number"
+           (keyup)="calculateTotal()"
+           [(ngModel)]="selectedBchPrice">
+
+    <p>BCH</p>
+  </div>
+</div>
+
+<div class="sell__box">
+  <p class="sell--label">
+    Total
+  </p>
+
+  <div class="input">
+    <input type="number"
+           [value]="totalTokenBalance"
+           disabled
+           input>
+
+    <p>BCH</p>
+  </div>
+</div>
+
+<app-button button-md
+            button-red
+            disabled
+            (click)="sell()">
+  SELL
+</app-button>

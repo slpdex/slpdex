@@ -64,25 +64,6 @@
   }
 
   &__sell {
-    border-top: 1px solid darken(white, 10%);
-    padding-top: 20px;
 
-    &__box {
-      align-items: center;
-      display: flex;
-      margin-bottom: 20px;
-    }
-
-    &--label {
-      flex-shrink: 0;
-      font-size: 12px;
-      font-weight: 600;
-      text-transform: uppercase;
-      width: 80px;
-    }
-
-    app-button {
-      margin-top: 20px;
-    }
   }
 }

@@ -34,60 +34,9 @@
         <app-tokens-details-orderbook>
         </app-tokens-details-orderbook>
 
-        <div class="tokens-details__sell">
+        <app-tokens-details-sell [token$]="tokenDetails$">
+        </app-tokens-details-sell>
 
-          <div class="tokens-details__sell__box">
-            <p class="tokens-details__sell--label">
-              Amount
-            </p>
-
-            <div class="input">
-              <input type="number"
-                     [max]="totalTokenBalance"
-                     [min]="0"
-                     (keyup)="calculateTotal()"
-                     [(ngModel)]="selectedTokenAmount">
-              <p>
-                {{token.slp.detail.symbol}}
-              </p>
-            </div>
-          </div>
-
-          <div class="tokens-details__sell__box">
-            <p class="tokens-details__sell--label">
-              Price
-            </p>
-
-            <div class="input">
-              <input type="number"
-                     (keyup)="calculateTotal()"
-                     [(ngModel)]="selectedBchPrice">
-
-              <p>BCH</p>
-            </div>
-          </div>
-
-          <div class="tokens-details__sell__box">
-            <p class="tokens-details__sell--label">
-              Total
-            </p>
-
-            <div class="input">
-              <input type="number"
-                     [value]="totalTokenBalance"
-                     disabled
-                     input>
-
-              <p>BCH</p>
-            </div>
-          </div>
-
-          <app-button button-md
-                      button-red
-                      (click)="sell()">
-            SELL
-          </app-button>
-        </div>
       </app-widget>
 
     </div>

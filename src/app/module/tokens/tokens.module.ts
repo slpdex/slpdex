@@ -10,6 +10,7 @@ import { TokensRoutingModule } from './tokens-routing.module';
 import { TokensComponent } from './tokens.component';
 import { TokensDetailsOrderbookComponent } from './tokens-details/tokens-details-orderbook/tokens-details-orderbook.component';
 import { FormsModule } from '@angular/forms';
+import { TokensDetailsSellComponent } from './tokens-details/tokens-details-sell/tokens-details-sell.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { FormsModule } from '@angular/forms';
     TokensListComponent,
     TokensDetailsComponent,
     TokensDetailsOrderbookComponent,
+    TokensDetailsSellComponent,
   ],
   imports: [
     CommonModule,
