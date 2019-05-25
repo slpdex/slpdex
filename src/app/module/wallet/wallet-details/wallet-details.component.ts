@@ -120,7 +120,7 @@ export class WalletDetailsComponent implements OnInit, OnDestroy {
 
   private setBchBalance = () => {
     const value = this.wallet.nonTokenBalance();
-    const bchBalance = +convertSatsToBch(value);
+    const bchBalance = convertSatsToBch(value);
     this.bchBalance$.next(bchBalance);
   };
 
