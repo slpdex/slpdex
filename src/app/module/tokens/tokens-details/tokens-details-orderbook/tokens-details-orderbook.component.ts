@@ -7,8 +7,19 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { Subject } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { take } from 'rxjs/operators';
 import SimpleBar from 'simplebar';
+import { TokenOffer } from 'slpdex-market/dist/token';
+import { MarketService } from '../../../../market.service';
+import { EndpointsService } from '../../../../endpoints.service';
+import { convertSatsToBch } from '../../../../helpers';
+
+export interface TokenOfferExtended extends TokenOffer {
+  selected?: boolean;
+  bchPricePerToken: number;
+}
 
 @Component({
   selector: 'app-tokens-details-orderbook',
@@ -18,15 +29,54 @@ import SimpleBar from 'simplebar';
 })
 export class TokensDetailsOrderbookComponent
   implements OnInit, OnDestroy, AfterViewInit {
-  tests = Array(30).fill(false);
+  openOffers$ = new BehaviorSubject<TokenOfferExtended[]>([]);
+  selectedOffer$ = new Subject<TokenOfferExtended>();
+
+  selectedAmount = 0;
+  tokenTotalAmount = 0;
+  selectedBchPrice = 0;
+  usdPrice = 0;
 
   private destroy$ = new Subject();
 
   @ViewChild('list', { static: false }) list: ElementRef<HTMLElement>;
 
-  constructor() {}
+  constructor(
+    private marketService: MarketService,
+    private activatedRoute: ActivatedRoute,
+    private endpointsService: EndpointsService,
+  ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.endpointsService
+      .getBchUsdPrice()
+      .pipe(take(1))
+      .subscribe(price => {
+        this.usdPrice = +price.ticker.price;
+      });
+
+    this.activatedRoute.params.pipe(take(1)).subscribe(async params => {
+      const tokenId = params.id;
+
+      const details = await this.marketService.getTokenDetails(tokenId);
+
+      if (!details) {
+        return;
+      }
+
+      const openOffers = details
+        .offers()
+        .toArray()
+        .map(item => {
+          return {
+            ...item,
+            bchPricePerToken: convertSatsToBch(item.pricePerToken),
+          } as TokenOfferExtended;
+        });
+      this.openOffers$.next(openOffers);
+      console.log(openOffers);
+    });
+  }
 
   ngOnDestroy() {
     this.destroy$.next();
@@ -37,7 +87,23 @@ export class TokensDetailsOrderbookComponent
     const simpleBar = new SimpleBar(this.list.nativeElement);
   }
 
-  select = item => {
-    item = true;
+  changeAmount = () => {
+    this.selectedBchPrice = convertSatsToBch(this.selectedAmount);
+  };
+
+  select = (item: TokenOfferExtended) => {
+    this.openOffers$.pipe(take(1)).subscribe(offers => {
+      const newOffers = offers.map(offer => {
+        offer.selected = item.timestamp === offer.timestamp;
+        return offer;
+      });
+
+      this.tokenTotalAmount = item.utxoEntry.vout;
+      this.selectedAmount = item.utxoEntry.vout;
+      this.selectedBchPrice = item.bchPricePerToken;
+
+      this.selectedOffer$.next(item);
+      this.openOffers$.next(newOffers);
+    });
   };
 }

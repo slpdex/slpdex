@@ -1,19 +1,44 @@
 <app-button button-md
-            disabled="true"
+            [attr.disabled]="!(selectedOffer$ | async)"
             class="mb-md">
   BUY
 </app-button>
 
-<div class="orderbook__amount">
+<div class="orderbook__box">
 
-  <p class="orderbook__amount--label">
+  <p class="orderbook__box--label">
     Amount
   </p>
 
   <div class="input">
-    <input type="number">
+    <input type="number"
+           [disabled]="!(selectedOffer$ | async)"
+           [max]="tokenTotalAmount"
+           (keyup)="changeAmount()"
+           [(ngModel)]="selectedAmount">
+
+    <p>BCH</p>
   </div>
 </div>
+
+<div class="orderbook__box mb-xs">
+
+  <p class="orderbook__box--label">
+    Price
+  </p>
+
+  <div class="input">
+    <input type="number"
+           [disabled]="true"
+           [value]="selectedBchPrice | number:'1.8-8'">
+
+    <p>BCH</p>
+  </div>
+</div>
+
+<p class="orderbook__usd">
+  {{(selectedBchPrice * usdPrice) | usdFormatter}} USD
+</p>
 
 <div class="orderbook">
 
@@ -25,18 +50,22 @@
   <div class="orderbook__list"
        #list>
 
-    <div *ngFor="let test of tests"
-         class="orderbook__item"
-         [class.orderbook__item--selected]="test"
-         (click)="select()">
-      <p class="orderbook__item--price">
-        0.23423134
-      </p>
+    <ng-container *ngIf="openOffers$ | async as offers">
 
-      <p class="orderbook__item--amount">
-        123
-      </p>
-    </div>
+      <div *ngFor="let offer of offers"
+           class="orderbook__item"
+           [class.orderbook__item--selected]="offer.selected"
+           (click)="select(offer)">
+        <p class="orderbook__item--price">
+          {{offer.pricePerToken | satsToBch | number:'1.8-8'}}
+        </p>
+
+        <p class="orderbook__item--amount">
+          {{offer.utxoEntry.vout}}
+        </p>
+      </div>
+    </ng-container>
+
   </div>
 
 </div>

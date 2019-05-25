@@ -8,11 +8,7 @@ import * as Market from 'slpdex-market';
 export class MarketService {
   constructor() {}
 
-  getTokenDetails = () => {
-    Market.MarketOverview.create().then(overview => {
-      console.log(overview);
-
-      console.log(overview.tokens().toJS());
-    });
+  getTokenDetails = async (id: string) => {
+    return Market.MarketToken.create(id);
   };
 }

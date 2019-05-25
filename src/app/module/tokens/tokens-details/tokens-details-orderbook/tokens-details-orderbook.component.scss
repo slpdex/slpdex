@@ -15,7 +15,7 @@ app-button {
   flex: 1;
   overflow: hidden;
 
-  &__amount {
+  &__box {
     align-items: center;
     display: flex;
     margin-bottom: 20px;
@@ -27,6 +27,14 @@ app-button {
       text-transform: uppercase;
       width: 80px;
     }
+  }
+
+  &__usd {
+    color: lighten($color-gray, 15%);
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 30px;
+    text-align: right;
   }
 
   &__header {
@@ -61,8 +69,8 @@ app-button {
     }
 
     &--selected {
-      background: $color-green;
-      color: white;
+      background: $color-green !important;
+      color: white !important;
     }
   }
 }
