@@ -3,19 +3,21 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  Input,
   OnDestroy,
   OnInit,
   ViewChild,
-  Input,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { BehaviorSubject, Subject } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { TradeOfferParams, Wallet } from 'cashcontracts';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
 import SimpleBar from 'simplebar';
 import { TokenOffer } from 'slpdex-market/dist/token';
-import { MarketService } from '../../../../market.service';
+import { CashContractsService } from '../../../../cash-contracts.service';
 import { EndpointsService } from '../../../../endpoints.service';
 import { convertSatsToBch } from '../../../../helpers';
+import { MarketService } from '../../../../market.service';
 import { TokensDetails } from '../tokens-details.component';
 
 export interface TokenOfferExtended extends TokenOffer {
@@ -31,16 +33,18 @@ export interface TokenOfferExtended extends TokenOffer {
 })
 export class TokensDetailsOrderbookComponent
   implements OnInit, OnDestroy, AfterViewInit {
-  @Input() token$: TokensDetails;
+  @Input() token$: Observable<TokensDetails>;
 
   openOffers$ = new BehaviorSubject<TokenOfferExtended[]>([]);
-  selectedOffer$ = new Subject<TokenOfferExtended>();
+  selectedOffer$ = new BehaviorSubject<TokenOfferExtended>(null);
 
   selectedAmount = 0;
   tokenTotalAmount = 0;
   selectedBchPrice = 0;
   usdPrice = 0;
 
+  private tokenId: string;
+  private wallet: Wallet;
   private destroy$ = new Subject();
 
   @ViewChild('list', { static: false }) list: ElementRef<HTMLElement>;
@@ -49,9 +53,20 @@ export class TokensDetailsOrderbookComponent
     private marketService: MarketService,
     private activatedRoute: ActivatedRoute,
     private endpointsService: EndpointsService,
+    private cashContractsService: CashContractsService,
   ) {}
 
   ngOnInit() {
+    this.cashContractsService.listenWallet
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(wallet => {
+        if (!wallet) {
+          return;
+        }
+
+        this.wallet = wallet;
+      });
+
     this.endpointsService
       .getBchUsdPrice()
       .pipe(take(1))
@@ -60,9 +75,9 @@ export class TokensDetailsOrderbookComponent
       });
 
     this.activatedRoute.params.pipe(take(1)).subscribe(async params => {
-      const tokenId = params.id;
+      this.tokenId = params.id;
 
-      const details = await this.marketService.getTokenDetails(tokenId);
+      const details = await this.marketService.getTokenDetails(this.tokenId);
 
       if (!details) {
         return;
@@ -91,23 +106,38 @@ export class TokensDetailsOrderbookComponent
     const simpleBar = new SimpleBar(this.list.nativeElement);
   }
 
-  changeAmount = () => {
-    this.selectedBchPrice = convertSatsToBch(this.selectedAmount);
-  };
-
   select = (item: TokenOfferExtended) => {
     this.openOffers$.pipe(take(1)).subscribe(offers => {
       const newOffers = offers.map(offer => {
-        offer.selected = item.timestamp === offer.timestamp;
+        offer.selected = item === offer;
         return offer;
       });
 
-      this.tokenTotalAmount = item.utxoEntry.vout;
-      this.selectedAmount = item.utxoEntry.vout;
+      this.tokenTotalAmount = item.sellAmountToken;
+      this.selectedAmount = item.sellAmountToken;
       this.selectedBchPrice = item.bchPricePerToken;
 
       this.selectedOffer$.next(item);
       this.openOffers$.next(newOffers);
+    });
+  };
+
+  buy = () => {
+    this.selectedOffer$.pipe(take(1)).subscribe(selectedOffer => {
+      const params: TradeOfferParams = {
+        buyAmountToken: this.selectedAmount,
+        feeAddress: this.wallet.cashAddr(),
+        pricePerToken: selectedOffer.pricePerToken,
+        receivingAddress: this.wallet.cashAddr(),
+        sellAmountToken: 0,
+        tokenId: this.tokenId,
+        feeDivisor: 500,
+      };
+
+      console.log(selectedOffer);
+      console.log(params);
+
+      this.cashContractsService.createBuyOffer(selectedOffer.utxoEntry, params);
     });
   };
 }

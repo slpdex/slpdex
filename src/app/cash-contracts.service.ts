@@ -138,6 +138,24 @@ export class CashContractsService {
     this.isSecretInStorageSubject.next(cc.Wallet.isSecretInStorage());
   };
 
+  createBuyOffer = async (utxo: cc.UtxoEntry, params: cc.TradeOfferParams) => {
+    const offer = cc.acceptTradeOfferTx(this.wallet, utxo, params);
+    console.log(offer);
+
+    try {
+      const tx = await offer.broadcast();
+
+      this.notificationService.showNotification(
+        `Successfully broadcasted buy offer to network. TX:
+        <a href="https://explorer.bitcoin.com/bch/tx/${tx}">
+      ${tx.slice(0, 10)}...
+        </a>`,
+      );
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   createSellOffer = async (params: cc.TradeOfferParams) => {
     const offer = cc.createAdvancedTradeOfferTxs(this.wallet, params);
 
@@ -154,7 +172,7 @@ export class CashContractsService {
       console.log(tx2);
 
       this.notificationService.showNotification(
-        `Successfully broadcasted offer to network. TX:
+        `Successfully broadcasted sell offer to network. TX:
         <a href="https://explorer.bitcoin.com/bch/tx/${tx2}">
       ${tx2.slice(0, 10)}...
         </a>`,

@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Wallet } from 'cashcontracts';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { CashContractsService } from '../../../../cash-contracts.service';
 import { EndpointsService } from '../../../../endpoints.service';
@@ -23,7 +23,7 @@ import { TokensDetails } from '../tokens-details.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TokensDetailsSellComponent implements OnInit, OnDestroy {
-  @Input() token$: TokensDetails;
+  @Input() token$: Observable<TokensDetails>;
 
   selectedTokenAmount = 0;
   selectedBchPrice = 0;
@@ -106,7 +106,7 @@ export class TokensDetailsSellComponent implements OnInit, OnDestroy {
       sellAmountToken: this.selectedTokenAmount,
       pricePerToken: convertBchToSats(+this.selectedBchPrice),
       feeAddress: this.wallet.cashAddr(),
-      feeDivisor: 0,
+      feeDivisor: 500,
       receivingAddress: this.wallet.cashAddr(),
       tokenId: this.tokenId,
     });

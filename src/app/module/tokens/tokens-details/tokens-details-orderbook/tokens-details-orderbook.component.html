@@ -1,6 +1,7 @@
 <app-button button-md
             [attr.disabled]="!(selectedOffer$ | async)"
-            class="mb-md">
+            class="mb-md"
+            (click)="buy()">
   BUY
 </app-button>
 
@@ -14,7 +15,6 @@
     <input type="number"
            [disabled]="!(selectedOffer$ | async)"
            [max]="tokenTotalAmount"
-           (keyup)="changeAmount()"
            [(ngModel)]="selectedAmount">
 
     <p>
@@ -63,7 +63,7 @@
         </p>
 
         <p class="orderbook__item--amount">
-          {{offer.utxoEntry.vout}}
+          {{offer.sellAmountToken}}
         </p>
       </div>
     </ng-container>
