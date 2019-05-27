@@ -145,6 +145,24 @@ export class TokensDetailsOrderbookComponent
             params,
             tokenDetails.slp.detail,
           );
+
+          this.clearSelectedOffer();
+        }),
+      )
+      .subscribe();
+  };
+
+  private clearSelectedOffer = () => {
+    this.selectedOffer$.next(null);
+
+    this.openOffers$
+      .pipe(
+        take(1),
+        map(offers => {
+          return offers.map(offer => {
+            offer.selected = false;
+            return offer;
+          });
         }),
       )
       .subscribe();
