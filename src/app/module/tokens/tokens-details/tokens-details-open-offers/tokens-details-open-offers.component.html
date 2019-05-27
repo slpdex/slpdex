@@ -1,0 +1,28 @@
+<app-widget class="open-offers">
+  <h2>Open offers</h2>
+
+  <div *ngFor="let offer of openOffers"
+       class="mb-lg">
+
+    <p>
+      price per token
+      {{offer.pricePerToken}}
+    </p>
+
+    <p>
+      amount
+      {{offer.sellAmountToken}}
+    </p>
+
+    <p>
+      timestamp
+      {{offer.timestamp}}
+    </p>
+
+    <!-- <p (click)="cancel()">
+      cancel
+    </p> -->
+
+  </div>
+
+</app-widget>

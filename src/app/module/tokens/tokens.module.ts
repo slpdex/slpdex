@@ -13,6 +13,7 @@ import { FormsModule } from '@angular/forms';
 import { TokensDetailsSellComponent } from './tokens-details/tokens-details-sell/tokens-details-sell.component';
 import { UsdFormatterPipe } from '../../pipe/usd-formatter.pipe';
 import { PipeModule } from '../../pipe/pipe.module';
+import { TokensDetailsOpenOffersComponent } from './tokens-details/tokens-details-open-offers/tokens-details-open-offers.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { PipeModule } from '../../pipe/pipe.module';
     TokensDetailsComponent,
     TokensDetailsOrderbookComponent,
     TokensDetailsSellComponent,
+    TokensDetailsOpenOffersComponent,
   ],
   imports: [
     CommonModule,
