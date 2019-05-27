@@ -31,8 +31,10 @@ export class HeaderComponent implements OnInit {
     setInterval(() => this.getTimeSinceLastBlock(), 20000);
 
     window.onload = e => {
-      this.hasLoaded = true;
-      this.changeDetectorRef.markForCheck();
+      setTimeout(() => {
+        this.hasLoaded = true;
+        this.changeDetectorRef.markForCheck();
+      }, 1000);
     };
   }
 

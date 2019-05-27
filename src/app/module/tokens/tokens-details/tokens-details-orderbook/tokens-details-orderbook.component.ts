@@ -10,8 +10,8 @@ import {
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TradeOfferParams, Wallet } from 'cashcontracts';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { BehaviorSubject, Observable, Subject, forkJoin } from 'rxjs';
+import { take, takeUntil, tap, map } from 'rxjs/operators';
 import SimpleBar from 'simplebar';
 import { TokenOffer } from 'slpdex-market/dist/token';
 import { CashContractsService } from '../../../../cash-contracts.service';
@@ -118,23 +118,47 @@ export class TokensDetailsOrderbookComponent
   };
 
   buy = () => {
-    this.selectedOffer$.pipe(take(1)).subscribe(selectedOffer => {
-      this.token$.pipe(take(1)).subscribe(tokenDetails => {
-        const params: TradeOfferParams = {
-          buyAmountToken: this.selectedAmount,
-          feeAddress: defaultNetworkSettings.feeAddress,
-          feeDivisor: defaultNetworkSettings.feeDivisor,
-          pricePerToken: selectedOffer.pricePerToken,
-          receivingAddress: selectedOffer.receivingAddress,
-          sellAmountToken: selectedOffer.sellAmountToken,
-          tokenId: this.tokenId,
-        };
-  
-        console.log(selectedOffer);
-        console.log(params);
-  
-        this.cashContractsService.createBuyOffer(selectedOffer.utxoEntry, params, tokenDetails.slp.detail);
-      })
-    });
+    forkJoin([this.selectedOffer$.pipe(take(1)), this.token$.pipe(take(1))])
+      .pipe(
+        map(([selectedOffer, tokenDetails]) => {
+          const params: TradeOfferParams = {
+            buyAmountToken: this.selectedAmount,
+            feeAddress: defaultNetworkSettings.feeAddress,
+            feeDivisor: defaultNetworkSettings.feeDivisor,
+            pricePerToken: selectedOffer.pricePerToken,
+            receivingAddress: selectedOffer.receivingAddress,
+            sellAmountToken: selectedOffer.sellAmountToken,
+            tokenId: this.tokenId,
+          };
+
+          console.log(selectedOffer);
+          console.log(params);
+
+          this.cashContractsService.createBuyOffer(
+            selectedOffer.utxoEntry,
+            params,
+            tokenDetails.slp.detail,
+          );
+
+          this.clearSelectedOffer();
+        }),
+      )
+      .subscribe();
+  };
+
+  private clearSelectedOffer = () => {
+    this.selectedOffer$.next(null);
+
+    this.openOffers$
+      .pipe(
+        take(1),
+        map(offers => {
+          return offers.map(offer => {
+            offer.selected = false;
+            return offer;
+          });
+        }),
+      )
+      .subscribe();
   };
 }
