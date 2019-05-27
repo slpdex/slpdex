@@ -19,6 +19,7 @@ import { EndpointsService } from '../../../../endpoints.service';
 import { convertSatsToBch } from '../../../../helpers';
 import { MarketService } from '../../../../market.service';
 import { TokensDetails } from '../tokens-details.component';
+import { defaultNetworkSettings } from 'slpdex-market';
 
 export interface TokenOfferExtended extends TokenOffer {
   selected?: boolean;
@@ -124,20 +125,22 @@ export class TokensDetailsOrderbookComponent
 
   buy = () => {
     this.selectedOffer$.pipe(take(1)).subscribe(selectedOffer => {
-      const params: TradeOfferParams = {
-        buyAmountToken: this.selectedAmount,
-        feeAddress: this.wallet.cashAddr(),
-        pricePerToken: selectedOffer.pricePerToken,
-        receivingAddress: this.wallet.cashAddr(),
-        sellAmountToken: 0,
-        tokenId: this.tokenId,
-        feeDivisor: 500,
-      };
-
-      console.log(selectedOffer);
-      console.log(params);
-
-      this.cashContractsService.createBuyOffer(selectedOffer.utxoEntry, params);
+      this.token$.pipe(take(1)).subscribe(tokenDetails => {
+        const params: TradeOfferParams = {
+          buyAmountToken: this.selectedAmount,
+          feeAddress: defaultNetworkSettings.feeAddress,
+          feeDivisor: defaultNetworkSettings.feeDivisor,
+          pricePerToken: selectedOffer.pricePerToken,
+          receivingAddress: selectedOffer.receivingAddress,
+          sellAmountToken: selectedOffer.sellAmountToken,
+          tokenId: this.tokenId,
+        };
+  
+        console.log(selectedOffer);
+        console.log(params);
+  
+        this.cashContractsService.createBuyOffer(selectedOffer.utxoEntry, params, tokenDetails.slp.detail);
+      })
     });
   };
 }
