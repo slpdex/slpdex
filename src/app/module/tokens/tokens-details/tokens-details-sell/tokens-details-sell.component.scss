@@ -24,11 +24,16 @@
     margin-top: 20px;
   }
 
-  &__usd {
+  &__usd,
+  &__balance {
     color: lighten($color-gray, 15%);
     font-size: 11px;
     font-weight: 600;
     margin-bottom: 20px;
     text-align: right;
+  }
+
+  &__balance {
+    cursor: pointer;
   }
 }

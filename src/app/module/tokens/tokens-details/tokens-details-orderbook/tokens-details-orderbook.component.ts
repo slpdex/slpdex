@@ -45,7 +45,7 @@ export class TokensDetailsOrderbookComponent
   usdPrice = 0;
 
   private tokenId: string;
-  private wallet: Wallet;
+  // private wallet: Wallet;
   private destroy$ = new Subject();
 
   @ViewChild('list', { static: false }) list: ElementRef<HTMLElement>;
@@ -58,15 +58,15 @@ export class TokensDetailsOrderbookComponent
   ) {}
 
   ngOnInit() {
-    this.cashContractsService.listenWallet
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(wallet => {
-        if (!wallet) {
-          return;
-        }
+    // this.cashContractsService.listenWallet
+    //   .pipe(takeUntil(this.destroy$))
+    //   .subscribe(wallet => {
+    //     if (!wallet) {
+    //       return;
+    //     }
 
-        this.wallet = wallet;
-      });
+    //     this.wallet = wallet;
+    //   });
 
     this.endpointsService
       .getBchUsdPrice()
@@ -77,24 +77,7 @@ export class TokensDetailsOrderbookComponent
 
     this.activatedRoute.params.pipe(take(1)).subscribe(async params => {
       this.tokenId = params.id;
-
-      const details = await this.marketService.getTokenDetails(this.tokenId);
-
-      if (!details) {
-        return;
-      }
-
-      const openOffers = details
-        .offers()
-        .toArray()
-        .map(item => {
-          return {
-            ...item,
-            bchPricePerToken: convertSatsToBch(item.pricePerToken),
-          } as TokenOfferExtended;
-        });
-      this.openOffers$.next(openOffers);
-      console.log(openOffers);
+      this.listenForOffers();
     });
   }
 
@@ -150,6 +133,30 @@ export class TokensDetailsOrderbookComponent
         }),
       )
       .subscribe();
+  };
+
+  private listenForOffers = () => {
+    this.marketService.offers
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(details => {
+        this.selectedOffer$.pipe(take(1)).subscribe(selectedOffer => {
+          const openOffers = details.map(item => {
+            const isCurrentSelectedOffer =
+              selectedOffer &&
+              selectedOffer.selected &&
+              selectedOffer.utxoEntry.txid === item.utxoEntry.txid;
+
+            return {
+              ...item,
+              bchPricePerToken: convertSatsToBch(item.pricePerToken),
+              selected: isCurrentSelectedOffer,
+            } as TokenOfferExtended;
+          });
+
+          this.openOffers$.next(openOffers);
+          console.log(openOffers);
+        });
+      });
   };
 
   private clearSelectedOffer = () => {

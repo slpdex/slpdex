@@ -11,6 +11,7 @@ import { take } from 'rxjs/operators';
 import { EndpointsService } from '../../../endpoints.service';
 import { TokenDetailsC } from '../../../queries/tokenDetailsQuery';
 import { SLPRoutes } from '../../../slp-routes';
+import { MarketService } from '../../../market.service';
 
 export interface TokensDetails extends TokenDetailsC {
   timeSinceLastTrade: string;
@@ -35,16 +36,20 @@ export class TokensDetailsComponent implements OnInit, OnDestroy {
     private endpointsService: EndpointsService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
+    private marketService: MarketService,
   ) {}
 
   ngOnInit() {
     this.activatedRoute.params.pipe(take(1)).subscribe(params => {
       const tokenId = params.id;
       this.getTokenDetails(tokenId);
+
+      this.marketService.loadOffersAndStartListener(tokenId);
     });
   }
 
   ngOnDestroy() {
+    this.marketService.unsubscribeListener();
     this.destroy$.next();
     this.destroy$.unsubscribe();
   }

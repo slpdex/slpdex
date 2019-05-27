@@ -8,13 +8,12 @@ import {
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Wallet } from 'cashcontracts';
-import { defaultNetworkSettings } from 'slpdex-market';
-import { Subject, Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
+import { defaultNetworkSettings } from 'slpdex-market';
 import { CashContractsService } from '../../../../cash-contracts.service';
 import { EndpointsService } from '../../../../endpoints.service';
 import { convertBchToSats, convertSatsToBch } from '../../../../helpers';
-import { NotificationService } from '../../../../notification.service';
 import { TokensDetails } from '../tokens-details.component';
 
 @Component({
@@ -41,11 +40,12 @@ export class TokensDetailsSellComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private cashContractsService: CashContractsService,
     private changeDetectorRef: ChangeDetectorRef,
-    private notificationService: NotificationService,
     private endpointsService: EndpointsService,
   ) {}
 
   ngOnInit() {
+    this.setDefaultAmounts();
+
     this.endpointsService
       .getBchUsdPrice()
       .pipe(take(1))
@@ -64,13 +64,11 @@ export class TokensDetailsSellComponent implements OnInit, OnDestroy {
           }
 
           this.wallet = wallet;
-          this.selectedBchPrice = convertSatsToBch(1);
 
           const totalTokenBalance = wallet.tokenBalance(this.tokenId);
-          this.selectedTokenAmount = totalTokenBalance;
           this.totalTokenBalance = totalTokenBalance;
 
-          this.calculateTotal();
+          this.calculateTotalPrice();
         });
     });
   }
@@ -79,14 +77,6 @@ export class TokensDetailsSellComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.unsubscribe();
   }
-
-  calculateTotal = () => {
-    this.totalPrice = +(
-      this.selectedTokenAmount * +this.selectedBchPrice
-    ).toFixed(8);
-
-    this.changeDetectorRef.markForCheck();
-  };
 
   priceChanged = value => {
     window.clearTimeout(this.priceTimer);
@@ -110,6 +100,27 @@ export class TokensDetailsSellComponent implements OnInit, OnDestroy {
         },
         tokenDetails.slp.detail,
       );
+
+      this.setDefaultAmounts();
     });
+  };
+
+  setMaxTokens = () => {
+    this.selectedTokenAmount = this.totalTokenBalance;
+  };
+
+  calculateTotalPrice = () => {
+    this.totalPrice = +(
+      this.selectedTokenAmount * +this.selectedBchPrice
+    ).toFixed(8);
+
+    this.changeDetectorRef.markForCheck();
+  };
+
+  private setDefaultAmounts = () => {
+    window.clearTimeout(this.priceTimer);
+    this.selectedTokenAmount = 0;
+    this.selectedBchPrice = convertSatsToBch(1);
+    this.calculateTotalPrice();
   };
 }
