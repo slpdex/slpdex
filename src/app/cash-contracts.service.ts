@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { convertBchToSats, generateShortId, convertSatsToBch } from './helpers';
 import { NotificationService } from './notification.service';
+import { TokenDetailsDetail } from './queries/tokenDetailsQuery';
 
 @Injectable({
   providedIn: 'root',
@@ -63,22 +64,22 @@ export class CashContractsService {
     });
   };
 
-  handleBroadcastResult = (broadcast: cc.BroadcastResult) => {
-    if (broadcast.success) {
-      const tx = broadcast.txid;
-      this.notificationService.showNotification(
-        `Successfully broadcasted transaction to network. TX:
-        <a href="https://explorer.bitcoin.com/bch/tx/${tx}">
-          ${tx.slice(0, 10)}...
-        </a>`,
-      );
-    } else if (broadcast.success == false) {
-      console.error(broadcast)
+  showBroadcastResultNotification = (broadcast: cc.BroadcastResult) => {
+    if (broadcast.success == false) {
+      console.error(broadcast);
       const msg = broadcast.msg;
       this.notificationService.showNotification(
         `Transaction broadcasted failed: ${msg}`,
       );
+      return;
     }
+    const tx = broadcast.txid;
+    this.notificationService.showNotification(
+      `Successfully broadcasted transaction to network. 
+      <a href="https://explorer.bitcoin.com/bch/tx/${tx}">
+        ${tx.slice(0, 10)}...
+      </a>`,
+    );
   }
 
   sendBch = (address: string, amount: number) => {
@@ -93,7 +94,7 @@ export class CashContractsService {
       const satsMinusFee = sats - cc.feeSendNonToken(wallet, sats);
       const item = cc.sendToAddressTx(wallet, address, satsMinusFee);
       const broadcast = await item.broadcast();
-      this.handleBroadcastResult(broadcast)
+      this.showBroadcastResultNotification(broadcast)
 
       this.emitWallet();
     });
@@ -115,7 +116,7 @@ export class CashContractsService {
     this.walletSubject.pipe(take(1)).subscribe(async wallet => {
       const item = cc.sendTokensToAddressTx(wallet, address, tokenId, amount);
       const broadcast = await item.broadcast();
-      this.handleBroadcastResult(broadcast);
+      this.showBroadcastResultNotification(broadcast);
 
       this.emitWallet();
     });
@@ -142,7 +143,7 @@ export class CashContractsService {
     this.isSecretInStorageSubject.next(cc.Wallet.isSecretInStorage());
   };
 
-  createBuyOffer = async (utxo: cc.UtxoEntry, params: cc.TradeOfferParams, tokenDetails: {decimals: number}) => {
+  createBuyOffer = async (utxo: cc.UtxoEntry, params: cc.TradeOfferParams, tokenDetails: TokenDetailsDetail) => {
     const tokenFactor = Math.pow(10, tokenDetails.decimals);
     const verification = cc.verifyAdvancedTradeOffer(this.wallet, tokenFactor, params);
     if (!verification.success) {
@@ -154,13 +155,13 @@ export class CashContractsService {
 
     try {
       const broadcast = await offer.broadcast();
-      this.handleBroadcastResult(broadcast);
+      this.showBroadcastResultNotification(broadcast);
     } catch (e) {
       console.log(e);
     }
   };
 
-  createSellOffer = async (params: cc.TradeOfferParams, tokenDetails: {decimals: number}) => {
+  createSellOffer = async (params: cc.TradeOfferParams, tokenDetails: TokenDetailsDetail) => {
     const tokenFactor = Math.pow(10, tokenDetails.decimals);
     const verification = cc.verifyAdvancedTradeOffer(this.wallet, tokenFactor, params);
     if (!verification.success) {
@@ -170,11 +171,11 @@ export class CashContractsService {
     const offer = cc.createAdvancedTradeOfferTxs(this.wallet, tokenFactor, params);
     const broadcast1 = await offer[0].broadcast();
     if (!broadcast1.success) {
-      this.handleBroadcastResult(broadcast1);
+      this.showBroadcastResultNotification(broadcast1);
       return;
     }
     const broadcast2 = await offer[1].broadcast();
-    this.handleBroadcastResult(broadcast2);
+    this.showBroadcastResultNotification(broadcast2);
   };
 
   private emitWallet = () => {
