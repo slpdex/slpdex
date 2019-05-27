@@ -45,7 +45,7 @@ export class TokensDetailsOrderbookComponent
   usdPrice = 0;
 
   private tokenId: string;
-  private wallet: Wallet;
+  // private wallet: Wallet;
   private destroy$ = new Subject();
 
   @ViewChild('list', { static: false }) list: ElementRef<HTMLElement>;
@@ -58,15 +58,15 @@ export class TokensDetailsOrderbookComponent
   ) {}
 
   ngOnInit() {
-    this.cashContractsService.listenWallet
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(wallet => {
-        if (!wallet) {
-          return;
-        }
+    // this.cashContractsService.listenWallet
+    //   .pipe(takeUntil(this.destroy$))
+    //   .subscribe(wallet => {
+    //     if (!wallet) {
+    //       return;
+    //     }
 
-        this.wallet = wallet;
-      });
+    //     this.wallet = wallet;
+    //   });
 
     this.endpointsService
       .getBchUsdPrice()
@@ -77,22 +77,13 @@ export class TokensDetailsOrderbookComponent
 
     this.activatedRoute.params.pipe(take(1)).subscribe(async params => {
       this.tokenId = params.id;
-
-      (await this.marketService.getOffers(this.tokenId)).subscribe(details => {
-        const openOffers = details
-          .map(item => {
-            return {
-              ...item,
-              bchPricePerToken: convertSatsToBch(item.pricePerToken),
-            } as TokenOfferExtended;
-          });
-          this.openOffers$.next(openOffers);
-          console.log(openOffers);
-      })
+      this.listenForOffers();
+      this.marketService.loadOffersAndStartListener(this.tokenId);
     });
   }
 
   ngOnDestroy() {
+    this.marketService.unsubscribeListener();
     this.destroy$.next();
     this.destroy$.unsubscribe();
   }
@@ -144,6 +135,22 @@ export class TokensDetailsOrderbookComponent
         }),
       )
       .subscribe();
+  };
+
+  private listenForOffers = () => {
+    this.marketService.offers
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(details => {
+        const openOffers = details.map(item => {
+          return {
+            ...item,
+            bchPricePerToken: convertSatsToBch(item.pricePerToken),
+          } as TokenOfferExtended;
+        });
+
+        this.openOffers$.next(openOffers);
+        console.log(openOffers);
+      });
   };
 
   private clearSelectedOffer = () => {
