@@ -9,6 +9,6 @@ export class MarketService {
   constructor() {}
 
   getTokenDetails = async (id: string) => {
-    return Market.MarketToken.create(id);
+    return Market.MarketToken.create(id, Market.defaultNetworkSettings);
   };
 }

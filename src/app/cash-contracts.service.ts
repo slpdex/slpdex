@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { convertBchToSats, generateShortId, convertSatsToBch } from './helpers';
 import { NotificationService } from './notification.service';
+import { TokenDetailsDetail } from './queries/tokenDetailsQuery';
 
 @Injectable({
   providedIn: 'root',
@@ -63,6 +64,24 @@ export class CashContractsService {
     });
   };
 
+  showBroadcastResultNotification = (broadcast: cc.BroadcastResult) => {
+    if (broadcast.success == false) {
+      console.error(broadcast);
+      const msg = broadcast.msg;
+      this.notificationService.showNotification(
+        `Transaction broadcasted failed: ${msg}`,
+      );
+      return;
+    }
+    const tx = broadcast.txid;
+    this.notificationService.showNotification(
+      `Successfully broadcasted transaction to network. 
+      <a href="https://explorer.bitcoin.com/bch/tx/${tx}">
+        ${tx.slice(0, 10)}...
+      </a>`,
+    );
+  }
+
   sendBch = (address: string, amount: number) => {
     console.log(address, amount);
     this.notificationService.showNotification(
@@ -75,14 +94,7 @@ export class CashContractsService {
       const satsMinusFee = sats - cc.feeSendNonToken(wallet, sats);
       const item = cc.sendToAddressTx(wallet, address, satsMinusFee);
       const broadcast = await item.broadcast();
-      const tx = broadcast.replace(/"/g, '');
-
-      this.notificationService.showNotification(
-        `Successfully broadcasted transaction to network. TX:
-        <a href="https://explorer.bitcoin.com/bch/tx/${tx}">
-      ${tx.slice(0, 10)}...
-        </a>`,
-      );
+      this.showBroadcastResultNotification(broadcast)
 
       this.emitWallet();
     });
@@ -104,14 +116,7 @@ export class CashContractsService {
     this.walletSubject.pipe(take(1)).subscribe(async wallet => {
       const item = cc.sendTokensToAddressTx(wallet, address, tokenId, amount);
       const broadcast = await item.broadcast();
-      const tx = broadcast.replace(/"/g, '');
-
-      this.notificationService.showNotification(
-        `Successfully broadcasted transaction to network. TX:
-        <a href="https://explorer.bitcoin.com/bch/tx/${tx}">
-      ${tx.slice(0, 10)}...
-        </a>`,
-      );
+      this.showBroadcastResultNotification(broadcast);
 
       this.emitWallet();
     });
@@ -138,48 +143,39 @@ export class CashContractsService {
     this.isSecretInStorageSubject.next(cc.Wallet.isSecretInStorage());
   };
 
-  createBuyOffer = async (utxo: cc.UtxoEntry, params: cc.TradeOfferParams) => {
-    const offer = cc.acceptTradeOfferTx(this.wallet, utxo, params);
+  createBuyOffer = async (utxo: cc.UtxoEntry, params: cc.TradeOfferParams, tokenDetails: TokenDetailsDetail) => {
+    const tokenFactor = Math.pow(10, tokenDetails.decimals);
+    const verification = cc.verifyAdvancedTradeOffer(this.wallet, tokenFactor, params);
+    if (!verification.success) {
+      this.notificationService.showNotification('Error: ' + verification.msg);
+      return;
+    }
+    const offer = cc.acceptTradeOfferTx(this.wallet, utxo, params, tokenDetails);
     console.log(offer);
 
     try {
-      const tx = await offer.broadcast();
-
-      this.notificationService.showNotification(
-        `Successfully broadcasted buy offer to network. TX:
-        <a href="https://explorer.bitcoin.com/bch/tx/${tx}">
-      ${tx.slice(0, 10)}...
-        </a>`,
-      );
+      const broadcast = await offer.broadcast();
+      this.showBroadcastResultNotification(broadcast);
     } catch (e) {
       console.log(e);
     }
   };
 
-  createSellOffer = async (params: cc.TradeOfferParams) => {
-    const offer = cc.createAdvancedTradeOfferTxs(this.wallet, params);
-
-    try {
-      const tx1 = await offer[0].broadcast();
-      console.log(tx1);
-    } catch (e) {
-      console.log(e);
+  createSellOffer = async (params: cc.TradeOfferParams, tokenDetails: TokenDetailsDetail) => {
+    const tokenFactor = Math.pow(10, tokenDetails.decimals);
+    const verification = cc.verifyAdvancedTradeOffer(this.wallet, tokenFactor, params);
+    if (!verification.success) {
+      this.notificationService.showNotification('Error: ' + verification.msg);
       return;
     }
-
-    try {
-      const tx2 = await offer[1].broadcast();
-      console.log(tx2);
-
-      this.notificationService.showNotification(
-        `Successfully broadcasted sell offer to network. TX:
-        <a href="https://explorer.bitcoin.com/bch/tx/${tx2}">
-      ${tx2.slice(0, 10)}...
-        </a>`,
-      );
-    } catch (e) {
-      console.log(e);
+    const offer = cc.createAdvancedTradeOfferTxs(this.wallet, tokenFactor, params);
+    const broadcast1 = await offer[0].broadcast();
+    if (!broadcast1.success) {
+      this.showBroadcastResultNotification(broadcast1);
+      return;
     }
+    const broadcast2 = await offer[1].broadcast();
+    this.showBroadcastResultNotification(broadcast2);
   };
 
   private emitWallet = () => {

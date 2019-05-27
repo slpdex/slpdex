@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Wallet } from 'cashcontracts';
+import { defaultNetworkSettings } from 'slpdex-market';
 import { Subject, Observable } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { CashContractsService } from '../../../../cash-contracts.service';
@@ -97,18 +98,18 @@ export class TokensDetailsSellComponent implements OnInit, OnDestroy {
   };
 
   sell = () => {
-    if (!this.selectedTokenAmount || !this.selectedBchPrice) {
-      this.notificationService.showNotification('Invalid value');
-      return;
-    }
-
-    this.cashContractsService.createSellOffer({
-      sellAmountToken: this.selectedTokenAmount,
-      pricePerToken: convertBchToSats(+this.selectedBchPrice),
-      feeAddress: this.wallet.cashAddr(),
-      feeDivisor: 500,
-      receivingAddress: this.wallet.cashAddr(),
-      tokenId: this.tokenId,
+    this.token$.pipe(take(1)).subscribe(tokenDetails => {
+      this.cashContractsService.createSellOffer(
+        {
+          sellAmountToken: this.selectedTokenAmount,
+          pricePerToken: convertBchToSats(+this.selectedBchPrice),
+          feeAddress: defaultNetworkSettings.feeAddress,
+          feeDivisor: defaultNetworkSettings.feeDivisor,
+          receivingAddress: this.wallet.cashAddr(),
+          tokenId: this.tokenId,
+        },
+        tokenDetails.slp.detail,
+      );
     });
   };
 }
