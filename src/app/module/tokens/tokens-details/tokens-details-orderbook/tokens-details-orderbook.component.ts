@@ -141,15 +141,23 @@ export class TokensDetailsOrderbookComponent
     this.marketService.offers
       .pipe(takeUntil(this.destroy$))
       .subscribe(details => {
-        const openOffers = details.map(item => {
-          return {
-            ...item,
-            bchPricePerToken: convertSatsToBch(item.pricePerToken),
-          } as TokenOfferExtended;
-        });
+        this.selectedOffer$.pipe(take(1)).subscribe(selectedOffer => {
+          const openOffers = details.map(item => {
+            const isCurrentSelectedOffer =
+              selectedOffer &&
+              selectedOffer.selected &&
+              selectedOffer.utxoEntry.txid === item.utxoEntry.txid;
 
-        this.openOffers$.next(openOffers);
-        console.log(openOffers);
+            return {
+              ...item,
+              bchPricePerToken: convertSatsToBch(item.pricePerToken),
+              selected: isCurrentSelectedOffer,
+            } as TokenOfferExtended;
+          });
+
+          this.openOffers$.next(openOffers);
+          console.log(openOffers);
+        });
       });
   };
 
