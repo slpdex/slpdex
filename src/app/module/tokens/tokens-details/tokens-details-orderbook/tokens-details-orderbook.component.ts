@@ -135,12 +135,16 @@ export class TokensDetailsOrderbookComponent
           sellAmountToken: selectedOffer.sellAmountToken,
           tokenId: this.tokenId,
         };
-  
+
         console.log(selectedOffer);
         console.log(params);
-  
-        this.cashContractsService.createBuyOffer(selectedOffer.utxoEntry, params, tokenDetails.slp.detail);
-      })
+
+        this.cashContractsService.createBuyOffer(
+          selectedOffer.utxoEntry,
+          params,
+          tokenDetails.slp.detail,
+        );
+      });
     });
   };
 }
