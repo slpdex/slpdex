@@ -78,23 +78,17 @@ export class TokensDetailsOrderbookComponent
     this.activatedRoute.params.pipe(take(1)).subscribe(async params => {
       this.tokenId = params.id;
 
-      const details = await this.marketService.getTokenDetails(this.tokenId);
-
-      if (!details) {
-        return;
-      }
-
-      const openOffers = details
-        .offers()
-        .toArray()
-        .map(item => {
-          return {
-            ...item,
-            bchPricePerToken: convertSatsToBch(item.pricePerToken),
-          } as TokenOfferExtended;
-        });
-      this.openOffers$.next(openOffers);
-      console.log(openOffers);
+      (await this.marketService.getOffers(this.tokenId)).subscribe(details => {
+        const openOffers = details
+          .map(item => {
+            return {
+              ...item,
+              bchPricePerToken: convertSatsToBch(item.pricePerToken),
+            } as TokenOfferExtended;
+          });
+          this.openOffers$.next(openOffers);
+          console.log(openOffers);
+      })
     });
   }
 
