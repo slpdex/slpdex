@@ -75,12 +75,12 @@ export class CashContractsService {
     }
     const tx = broadcast.txid;
     this.notificationService.showNotification(
-      `Successfully broadcasted transaction to network. 
+      `Successfully broadcasted transaction to network.
       <a href="https://explorer.bitcoin.com/bch/tx/${tx}">
         ${tx.slice(0, 10)}...
       </a>`,
     );
-  }
+  };
 
   sendBch = (address: string, amount: number) => {
     console.log(address, amount);
@@ -94,7 +94,7 @@ export class CashContractsService {
       const satsMinusFee = sats - cc.feeSendNonToken(wallet, sats);
       const item = cc.sendToAddressTx(wallet, address, satsMinusFee);
       const broadcast = await item.broadcast();
-      this.showBroadcastResultNotification(broadcast)
+      this.showBroadcastResultNotification(broadcast);
 
       this.emitWallet();
     });
@@ -143,14 +143,27 @@ export class CashContractsService {
     this.isSecretInStorageSubject.next(cc.Wallet.isSecretInStorage());
   };
 
-  createBuyOffer = async (utxo: cc.UtxoEntry, params: cc.TradeOfferParams, tokenDetails: TokenDetailsDetail) => {
+  createBuyOffer = async (
+    utxo: cc.UtxoEntry,
+    params: cc.TradeOfferParams,
+    tokenDetails: TokenDetailsDetail,
+  ) => {
     const tokenFactor = Math.pow(10, tokenDetails.decimals);
-    const verification = cc.verifyAdvancedTradeOffer(this.wallet, tokenFactor, params);
+    const verification = cc.verifyAdvancedTradeOffer(
+      this.wallet,
+      tokenFactor,
+      params,
+    );
     if (!verification.success) {
       this.notificationService.showNotification('Error: ' + verification.msg);
       return;
     }
-    const offer = cc.acceptTradeOfferTx(this.wallet, utxo, params, tokenDetails);
+    const offer = cc.acceptTradeOfferTx(
+      this.wallet,
+      utxo,
+      params,
+      tokenDetails,
+    );
     console.log(offer);
 
     try {
@@ -161,14 +174,25 @@ export class CashContractsService {
     }
   };
 
-  createSellOffer = async (params: cc.TradeOfferParams, tokenDetails: TokenDetailsDetail) => {
+  createSellOffer = async (
+    params: cc.TradeOfferParams,
+    tokenDetails: TokenDetailsDetail,
+  ) => {
     const tokenFactor = Math.pow(10, tokenDetails.decimals);
-    const verification = cc.verifyAdvancedTradeOffer(this.wallet, tokenFactor, params);
+    const verification = cc.verifyAdvancedTradeOffer(
+      this.wallet,
+      tokenFactor,
+      params,
+    );
     if (!verification.success) {
       this.notificationService.showNotification('Error: ' + verification.msg);
       return;
     }
-    const offer = cc.createAdvancedTradeOfferTxs(this.wallet, tokenFactor, params);
+    const offer = cc.createAdvancedTradeOfferTxs(
+      this.wallet,
+      tokenFactor,
+      params,
+    );
     const broadcast1 = await offer[0].broadcast();
     if (!broadcast1.success) {
       this.showBroadcastResultNotification(broadcast1);
