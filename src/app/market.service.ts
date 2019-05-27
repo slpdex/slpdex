@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import * as Market from 'slpdex-market';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MarketService {
-  private offersSubject$ = new Subject<Market.TokenOffer[]>();
+  private offersSubject$ = new BehaviorSubject<Market.TokenOffer[]>([]);
   private marketToken: Market.MarketToken;
 
   constructor() {}
 
   get offers() {
     return this.offersSubject$.asObservable();
-  };
+  }
 
   loadOffersAndStartListener = async (id: string) => {
     try {

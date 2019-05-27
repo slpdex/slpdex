@@ -78,12 +78,10 @@ export class TokensDetailsOrderbookComponent
     this.activatedRoute.params.pipe(take(1)).subscribe(async params => {
       this.tokenId = params.id;
       this.listenForOffers();
-      this.marketService.loadOffersAndStartListener(this.tokenId);
     });
   }
 
   ngOnDestroy() {
-    this.marketService.unsubscribeListener();
     this.destroy$.next();
     this.destroy$.unsubscribe();
   }

@@ -1,4 +1,4 @@
-<div class="sell__box">
+<div class="sell__box mb-xs">
   <p class="sell--label">
     Amount
   </p>
@@ -7,13 +7,18 @@
     <input type="number"
            [max]="totalTokenBalance"
            [min]="0"
-           (keyup)="calculateTotal()"
+           (keyup)="calculateTotalPrice()"
            [(ngModel)]="selectedTokenAmount">
     <p>
       {{(token$ | async).slp.detail.symbol}}
     </p>
   </div>
 </div>
+
+<p class="sell__balance"
+   (click)="setMaxTokens()">
+  Your balance {{totalTokenBalance}}
+</p>
 
 <div class="sell__box">
   <p class="sell--label">
@@ -22,7 +27,7 @@
 
   <div class="input">
     <input type="number"
-           (keyup)="calculateTotal()"
+           (keyup)="calculateTotalPrice()"
            [ngModel]="selectedBchPrice | number:'1.8-8'"
            (ngModelChange)="priceChanged($event)">
 
@@ -44,9 +49,9 @@
   </div>
 
 </div>
+
 <p class="sell__usd">
   {{(totalPrice * usdPrice) | usdFormatter}} USD
-
 </p>
 
 <app-button button-md
