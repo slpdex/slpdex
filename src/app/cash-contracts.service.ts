@@ -202,6 +202,26 @@ export class CashContractsService {
     this.showBroadcastResultNotification(broadcast2);
   };
 
+  cancelSellOffer = async (
+    utxo: cc.UtxoEntry,
+    params: cc.TradeOfferParams,
+    tokenDetails: TokenDetailsDetail,
+  ) => {
+    const cancelTx = cc.cancelTradeOfferTx(
+      this.wallet,
+      utxo,
+      params,
+      tokenDetails,
+    );
+
+    try {
+      const broadcast = await cancelTx.broadcast();
+      this.showBroadcastResultNotification(broadcast);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   private emitWallet = () => {
     this.walletSubject.next(this.wallet);
   };

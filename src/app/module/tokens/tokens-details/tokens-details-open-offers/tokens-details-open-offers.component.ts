@@ -4,12 +4,15 @@ import {
   Component,
   OnDestroy,
   OnInit,
+  Input,
 } from '@angular/core';
-import { combineLatest, Subject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/operators';
-import { TokenOffer } from 'slpdex-market';
+import { combineLatest, Subject, Observable } from 'rxjs';
+import { map, takeUntil, take } from 'rxjs/operators';
+import { TokenOffer, defaultNetworkSettings } from 'slpdex-market';
 import { CashContractsService } from '../../../../cash-contracts.service';
 import { MarketService } from '../../../../market.service';
+import { TokensDetails } from '../tokens-details.component';
+import { Wallet } from 'cashcontracts';
 
 @Component({
   selector: 'app-tokens-details-open-offers',
@@ -18,9 +21,11 @@ import { MarketService } from '../../../../market.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TokensDetailsOpenOffersComponent implements OnInit, OnDestroy {
+  @Input() token$: Observable<TokensDetails>;
   openOffers: TokenOffer[] = [];
 
   private destroy$ = new Subject();
+  private wallet: Wallet
 
   constructor(
     private marketService: MarketService,
@@ -39,6 +44,7 @@ export class TokensDetailsOpenOffersComponent implements OnInit, OnDestroy {
           if (!wallet) {
             return;
           }
+          this.wallet = wallet;
 
           const cashAddres = wallet.cashAddr();
 
@@ -58,5 +64,22 @@ export class TokensDetailsOpenOffersComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.unsubscribe();
+  }
+
+  cancel = (offer: TokenOffer) => {
+    this.token$.pipe(take(1)).subscribe(tokenDetails => {
+      this.cashContractsService.cancelSellOffer(
+        offer.utxoEntry,
+        {
+          sellAmountToken: offer.sellAmountToken,
+          pricePerToken: offer.pricePerToken,
+          feeAddress: defaultNetworkSettings.feeAddress,
+          feeDivisor: defaultNetworkSettings.feeDivisor,
+          receivingAddress: this.wallet.cashAddr(),
+          tokenId: this.marketService.tokenId(),
+        },
+        tokenDetails.slp.detail,
+      )
+    })
   }
 }
