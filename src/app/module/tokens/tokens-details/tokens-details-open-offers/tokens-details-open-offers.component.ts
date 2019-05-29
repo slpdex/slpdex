@@ -25,7 +25,7 @@ export class TokensDetailsOpenOffersComponent implements OnInit, OnDestroy {
   openOffers: TokenOffer[] = [];
 
   private destroy$ = new Subject();
-  private wallet: Wallet
+  private wallet: Wallet;
 
   constructor(
     private marketService: MarketService,
@@ -79,7 +79,7 @@ export class TokensDetailsOpenOffersComponent implements OnInit, OnDestroy {
           tokenId: this.marketService.tokenId(),
         },
         tokenDetails.slp.detail,
-      )
-    })
-  }
+      );
+    });
+  };
 }
