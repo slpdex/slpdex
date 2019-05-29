@@ -1,7 +1,7 @@
 <app-widget class="open-offers">
   <h2>Open offers</h2>
 
-  <app-widget *ngFor="let offer of openOffers"
+  <app-widget *ngFor="let offer of openOffers; trackBy: trackByTimestamp"
               widget-sm
               class="open-offers__item">
 

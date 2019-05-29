@@ -78,7 +78,7 @@ export class TokensDetailsOpenOffersComponent implements OnInit, OnDestroy {
     this.destroy$.unsubscribe();
   }
 
-  cancel = (offer: TokenOffer) => {
+  cancel = (offer: TokenOfferExtended) => {
     this.token$.pipe(take(1)).subscribe(tokenDetails => {
       this.cashContractsService.cancelSellOffer(
         offer.utxoEntry,
@@ -93,5 +93,9 @@ export class TokensDetailsOpenOffersComponent implements OnInit, OnDestroy {
         tokenDetails.slp.detail,
       );
     });
+  };
+
+  trackByTimestamp = (index: number, item: TokenOfferExtended) => {
+    return item.timestamp;
   };
 }
