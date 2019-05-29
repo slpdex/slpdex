@@ -15,6 +15,10 @@ export class MarketService {
     return this.offersSubject$.asObservable();
   }
 
+  tokenId = () => {
+    return this.marketToken.tokenId()
+  }
+
   loadOffersAndStartListener = async (id: string) => {
     try {
       this.marketToken = await Market.MarketToken.create(
