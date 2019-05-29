@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as cc from 'cashcontracts';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { convertBchToSats, generateShortId, convertSatsToBch } from './helpers';
 import { NotificationService } from './notification.service';
@@ -178,53 +178,63 @@ export class CashContractsService {
     params: cc.TradeOfferParams,
     tokenDetails: TokenDetailsDetail,
   ) => {
-    const tokenFactor = Math.pow(10, tokenDetails.decimals);
-    const verification = cc.verifyAdvancedTradeOffer(
-      this.wallet,
-      tokenFactor,
-      params,
-    );
+    return new Promise(async resolve => {
+      const tokenFactor = Math.pow(10, tokenDetails.decimals);
+      const verification = cc.verifyAdvancedTradeOffer(
+        this.wallet,
+        tokenFactor,
+        params,
+      );
 
-    if (!verification.success) {
-      this.notificationService.showNotification('Error: ' + verification.msg);
-      return;
-    }
+      if (!verification.success) {
+        this.notificationService.showNotification('Error: ' + verification.msg);
+        setTimeout(() => resolve(), 1000);
+        return;
+      }
 
-    const offer = cc.createAdvancedTradeOfferTxs(
-      this.wallet,
-      tokenFactor,
-      params,
-    );
+      const offer = cc.createAdvancedTradeOfferTxs(
+        this.wallet,
+        tokenFactor,
+        params,
+      );
 
-    const broadcast1 = await offer[0].broadcast();
+      const broadcast1 = await offer[0].broadcast();
 
-    if (!broadcast1.success) {
-      this.showBroadcastResultNotification(broadcast1);
-      return;
-    }
+      if (!broadcast1.success) {
+        this.showBroadcastResultNotification(broadcast1);
+        setTimeout(() => resolve(), 1000);
+        return;
+      }
 
-    const broadcast2 = await offer[1].broadcast();
-    this.showBroadcastResultNotification(broadcast2);
+      const broadcast2 = await offer[1].broadcast();
+      this.showBroadcastResultNotification(broadcast2);
+      setTimeout(() => resolve(), 1000);
+    });
   };
 
-  cancelSellOffer = async (
+  cancelSellOffer = (
     utxo: cc.UtxoEntry,
     params: cc.TradeOfferParams,
     tokenDetails: TokenDetailsDetail,
   ) => {
-    const cancelTx = cc.cancelTradeOfferTx(
-      this.wallet,
-      utxo,
-      params,
-      tokenDetails,
-    );
+    return new Promise(resolve => {
+      const cancelTx = cc.cancelTradeOfferTx(
+        this.wallet,
+        utxo,
+        params,
+        tokenDetails,
+      );
 
-    try {
-      const broadcast = await cancelTx.broadcast();
-      this.showBroadcastResultNotification(broadcast);
-    } catch (e) {
-      console.log(e);
-    }
+      try {
+        cancelTx.broadcast().then(broadcast => {
+          this.showBroadcastResultNotification(broadcast);
+        });
+        setTimeout(() => resolve(), 1000);
+      } catch (e) {
+        console.log(e);
+        setTimeout(() => resolve(), 1000);
+      }
+    });
   };
 
   private emitWallet = () => {
