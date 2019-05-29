@@ -74,8 +74,16 @@ app-button {
       color: white !important;
     }
 
-    &--my {
-      background: lighten($color-green-light, 30%) !important;
+    &--price {
+      align-items: center;
+      display: flex;
+    }
+
+    &--yours {
+      color: lighten($color-gray, 20%);
+      font-size: 9px;
+      font-weight: 500;
+      margin-left: 5px;
     }
   }
 }
