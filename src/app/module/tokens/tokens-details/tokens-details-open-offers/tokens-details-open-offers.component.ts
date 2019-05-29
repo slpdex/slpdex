@@ -29,6 +29,7 @@ export class TokensDetailsOpenOffersComponent implements OnInit, OnDestroy {
   @Input() token$: Observable<TokensDetails>;
   openOffers: TokenOfferExtended[] = [];
 
+  private isLoading = false;
   private destroy$ = new Subject();
   private wallet: Wallet;
 
@@ -60,7 +61,9 @@ export class TokensDetailsOpenOffersComponent implements OnInit, OnDestroy {
             .map(offer => {
               return {
                 ...offer,
-                timeSince: moment.unix(offer.timestamp).fromNow(),
+                timeSince: offer.timestamp
+                  ? moment.unix(offer.timestamp).fromNow()
+                  : 'Unconfirmed',
               } as TokenOfferExtended;
             });
 
@@ -79,8 +82,14 @@ export class TokensDetailsOpenOffersComponent implements OnInit, OnDestroy {
   }
 
   cancel = (offer: TokenOfferExtended) => {
-    this.token$.pipe(take(1)).subscribe(tokenDetails => {
-      this.cashContractsService.cancelSellOffer(
+    if (this.isLoading) {
+      return;
+    }
+
+    this.isLoading = true;
+
+    this.token$.pipe(take(1)).subscribe(async tokenDetails => {
+      await this.cashContractsService.cancelSellOffer(
         offer.utxoEntry,
         {
           sellAmountToken: offer.sellAmountToken,
@@ -92,6 +101,8 @@ export class TokensDetailsOpenOffersComponent implements OnInit, OnDestroy {
         },
         tokenDetails.slp.detail,
       );
+
+      this.isLoading = false;
     });
   };
 
