@@ -72,5 +72,9 @@ app-button {
       background: $color-green !important;
       color: white !important;
     }
+
+    &--my {
+      background: lighten($color-green-light, 30%) !important;
+    }
   }
 }

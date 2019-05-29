@@ -57,6 +57,7 @@
       <div *ngFor="let offer of offers"
            class="orderbook__item"
            [class.orderbook__item--selected]="offer.selected"
+           [class.orderbook__item--my]="offer.isMyOrder"
            (click)="select(offer)">
         <p class="orderbook__item--price">
           {{offer.pricePerToken | satsToBch | number:'1.8-8'}}

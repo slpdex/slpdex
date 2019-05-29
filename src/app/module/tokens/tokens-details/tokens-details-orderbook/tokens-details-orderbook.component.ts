@@ -22,8 +22,9 @@ import { TokensDetails } from '../tokens-details.component';
 import { defaultNetworkSettings } from 'slpdex-market';
 
 export interface TokenOfferExtended extends TokenOffer {
-  selected?: boolean;
   bchPricePerToken: number;
+  selected?: boolean;
+  isMyOrder?: boolean;
 }
 
 @Component({
@@ -44,8 +45,9 @@ export class TokensDetailsOrderbookComponent
   selectedBchPrice = 0;
   usdPrice = 0;
 
+  private tokenOffer: TokenOffer[] = [];
   private tokenId: string;
-  // private wallet: Wallet;
+  private wallet: Wallet;
   private destroy$ = new Subject();
 
   @ViewChild('list', { static: false }) list: ElementRef<HTMLElement>;
@@ -58,15 +60,19 @@ export class TokensDetailsOrderbookComponent
   ) {}
 
   ngOnInit() {
-    // this.cashContractsService.listenWallet
-    //   .pipe(takeUntil(this.destroy$))
-    //   .subscribe(wallet => {
-    //     if (!wallet) {
-    //       return;
-    //     }
+    this.cashContractsService.listenWallet
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(wallet => {
+        if (!wallet) {
+          return;
+        }
 
-    //     this.wallet = wallet;
-    //   });
+        this.wallet = wallet;
+
+        if (this.tokenOffer && this.tokenOffer.length) {
+          this.mapTokenOffer();
+        }
+      });
 
     this.endpointsService
       .getBchUsdPrice()
@@ -138,25 +144,35 @@ export class TokensDetailsOrderbookComponent
   private listenForOffers = () => {
     this.marketService.offers
       .pipe(takeUntil(this.destroy$))
-      .subscribe(details => {
-        this.selectedOffer$.pipe(take(1)).subscribe(selectedOffer => {
-          const openOffers = details.map(item => {
-            const isCurrentSelectedOffer =
-              selectedOffer &&
-              selectedOffer.selected &&
-              selectedOffer.utxoEntry.txid === item.utxoEntry.txid;
-
-            return {
-              ...item,
-              bchPricePerToken: convertSatsToBch(item.pricePerToken),
-              selected: isCurrentSelectedOffer,
-            } as TokenOfferExtended;
-          });
-
-          this.openOffers$.next(openOffers);
-          console.log(openOffers);
-        });
+      .subscribe(tokenOffer => {
+        this.tokenOffer = tokenOffer;
+        this.mapTokenOffer();
       });
+  };
+
+  private mapTokenOffer = () => {
+    this.selectedOffer$.pipe(take(1)).subscribe(selectedOffer => {
+      const openOffers = this.tokenOffer.map(item => {
+        const isCurrentSelectedOffer =
+          selectedOffer &&
+          selectedOffer.selected &&
+          selectedOffer.utxoEntry.txid === item.utxoEntry.txid;
+
+        const isMyOrder = this.wallet
+          ? item.receivingAddress === this.wallet.cashAddr()
+          : false;
+
+        return {
+          ...item,
+          bchPricePerToken: convertSatsToBch(item.pricePerToken),
+          selected: isCurrentSelectedOffer,
+          isMyOrder,
+        } as TokenOfferExtended;
+      });
+
+      this.openOffers$.next(openOffers);
+      console.log(openOffers);
+    });
   };
 
   private clearSelectedOffer = () => {
