@@ -45,7 +45,7 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/manifest.json"
+              "src/manifest.webmanifest"
             ],
             "styles": [
               "src/styles/styles.scss"
@@ -83,7 +83,7 @@
                 }
               ],
               "serviceWorker": true,
-              "ngswConfigPath": "src/ngsw-config.json"
+              "ngswConfigPath": "ngsw-config.json"
             }
           }
         },
@@ -118,7 +118,7 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/manifest.json"
+              "src/manifest.webmanifest"
             ]
           }
         },
