@@ -88,8 +88,8 @@ export class TokensDetailsSellComponent implements OnInit, OnDestroy {
   };
 
   sell = () => {
-    this.token$.pipe(take(1)).subscribe(tokenDetails => {
-      this.cashContractsService.createSellOffer(
+    this.token$.pipe(take(1)).subscribe(async tokenDetails => {
+      await this.cashContractsService.createSellOffer(
         {
           sellAmountToken: this.selectedTokenAmount,
           pricePerToken: convertBchToSats(+this.selectedBchPrice),
