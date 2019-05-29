@@ -10,15 +10,8 @@
 
       <div class="tokens-details__left">
 
-        <app-widget class="tokens-details__header mb-lg">
-          <h2>
-            {{token.slp.detail.name}}
-          </h2>
-
-          <p class="tokens-details__header--symbol">
-            {{token.slp.detail.symbol}}
-          </p>
-        </app-widget>
+        <app-tokens-details-header [token$]="tokenDetails$">
+        </app-tokens-details-header>
 
         <app-widget class="tokens-details__chart mb-lg">
           <p>CHART COMING SOON</p>

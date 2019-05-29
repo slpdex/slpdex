@@ -1,0 +1,21 @@
+<app-widget *ngIf="token$ | async as token"
+            class="header">
+
+  <div class="header__left">
+    <app-jdenticon [id]="token._id"
+                   [size]="50"
+                   class="mr-sm">
+    </app-jdenticon>
+
+    <div>
+      <h2>
+        {{token.slp.detail.name}}
+      </h2>
+
+      <p class="tokens-details__header--symbol">
+        {{token.slp.detail.symbol}}
+      </p>
+    </div>
+  </div>
+
+</app-widget>

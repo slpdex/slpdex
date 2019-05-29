@@ -1,0 +1,9 @@
+.header {
+  flex-direction: column;
+  margin-bottom: 20px;
+
+  &__left {
+    align-items: center;
+    display: flex;
+  }
+}

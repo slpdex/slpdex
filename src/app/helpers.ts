@@ -20,7 +20,7 @@ export const generateBase64QrCode = async (value: string): Promise<string> => {
   return QRCode.toDataURL(value, { margin: 0 });
 };
 
-export const getJdenticon = (id: string) => {
+export const getJdenticon = (id: string, size = 30) => {
   // tslint:disable-next-line: no-string-literal
-  return window['jdenticon'].toSvg(id, 30);
+  return window['jdenticon'].toSvg(id, size);
 };
