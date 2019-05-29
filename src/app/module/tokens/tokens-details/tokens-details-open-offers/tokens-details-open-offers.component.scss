@@ -1,3 +1,22 @@
 .open-offers {
   flex-direction: column;
+
+  h2 {
+    margin-bottom: 20px;
+  }
+
+  &__item {
+    align-items: center;
+    margin-bottom: 10px;
+
+    > * {
+      flex: 1;
+      font-size: 14px;
+    }
+  }
+
+  &__cancel {
+    flex: 0 !important;
+    width: 100px;
+  }
 }

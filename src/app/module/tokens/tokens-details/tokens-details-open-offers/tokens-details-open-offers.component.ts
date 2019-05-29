@@ -13,6 +13,11 @@ import { CashContractsService } from '../../../../cash-contracts.service';
 import { MarketService } from '../../../../market.service';
 import { TokensDetails } from '../tokens-details.component';
 import { Wallet } from 'cashcontracts';
+import * as moment from 'moment';
+
+interface TokenOfferExtended extends TokenOffer {
+  timeSince: string;
+}
 
 @Component({
   selector: 'app-tokens-details-open-offers',
@@ -22,7 +27,7 @@ import { Wallet } from 'cashcontracts';
 })
 export class TokensDetailsOpenOffersComponent implements OnInit, OnDestroy {
   @Input() token$: Observable<TokensDetails>;
-  openOffers: TokenOffer[] = [];
+  openOffers: TokenOfferExtended[] = [];
 
   private destroy$ = new Subject();
   private wallet: Wallet;
@@ -48,9 +53,16 @@ export class TokensDetailsOpenOffersComponent implements OnInit, OnDestroy {
 
           const cashAddres = wallet.cashAddr();
 
-          this.openOffers = offers.filter(offer => {
-            return offer.receivingAddress === cashAddres ? offer : false;
-          });
+          this.openOffers = offers
+            .filter(offer => {
+              return offer.receivingAddress === cashAddres ? offer : false;
+            })
+            .map(offer => {
+              return {
+                ...offer,
+                timeSince: moment.unix(offer.timestamp).fromNow(),
+              } as TokenOfferExtended;
+            });
 
           this.changeDetectorRef.markForCheck();
 
