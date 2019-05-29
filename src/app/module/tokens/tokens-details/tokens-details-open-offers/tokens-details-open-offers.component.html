@@ -1,30 +1,39 @@
 <app-widget class="open-offers">
-  <h2>Open offers</h2>
+  <h2>
+    Open offers ({{openOffers.length}})
+  </h2>
 
-  <app-widget *ngFor="let offer of openOffers; trackBy: trackByTimestamp"
-              widget-sm
-              class="open-offers__item">
+  <ng-container *ngIf="openOffers.length; else noOffers">
+    <app-widget *ngFor="let offer of openOffers; trackBy: trackByTimestamp"
+                widget-sm
+                class="open-offers__item">
 
+      <p>
+        {{offer.sellAmountToken}} {{(token$ | async).slp.detail.symbol}}
+      </p>
+
+      <p>
+        {{offer.pricePerToken | satsToBch}} BCH
+      </p>
+
+      <p>
+        {{offer.timeSince}}
+      </p>
+
+      <div class="open-offers__cancel">
+        <app-button (click)="cancel(offer)"
+                    button-sm
+                    button-red>
+          Cancel
+        </app-button>
+      </div>
+    </app-widget>
+  </ng-container>
+
+  <ng-template #noOffers>
     <p>
-      {{offer.sellAmountToken}} {{(token$ | async).slp.detail.symbol}}
+      No open offers for {{(token$ | async).slp.detail.symbol}}
     </p>
-
-    <p>
-      {{offer.pricePerToken | satsToBch}} BCH
-    </p>
-
-    <p>
-      {{offer.timeSince}}
-    </p>
-
-    <div class="open-offers__cancel">
-      <app-button (click)="cancel(offer)"
-                  button-sm
-                  button-red>
-        Cancel
-      </app-button>
-    </div>
-
-  </app-widget>
+  </ng-template>
 
 </app-widget>
