@@ -184,20 +184,25 @@ export class CashContractsService {
       tokenFactor,
       params,
     );
+
     if (!verification.success) {
       this.notificationService.showNotification('Error: ' + verification.msg);
       return;
     }
+
     const offer = cc.createAdvancedTradeOfferTxs(
       this.wallet,
       tokenFactor,
       params,
     );
+
     const broadcast1 = await offer[0].broadcast();
+
     if (!broadcast1.success) {
       this.showBroadcastResultNotification(broadcast1);
       return;
     }
+
     const broadcast2 = await offer[1].broadcast();
     this.showBroadcastResultNotification(broadcast2);
   };
