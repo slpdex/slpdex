@@ -72,6 +72,10 @@ app-button {
     &--selected {
       background: $color-green !important;
       color: white !important;
+
+      span {
+        color: white;
+      }
     }
 
     &--price {
