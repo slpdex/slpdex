@@ -3,10 +3,9 @@
 
   <ng-content select="[checkbox]"></ng-content>
 
-  <div *ngIf="item.id"
-       class="coin-card__icon"
-       [innerHTML]="item.icon">
-  </div>
+  <app-jdenticon [id]="item.id"
+                 class="mr-md">
+  </app-jdenticon>
 
   <img *ngIf="!item.id"
        src="assets/bch.png"

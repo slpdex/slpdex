@@ -4,12 +4,10 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { CoinCard } from '../../../coin-card/coin-card.component';
 import { EndpointsService } from '../../../endpoints.service';
-import { getJdenticon } from '../../../helpers';
 import { AllTokens } from '../../../queries/allTokensQuery';
 import { SLPRoutes } from '../../../slp-routes';
 
@@ -27,10 +25,7 @@ export class TokensListComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject();
 
-  constructor(
-    private endpointsService: EndpointsService,
-    private domSanitizer: DomSanitizer,
-  ) {}
+  constructor(private endpointsService: EndpointsService) {}
 
   ngOnInit() {
     this.endpointsService
@@ -56,9 +51,6 @@ export class TokensListComponent implements OnInit, OnDestroy {
         id: token.slp.detail.tokenIdHex,
         name: token.slp.detail.name,
         symbol: token.slp.detail.symbol,
-        icon: this.domSanitizer.bypassSecurityTrustHtml(
-          getJdenticon(token.slp.detail.tokenIdHex),
-        ),
       } as TokensList;
     });
 

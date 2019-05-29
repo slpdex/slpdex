@@ -6,8 +6,7 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { generateShortId, getJdenticon } from '../helpers';
+import { generateShortId } from '../helpers';
 
 export interface CoinCard {
   name: string;
@@ -16,7 +15,6 @@ export interface CoinCard {
   balance?: number;
   id?: string;
   shortId?: string;
-  icon?: SafeHtml;
 }
 
 @Component({
@@ -28,7 +26,7 @@ export interface CoinCard {
 export class CoinCardComponent implements OnInit, OnChanges {
   @Input() item: CoinCard;
 
-  constructor(private domSanitizer: DomSanitizer) {}
+  constructor() {}
 
   ngOnInit() {}
 
@@ -37,9 +35,6 @@ export class CoinCardComponent implements OnInit, OnChanges {
       this.item = {
         ...this.item,
         shortId: generateShortId(this.item.id),
-        icon: this.domSanitizer.bypassSecurityTrustHtml(
-          getJdenticon(this.item.id),
-        ),
       };
     }
   }
