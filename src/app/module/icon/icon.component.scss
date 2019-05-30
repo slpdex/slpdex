@@ -21,6 +21,12 @@
     }
   }
 
+  &[icon-orange] {
+    svg {
+      fill: $color-orange;
+    }
+  }
+
   svg {
     fill: $color-gray;
     height: 40px;

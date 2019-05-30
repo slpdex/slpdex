@@ -15,6 +15,7 @@ import { WalletReceiveComponent } from './wallet-receive/wallet-receive.componen
 import { WalletRoutingModule } from './wallet-routing.module';
 import { WalletSendComponent } from './wallet-send/wallet-send.component';
 import { WalletComponent } from './wallet.component';
+import { IconModule } from '../icon/icon.module';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { WalletComponent } from './wallet.component';
     CommonModule,
     WalletRoutingModule,
     WrapperModule,
+    IconModule,
     PipeModule,
     CopyModule,
     FormsModule,

@@ -8,43 +8,56 @@
       Proin viverra, ligula sit amet ultrices semper, Nunc nulla. Sed lectus.
     </p>
 
-    <div class="wallet-create__content">
+    <app-widget *ngIf="isSecretInStorage"
+                class="wallet-create__warning">
 
-      <app-widget *ngIf="isSecretInStorage"
-                  class="wallet-create__warning">
+      <app-icon [icon]="'warning'"
+                [size]="80"
+                class="mb-sm"
+                icon-orange>
+      </app-icon>
 
-        <p class="wallet-create__warning--heading">
-          You already have a wallet
-        </p>
+      <p class="wallet-create__warning--heading">
+        You already have a wallet
+      </p>
 
-        <p class="wallet-create__warning--title">
-          Make sure you backup your existing wallet before creating a new
-        </p>
+      <p class="wallet-create__warning--title">
+        Make sure you backup your existing wallet before creating a new
+      </p>
 
-        <app-button [routerLink]="'../' + slpRoutes.walletExport"
-                    button-orange
-                    button-md>
-          Export
-        </app-button>
-      </app-widget>
+      <app-button [routerLink]="'../' + slpRoutes.walletExport"
+                  button-orange
+                  button-md>
+        Export
+      </app-button>
+    </app-widget>
 
-      <div class="wallet-create__boxes">
-        <app-widget (click)="create()">
-          <h3>
-            Create a new wallet
-          </h3>
-        </app-widget>
+    <app-widget class="wallet-create__box"
+                (click)="create()">
+      <app-icon [icon]="'add'"
+                [size]="60"
+                class="mb-md">
+      </app-icon>
 
-        <p class="wallet-create--or">OR</p>
+      <h3>
+        Create a new wallet
+      </h3>
+    </app-widget>
 
-        <app-widget>
-          <h3>
-            Import private key
-          </h3>
-        </app-widget>
-      </div>
+    <p class="wallet-create--or">
+      OR
+    </p>
 
-    </div>
+    <app-widget class="wallet-create__box">
+      <app-icon [icon]="'add'"
+                [size]="60"
+                class="mb-md">
+      </app-icon>
+
+      <h3>
+        Import private key
+      </h3>
+    </app-widget>
 
   </div>
 

@@ -3,12 +3,15 @@
 :host {
   @include fadeIn();
   display: flex;
+  max-width: 800px;
+  width: 100%;
 }
 
 .wallet-create {
   align-items: center;
   display: flex;
   flex-direction: column;
+  margin-bottom: 100px;
 
   h2 {
     color: white;
@@ -20,8 +23,13 @@
   h3 {
     font-size: 20px;
     font-weight: 500;
-    padding: 40px;
     text-align: center;
+  }
+
+  app-widget {
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
   }
 
   &--title {
@@ -31,31 +39,14 @@
 
   &--or {
     color: white;
-    font-size: 20px;
+    font-size: 26px;
     font-weight: 600;
-    padding: 0 40px;
-  }
-
-  &__content {
-    display: flex;
-    flex-direction: column;
-    margin: 0 auto;
-    max-width: 800px;
-  }
-
-  &__boxes {
-    align-items: center;
-    display: flex;
-
-    app-widget {
-      cursor: pointer;
-    }
+    padding: 30px;
+    text-align: center;
   }
 
   &__warning {
-    align-items: center;
-    flex-direction: column;
-    margin-bottom: 40px;
+    margin-bottom: 80px;
 
     p {
       color: $color-orange;
@@ -75,5 +66,9 @@
     app-button {
       margin-top: 20px;
     }
+  }
+
+  &__box {
+    cursor: pointer;
   }
 }

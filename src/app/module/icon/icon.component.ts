@@ -13,6 +13,7 @@ import {
 })
 export class IconComponent implements OnInit {
   @Input() icon: string;
+  @Input() size = 40;
 
   constructor() {}
 
