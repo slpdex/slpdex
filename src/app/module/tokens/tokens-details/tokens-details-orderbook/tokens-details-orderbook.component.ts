@@ -141,6 +141,10 @@ export class TokensDetailsOrderbookComponent
       .subscribe();
   };
 
+  trackByIndex = (index: number, item: TokenOfferExtended) => {
+    return index;
+  };
+
   private listenForOffers = () => {
     this.marketService.marketToken
       .pipe(takeUntil(this.destroy$))

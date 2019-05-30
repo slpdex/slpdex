@@ -54,7 +54,7 @@
 
     <ng-container *ngIf="openOffers$ | async as offers">
 
-      <div *ngFor="let offer of offers"
+      <div *ngFor="let offer of offers; trackBy: trackByIndex"
            class="orderbook__item"
            [class.orderbook__item--selected]="offer.selected"
            (click)="select(offer)">
@@ -70,6 +70,11 @@
         <p class="orderbook__item--amount">
           {{offer.sellAmountToken}}
         </p>
+      </div>
+
+      <div *ngIf="!offers.length"
+           class="orderbook__item">
+        No orders yet
       </div>
     </ng-container>
 
