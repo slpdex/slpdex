@@ -60,7 +60,7 @@ export class TokensDetailsOpenOffersComponent implements OnInit, OnDestroy {
           }
           this.wallet = wallet;
 
-          const cashAddres = wallet.cashAddr();
+          const cashAddres = this.wallet.cashAddr();
 
           this.openOffers = offers
             .filter(offer => {
@@ -76,9 +76,6 @@ export class TokensDetailsOpenOffersComponent implements OnInit, OnDestroy {
             });
 
           this.changeDetectorRef.markForCheck();
-
-          console.log(offers);
-          console.log(wallet);
         }),
       )
       .subscribe();
@@ -96,6 +93,7 @@ export class TokensDetailsOpenOffersComponent implements OnInit, OnDestroy {
 
     this.isLoading = true;
 
+    // TODO: Replace with marketoverview for 1 token
     this.token$.pipe(take(1)).subscribe(async tokenDetails => {
       await this.cashContractsService.cancelSellOffer(
         offer.utxoEntry,
