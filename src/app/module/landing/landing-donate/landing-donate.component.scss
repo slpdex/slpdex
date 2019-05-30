@@ -9,6 +9,7 @@
 h3,
 p {
   color: white;
+  text-align: center;
 }
 
 .landing-donate {
@@ -23,19 +24,15 @@ p {
 
   p {
     font-size: 16px;
+    line-height: 1.5;
+    margin: 0 auto;
+    max-width: 800px;
+    width: 100%;
   }
 
   &__button {
-    background: $color-green;
-    border-radius: 4px;
-    color: white;
-    font-size: 30px;
-    font-weight: 600;
-    margin: 0 auto;
-    margin-top: 50px;
-    max-width: 300px;
-    padding: 10px 20px;
-    text-align: center;
+    margin: 30px auto;
+    max-width: 200px;
     width: 100%;
   }
 }

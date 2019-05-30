@@ -2,6 +2,14 @@
   position: relative;
   width: 100%;
 
+  &.input-lg {
+    input {
+      font-size: 18px;
+      height: 50px;
+      padding: 15px;
+    }
+  }
+
   input {
     background: darken(white, 5%);
     border: 0;

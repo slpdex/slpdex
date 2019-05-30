@@ -1,22 +1,25 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { ButtonModule } from '../../button/button.module';
+import { CopyModule } from '../../directive/copy/copy.module';
 import { IconModule } from '../../icon/icon.module';
 import { ModalModule } from '../../modal/modal.module';
 import { WidgetModule } from '../../widget/widget.module';
 import { WrapperModule } from '../../wrapper/wrapper.module';
-import { OfferItemComponent } from './offer-item/offer-item.component';
-import { OfferRoutingModule } from './offer-routing.module';
-import { OfferComponent } from './offer.component';
+import { DonateRoutingModule } from './donate-routing.module';
+import { DonateComponent } from './donate.component';
 
 @NgModule({
-  declarations: [OfferComponent, OfferItemComponent],
+  declarations: [DonateComponent],
   imports: [
     CommonModule,
-    OfferRoutingModule,
-    ModalModule,
-    WidgetModule,
     WrapperModule,
+    ModalModule,
+    CopyModule,
     IconModule,
+    DonateRoutingModule,
+    WidgetModule,
+    ButtonModule,
   ],
 })
-export class OfferModule {}
+export class DonateModule {}

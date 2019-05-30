@@ -3,6 +3,7 @@ export enum SLPRoutes {
   offer = 'offer',
   tokens = 'tokens',
   balance = 'balance',
+  donate = 'donate',
   wallet = 'wallet',
   walletCreate = 'create',
   walletReceive = 'receive',

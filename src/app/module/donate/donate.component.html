@@ -1,0 +1,47 @@
+<app-modal>
+
+  <app-wrapper>
+    <app-modal-heading>
+      Donate
+    </app-modal-heading>
+
+    <div class="donate">
+      <p>
+        Nullam dictum felis eu pede
+      </p>
+
+      <app-widget class="donate__widget">
+
+        <h3>
+          BCH address
+        </h3>
+
+        <div class="donate__img">
+          <img *ngIf="bchDataUrl"
+               [src]="bchDataUrl">
+        </div>
+
+        <div class="input input-lg mb-md">
+          <input #bchInput
+                 type="text"
+                 [value]="address"
+                 disabled="true">
+
+          <div class="donate__button">
+            <app-button appCopy
+                        button-sm
+                        [copyInputElement]="bchInput"
+                        [copyNotificationText]="'Copied address to clipboard'">
+              Copy
+            </app-button>
+
+          </div>
+
+        </div>
+
+      </app-widget>
+    </div>
+
+  </app-wrapper>
+
+</app-modal>

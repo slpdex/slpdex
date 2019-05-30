@@ -35,7 +35,7 @@ export class WalletReceiveComponent implements OnInit, OnDestroy {
     this.destroy$.unsubscribe();
   }
 
-  loadWallet = () => {
+  private loadWallet = () => {
     this.cashContractsService.listenWallet
       .pipe(takeUntil(this.destroy$))
       .subscribe(async wallet => {

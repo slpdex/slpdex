@@ -28,6 +28,11 @@ const routes: Routes = [
     loadChildren: () =>
       import('./module/wallet/wallet.module').then(m => m.WalletModule),
   },
+  {
+    path: SLPRoutes.donate,
+    loadChildren: () =>
+      import('./module/donate/donate.module').then(m => m.DonateModule),
+  },
 ];
 
 @NgModule({

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ButtonModule } from '../../button/button.module';
 import { CoinCardModule } from '../../coin-card/coin-card.module';
 import { CopyModule } from '../../directive/copy/copy.module';
+import { IconModule } from '../../icon/icon.module';
 import { ModalModule } from '../../modal/modal.module';
 import { PipeModule } from '../../pipe/pipe.module';
 import { WidgetModule } from '../../widget/widget.module';
@@ -15,7 +16,6 @@ import { WalletReceiveComponent } from './wallet-receive/wallet-receive.componen
 import { WalletRoutingModule } from './wallet-routing.module';
 import { WalletSendComponent } from './wallet-send/wallet-send.component';
 import { WalletComponent } from './wallet.component';
-import { IconModule } from '../icon/icon.module';
 
 @NgModule({
   declarations: [

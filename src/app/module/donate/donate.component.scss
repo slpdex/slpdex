@@ -1,0 +1,46 @@
+.donate {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+
+  h3 {
+    font-size: 30px;
+    margin-bottom: 30px;
+  }
+
+  p {
+    color: white;
+  }
+
+  &__widget {
+    align-items: center;
+    flex-direction: column;
+    margin: 40px 0;
+    max-width: 800px;
+    width: 100%;
+  }
+
+  &__img {
+    display: flex;
+    height: 200px;
+    justify-content: center;
+    margin-bottom: 30px;
+
+    img {
+      height: 100%;
+      width: auto;
+    }
+  }
+
+  &__button {
+    align-items: center;
+    background: darken(white, 15%);
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    padding-right: 10px;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+}

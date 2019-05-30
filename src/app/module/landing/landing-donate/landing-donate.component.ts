@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { SLPRoutes } from '../../../slp-routes';
 
 @Component({
   selector: 'app-landing-donate',
@@ -7,6 +8,8 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LandingDonateComponent implements OnInit {
+  slpRoutes = { ...SLPRoutes };
+
   constructor() {}
 
   ngOnInit() {}

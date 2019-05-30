@@ -6,14 +6,17 @@
     </h3>
 
     <p>
-      In this project we're using a mixed low exchange fee & donation model. If you like this project, please show
-      support
-      by sending a donation to our developers.
+      In this project we're using a mixed low exchange fee & donation model. If you like this project,
+      please show us support by sending a donation to our developers.
     </p>
   </div>
 
-  <a class="landing-donate__button">
-    DONATE
-  </a>
+  <div class="landing-donate__button">
+    <app-button button-green
+                button-lg
+                [routerLink]="slpRoutes.donate">
+      DONATE
+    </app-button>
+  </div>
 
 </app-wrapper>

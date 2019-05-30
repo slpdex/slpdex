@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { ButtonModule } from '../../button/button.module';
 import { WrapperModule } from '../../wrapper/wrapper.module';
 import { LandingContentComponent } from './landing-content/landing-content.component';
 import { LandingDonateComponent } from './landing-donate/landing-donate.component';
@@ -19,6 +20,12 @@ import { QuickOfferComponent } from './quick-offer/quick-offer.component';
     LandingTeamComponent,
     LandingDonateComponent,
   ],
-  imports: [CommonModule, RouterModule, LandingRoutingModule, WrapperModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    LandingRoutingModule,
+    ButtonModule,
+    WrapperModule,
+  ],
 })
 export class LandingModule {}
