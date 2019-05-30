@@ -58,7 +58,7 @@
     <p class="tokens-list__col"
        [class.tokens-list__price--positive]="token.last24h.priceIncrease > 0"
        [class.tokens-list__price--negative]="token.last24h.priceIncrease < 0">
-      {{token.last24h.priceIncrease || 0}}%
+      {{(token.last24h.priceIncrease || 0) * 100}}%
     </p>
 
   </div>
