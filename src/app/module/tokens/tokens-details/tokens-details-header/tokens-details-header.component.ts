@@ -15,9 +15,10 @@ import * as moment from 'moment';
 
 interface HeaderStat {
   heading: string;
-  stat: string;
+  stat: string | number;
   color?: string;
   isPrice?: boolean;
+  isPercentage?: boolean;
 }
 
 @Component({
@@ -28,7 +29,7 @@ interface HeaderStat {
 })
 export class TokensDetailsHeaderComponent implements OnInit, OnDestroy {
   headerStats: HeaderStat[] = [];
-  tokenOverview: TokenOverview;
+  tokenOverview: TokenOverview = {} as TokenOverview;
   tokenId: string;
 
   private destroy$ = new Subject();
@@ -71,35 +72,36 @@ export class TokensDetailsHeaderComponent implements OnInit, OnDestroy {
         );
         this.tokenOverview = currentToken;
 
+        console.log(this.tokenOverview);
         this.createStats();
       });
   };
 
   private createStats = () => {
     const change24 = this.tokenOverview.last24h.priceIncrease * 100;
-    console.log(change24);
+    let changeColor = '';
 
-    const positiveChange = change24 > 0;
+    if (this.tokenOverview.last24h.priceIncrease > 0) {
+      changeColor = 'green';
+    } else if (this.tokenOverview.last24h.priceIncrease < 0) {
+      changeColor = 'red';
+    }
 
     this.headerStats = [
       {
         heading: 'Last price',
-        stat: convertSatsToBch(
-          this.tokenOverview.lastTrade.pricePerToken,
-        ).toString(),
+        stat: convertSatsToBch(this.tokenOverview.lastTrade.pricePerToken || 0),
         isPrice: true,
       },
       {
         heading: 'Volume 24h',
-        stat: convertSatsToBch(
-          this.tokenOverview.last24h.volumeSatoshis,
-        ).toString(),
+        stat: convertSatsToBch(this.tokenOverview.last24h.volumeSatoshis),
         isPrice: true,
       },
       {
         heading: 'Change 24h',
-        stat: change24 + '%',
-        color: positiveChange ? 'green' : 'red',
+        stat: (change24 || 0) + '%',
+        color: changeColor,
       },
       {
         heading: 'Last trade',
