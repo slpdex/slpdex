@@ -3,8 +3,10 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from '../../button/button.module';
 import { CoinCardModule } from '../../coin-card/coin-card.module';
+import { IconModule } from '../../icon/icon.module';
 import { JdenticonModule } from '../../jdenticon/jdenticon.module';
 import { PipeModule } from '../../pipe/pipe.module';
+import { SortModule } from '../../sort/sort.module';
 import { WidgetModule } from '../../widget/widget.module';
 import { WrapperModule } from '../../wrapper/wrapper.module';
 import { TokensDetailsHeaderComponent } from './tokens-details/tokens-details-header/tokens-details-header.component';
@@ -31,6 +33,8 @@ import { TokensComponent } from './tokens.component';
     TokensRoutingModule,
     WrapperModule,
     JdenticonModule,
+    SortModule,
+    IconModule,
     PipeModule,
     FormsModule,
     CoinCardModule,

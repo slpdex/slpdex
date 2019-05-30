@@ -1,17 +1,22 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { CoinCard } from '../../../coin-card/coin-card.component';
-import { EndpointsService } from '../../../endpoints.service';
-import { AllTokens } from '../../../queries/allTokensQuery';
+import { TokenOverview, TokenSortByKey } from 'slpdex-market';
+import { MarketService } from '../../../market.service';
 import { SLPRoutes } from '../../../slp-routes';
 
-interface TokensList extends CoinCard {}
+interface TokensSort {
+  name: string;
+  sortKey?: TokenSortByKey;
+  sortBy?: string;
+  ignoreSorting?: boolean;
+}
 
 @Component({
   selector: 'app-tokens-list',
@@ -20,20 +25,46 @@ interface TokensList extends CoinCard {}
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TokensListComponent implements OnInit, OnDestroy {
-  tokens$ = new BehaviorSubject<TokensList[]>([]);
+  tokens: TokenOverview[] = [];
   slpRoutes = { ...SLPRoutes };
+
+  tokensSort: TokensSort[] = [
+    {
+      name: '#',
+      ignoreSorting: true,
+    },
+    {
+      name: 'NAME',
+      ignoreSorting: true,
+    },
+    {
+      name: 'MARKET CAP',
+      sortBy: 'desc',
+      sortKey: 'marketCapSatoshis',
+    },
+    {
+      name: 'PRICE',
+      sortKey: 'pricePerToken',
+    },
+    {
+      name: 'VOLUME 24H',
+      sortKey: 'volumeSatoshis',
+    },
+    {
+      name: 'CHANGE 24H',
+      sortKey: 'priceIncrease',
+    },
+  ];
 
   private destroy$ = new Subject();
 
-  constructor(private endpointsService: EndpointsService) {}
+  constructor(
+    private marketService: MarketService,
+    private changeDetectorRef: ChangeDetectorRef,
+  ) {}
 
   ngOnInit() {
-    this.endpointsService
-      .getAllTokens()
-      .pipe(take(1))
-      .subscribe(data => {
-        this.renderTokens(data);
-      });
+    this.fetchTokens('marketCapSatoshis', false);
   }
 
   ngOnDestroy() {
@@ -41,19 +72,37 @@ export class TokensListComponent implements OnInit, OnDestroy {
     this.destroy$.unsubscribe();
   }
 
-  private renderTokens = (data: AllTokens) => {
-    const tokens = data.t.filter(item => {
-      return item.slp.detail.name && item.slp.detail.symbol;
+  sortColumn = (item: TokensSort) => {
+    this.tokensSort = this.tokensSort.map(sort => {
+      if (sort.name === item.name) {
+        if (sort.sortBy === 'asc' || sort.sortBy === null) {
+          sort.sortBy = 'desc';
+          this.fetchTokens(sort.sortKey, false);
+        } else {
+          sort.sortBy = 'asc';
+          this.fetchTokens(sort.sortKey, true);
+        }
+      } else {
+        sort.sortBy = null;
+      }
+
+      return sort;
     });
 
-    const cards: TokensList[] = tokens.map((token, index) => {
-      return {
-        id: token.slp.detail.tokenIdHex,
-        name: token.slp.detail.name,
-        symbol: token.slp.detail.symbol,
-      } as TokensList;
-    });
+    this.changeDetectorRef.markForCheck();
+  };
 
-    this.tokens$.next(cards);
+  trackByName = (index: number, item: TokensSort) => {
+    return item.name;
+  };
+
+  private fetchTokens = (sort: TokenSortByKey, asc: boolean) => {
+    this.marketService
+      .getMarketOverview(sort, 0, 100, asc)
+      .pipe(take(1))
+      .subscribe(overview => {
+        this.tokens = overview;
+        this.changeDetectorRef.markForCheck();
+      });
   };
 }

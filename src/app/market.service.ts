@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, from } from 'rxjs';
+import { BehaviorSubject, from, Observable } from 'rxjs';
+import { map, take } from 'rxjs/operators';
 import * as Market from 'slpdex-market';
 
 @Injectable({
@@ -15,8 +16,18 @@ export class MarketService {
     return this.offersSubject$.asObservable();
   }
 
-  getTokenOverview = (): Observable<Market.MarketOverview> => {
-    return from(Market.MarketOverview.create());
+  getMarketOverview = (
+    sortByKey: Market.TokenSortByKey,
+    skip: number,
+    limit: number,
+    ascending: boolean,
+  ): Observable<Market.TokenOverview[]> => {
+    return from(Market.MarketOverview.create()).pipe(
+      take(1),
+      map(overview => {
+        return overview.tokens(sortByKey, skip, limit, ascending).toArray();
+      }),
+    );
   };
 
   tokenId = () => {

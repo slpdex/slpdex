@@ -57,52 +57,52 @@ export class TokensDetailsHeaderComponent implements OnInit, OnDestroy {
   private getOverview = () => {
     forkJoin([
       this.token$.pipe(take(1)),
-      this.marketService.getTokenOverview().pipe(take(1)),
+      // this.marketService.getTokenOverview().pipe(take(1)),
     ])
       .pipe(
-        map(([token, overview]) => {
-          const overviewToken = overview.tokens().get(token._id);
+        map(([token]) => {
+          // const overviewToken = overview.tokens().get(token._id);
 
-          if (overviewToken) {
-            let change24: string = (
-              overviewToken.lastTrade.price / overviewToken.price24hAgo
-            ).toString();
+          // if (overviewToken) {
+          //   let change24: string = (
+          //     overviewToken.lastTrade.price / overviewToken.price24hAgo
+          //   ).toString();
 
-            const isNegative =
-              overviewToken.lastTrade.price < overviewToken.price24hAgo;
+          //   const isNegative =
+          //     overviewToken.lastTrade.price < overviewToken.price24hAgo;
 
-            if (isNegative) {
-              change24 = '-' + change24;
-            }
+          //   if (isNegative) {
+          //     change24 = '-' + change24;
+          //   }
 
-            this.headerStats = [
-              {
-                heading: 'Last price',
-                stat:
-                  convertSatsToBch(overviewToken.lastTrade.price).toString() +
-                  ' BCH',
-              },
-              {
-                heading: 'Volume',
-                stat:
-                  convertSatsToBch(overviewToken.volumeSatoshis).toString() +
-                  ' BCH',
-              },
-              {
-                heading: 'Change 24h',
-                stat: change24 + '%',
-                color: isNegative ? 'red' : 'green',
-              },
-              {
-                heading: 'Last trade',
-                stat: overviewToken.lastTrade.timestamp
-                  ? moment.unix(overviewToken.lastTrade.timestamp).fromNow()
-                  : 'Now (Unconfirmed)',
-              },
-            ];
+          //   this.headerStats = [
+          //     {
+          //       heading: 'Last price',
+          //       stat:
+          //         convertSatsToBch(overviewToken.lastTrade.price).toString() +
+          //         ' BCH',
+          //     },
+          //     {
+          //       heading: 'Volume',
+          //       stat:
+          //         convertSatsToBch(overviewToken.volumeSatoshis).toString() +
+          //         ' BCH',
+          //     },
+          //     {
+          //       heading: 'Change 24h',
+          //       stat: change24 + '%',
+          //       color: isNegative ? 'red' : 'green',
+          //     },
+          //     {
+          //       heading: 'Last trade',
+          //       stat: overviewToken.lastTrade.timestamp
+          //         ? moment.unix(overviewToken.lastTrade.timestamp).fromNow()
+          //         : 'Now (Unconfirmed)',
+          //     },
+          //   ];
 
-            this.changeDetectorRef.markForCheck();
-          }
+          //   this.changeDetectorRef.markForCheck();
+          // }
         }),
       )
       .subscribe();

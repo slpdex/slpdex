@@ -1,40 +1,25 @@
 <div class="tokens-list">
 
   <div class="tokens-list__row tokens-list__top">
-    <div class="tokens-list__col tokens-list--count">
-      <p class="tokens-list--label">
-        #
-      </p>
-    </div>
+    <div *ngFor="let sort of tokensSort; trackBy: trackByName"
+         class="tokens-list__col"
+         [class.tokens-list--count]="sort.name === '#'"
+         [class.tokens-list--name]="sort.name === 'NAME'"
+         (click)="sortColumn(sort)">
 
-    <div class="tokens-list__col tokens-list--name">
       <p class="tokens-list--label">
-        NAME
+        {{sort.name}}
       </p>
-    </div>
 
-    <div class="tokens-list__col">
-      <p class="tokens-list--label">
-        PRICE
-      </p>
-    </div>
-
-    <div class="tokens-list__col">
-      <p class="tokens-list--label">
-        VOLUME
-      </p>
-    </div>
-
-    <div class="tokens-list__col">
-      <p class="tokens-list--label">
-        LAST 24H
-      </p>
+      <app-sort *ngIf="!sort.ignoreSorting"
+                [sort]="sort.sortBy">
+      </app-sort>
     </div>
   </div>
 
-  <div *ngFor="let token of tokens$ | async let i = index"
+  <div *ngFor="let token of tokens; let i = index"
        class="tokens-list__row"
-       [routerLink]="['./', token.id]">
+       [routerLink]="['./', token.tokenId]">
 
     <div class="tokens-list__col tokens-list--count">
       {{i + 1}}
@@ -42,7 +27,7 @@
 
     <div class="tokens-list__col tokens-list--name">
 
-      <app-jdenticon [id]="token.id"
+      <app-jdenticon [id]="token.tokenId"
                      class="mr-md">
       </app-jdenticon>
 
@@ -58,20 +43,23 @@
 
     </div>
 
-    <div class="tokens-list__col">
-      123
-    </div>
+    <p class="tokens-list__col">
+      {{token.marketCapSatoshis || 0 | satsToBch}} BCH
+    </p>
 
-    <div class="tokens-list__col">
-      456
-    </div>
+    <p class="tokens-list__col">
+      {{token.lastTrade.pricePerToken || 0 | satsToBch}} BCH
+    </p>
 
-    <div class="tokens-list__col">
+    <p class="tokens-list__col">
+      {{token.last24h.volumeSatoshis || 0 | satsToBch}} BCH
+    </p>
 
-      <p class="tokens-list__price--positive">
-        13.37%
-      </p>
-    </div>
+    <p class="tokens-list__col"
+       [class.tokens-list__price--positive]="token.last24h.priceIncrease > 0"
+       [class.tokens-list__price--negative]="token.last24h.priceIncrease < 0">
+      {{token.last24h.priceIncrease || 0}}%
+    </p>
 
   </div>
 
