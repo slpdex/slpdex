@@ -1,9 +1,39 @@
+@import 'helpers';
+
 .header {
   flex-direction: column;
   margin-bottom: 20px;
 
+  &__top {
+    display: flex;
+  }
+
   &__left {
     align-items: center;
     display: flex;
+  }
+
+  &__bottom {
+    display: flex;
+    margin-top: 20px;
+    padding-left: 75px;
+
+    &--item {
+      flex: 1;
+      font-size: 12px;
+
+      h4 {
+        font-weight: 600;
+        margin-bottom: 5px;
+      }
+    }
+
+    &--green {
+      color: $color-green;
+    }
+
+    &--red {
+      color: $color-red;
+    }
   }
 }

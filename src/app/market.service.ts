@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, from } from 'rxjs';
 import * as Market from 'slpdex-market';
 
 @Injectable({
@@ -15,9 +15,13 @@ export class MarketService {
     return this.offersSubject$.asObservable();
   }
 
+  getTokenOverview = (): Observable<Market.MarketOverview> => {
+    return from(Market.MarketOverview.create());
+  };
+
   tokenId = () => {
-    return this.marketToken.tokenId()
-  }
+    return this.marketToken.tokenId();
+  };
 
   loadOffersAndStartListener = async (id: string) => {
     try {
