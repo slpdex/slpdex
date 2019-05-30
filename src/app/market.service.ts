@@ -7,13 +7,12 @@ import * as Market from 'slpdex-market';
   providedIn: 'root',
 })
 export class MarketService {
-  private offersSubject$ = new BehaviorSubject<Market.TokenOffer[]>([]);
-  private marketToken: Market.MarketToken;
+  private marketToken$ = new BehaviorSubject<Market.MarketToken>(null);
 
   constructor() {}
 
-  get offers() {
-    return this.offersSubject$.asObservable();
+  get marketToken() {
+    return this.marketToken$.asObservable();
   }
 
   getMarketOverview = (
@@ -30,34 +29,19 @@ export class MarketService {
     );
   };
 
-  tokenId = () => {
-    return this.marketToken.tokenId();
+  loadOffersAndStartListener = (id: string) => {
+    from(Market.MarketToken.create(id, Market.defaultNetworkSettings))
+      .pipe(take(1))
+      .subscribe(marketToken => {
+        this.marketToken$.next(marketToken);
+
+        this.startListener(marketToken);
+      });
   };
 
-  loadOffersAndStartListener = async (id: string) => {
-    try {
-      this.marketToken = await Market.MarketToken.create(
-        id,
-        Market.defaultNetworkSettings,
-      );
-
-      this.offersSubject$.next(this.fetchOffers());
-
-      this.startListener();
-    } catch (e) {}
-  };
-
-  private fetchOffers = () => {
-    return this.marketToken.offers().toArray();
-  };
-
-  private startListener = () => {
-    this.marketToken.addReceivedOfferListener(() => {
-      this.offersSubject$.next(this.fetchOffers());
+  private startListener = (marketToken: Market.MarketToken) => {
+    marketToken.addReceivedOfferListener(() => {
+      this.marketToken$.next(marketToken);
     });
-  };
-
-  unsubscribeListener = () => {
-    this.marketToken = null;
   };
 }

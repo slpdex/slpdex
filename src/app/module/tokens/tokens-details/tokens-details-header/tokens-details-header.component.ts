@@ -1,17 +1,17 @@
 import {
-  Component,
-  OnInit,
   ChangeDetectionStrategy,
-  Input,
   ChangeDetectorRef,
+  Component,
   OnDestroy,
+  OnInit,
 } from '@angular/core';
-import { TokensDetails } from '../tokens-details.component';
+import { ActivatedRoute } from '@angular/router';
+import { Subject, combineLatest } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
+import { TokenOverview } from 'slpdex-market';
 import { MarketService } from '../../../../market.service';
-import { take, map, takeUntil } from 'rxjs/operators';
-import { forkJoin, Observable, Subject } from 'rxjs';
-import * as moment from 'moment';
 import { convertSatsToBch } from '../../../../helpers';
+import * as moment from 'moment';
 
 interface HeaderStat {
   heading: string;
@@ -26,23 +26,29 @@ interface HeaderStat {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TokensDetailsHeaderComponent implements OnInit, OnDestroy {
-  @Input() token$: Observable<TokensDetails>;
-
   headerStats: HeaderStat[] = [];
+  tokenOverview: TokenOverview;
+  tokenId: string;
 
   private destroy$ = new Subject();
 
   constructor(
     private marketService: MarketService,
     private changeDetectorRef: ChangeDetectorRef,
+    private activatedRoute: ActivatedRoute,
   ) {}
 
   ngOnInit() {
-    this.marketService.offers
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(offers => {
-        this.getOverview();
-      });
+    combineLatest([this.activatedRoute.params, this.marketService.marketToken])
+      .pipe(
+        takeUntil(this.destroy$),
+        map(([params, marketToken]) => {
+          this.tokenId = params.id;
+
+          this.getOverview();
+        }),
+      )
+      .subscribe();
   }
 
   ngOnDestroy() {
@@ -55,56 +61,53 @@ export class TokensDetailsHeaderComponent implements OnInit, OnDestroy {
   };
 
   private getOverview = () => {
-    forkJoin([
-      this.token$.pipe(take(1)),
-      // this.marketService.getTokenOverview().pipe(take(1)),
-    ])
-      .pipe(
-        map(([token]) => {
-          // const overviewToken = overview.tokens().get(token._id);
+    this.marketService
+      .getMarketOverview('marketCapSatoshis', 0, 10, false) // TODO: fetch 1 token
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(tokenOverview => {
+        const currentToken = tokenOverview.find(
+          x => x.tokenId === this.tokenId,
+        );
+        this.tokenOverview = currentToken;
 
-          // if (overviewToken) {
-          //   let change24: string = (
-          //     overviewToken.lastTrade.price / overviewToken.price24hAgo
-          //   ).toString();
+        this.createStats();
+      });
+  };
 
-          //   const isNegative =
-          //     overviewToken.lastTrade.price < overviewToken.price24hAgo;
+  private createStats = () => {
+    const change24 = this.tokenOverview.last24h.priceIncrease * 100;
+    console.log(change24);
 
-          //   if (isNegative) {
-          //     change24 = '-' + change24;
-          //   }
+    const positiveChange = change24 > 0;
 
-          //   this.headerStats = [
-          //     {
-          //       heading: 'Last price',
-          //       stat:
-          //         convertSatsToBch(overviewToken.lastTrade.price).toString() +
-          //         ' BCH',
-          //     },
-          //     {
-          //       heading: 'Volume',
-          //       stat:
-          //         convertSatsToBch(overviewToken.volumeSatoshis).toString() +
-          //         ' BCH',
-          //     },
-          //     {
-          //       heading: 'Change 24h',
-          //       stat: change24 + '%',
-          //       color: isNegative ? 'red' : 'green',
-          //     },
-          //     {
-          //       heading: 'Last trade',
-          //       stat: overviewToken.lastTrade.timestamp
-          //         ? moment.unix(overviewToken.lastTrade.timestamp).fromNow()
-          //         : 'Now (Unconfirmed)',
-          //     },
-          //   ];
+    this.headerStats = [
+      {
+        heading: 'Last price',
+        stat:
+          convertSatsToBch(
+            this.tokenOverview.lastTrade.pricePerToken,
+          ).toString() + ' BCH',
+      },
+      {
+        heading: 'Volume 24h',
+        stat:
+          convertSatsToBch(
+            this.tokenOverview.last24h.volumeSatoshis,
+          ).toString() + ' BCH',
+      },
+      {
+        heading: 'Change 24h',
+        stat: change24 + '%',
+        color: positiveChange ? 'green' : 'red',
+      },
+      {
+        heading: 'Last trade',
+        stat: this.tokenOverview.lastTrade.timestamp
+          ? moment.unix(this.tokenOverview.lastTrade.timestamp).fromNow()
+          : 'Now (Unconfirmed)',
+      },
+    ];
 
-          //   this.changeDetectorRef.markForCheck();
-          // }
-        }),
-      )
-      .subscribe();
+    this.changeDetectorRef.markForCheck();
   };
 }

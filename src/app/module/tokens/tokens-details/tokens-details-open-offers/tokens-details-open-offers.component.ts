@@ -41,7 +41,15 @@ export class TokensDetailsOpenOffersComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     combineLatest([
-      this.marketService.offers,
+      this.marketService.marketToken.pipe(
+        map(marketToken => {
+          if (!marketToken) {
+            return [];
+          }
+
+          return marketToken.offers().toArray();
+        }),
+      ),
       this.cashContractsService.listenWallet,
     ])
       .pipe(
@@ -97,7 +105,7 @@ export class TokensDetailsOpenOffersComponent implements OnInit, OnDestroy {
           feeAddress: defaultNetworkSettings.feeAddress,
           feeDivisor: defaultNetworkSettings.feeDivisor,
           receivingAddress: this.wallet.cashAddr(),
-          tokenId: this.marketService.tokenId(),
+          tokenId: tokenDetails._id,
         },
         tokenDetails.slp.detail,
       );

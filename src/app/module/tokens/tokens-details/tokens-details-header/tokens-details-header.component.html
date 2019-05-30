@@ -1,20 +1,20 @@
-<app-widget *ngIf="token$ | async as token"
+<app-widget *ngIf="tokenOverview && tokenId"
             class="header">
   <div class="header__top">
 
     <div class="header__left">
-      <app-jdenticon [id]="token._id"
+      <app-jdenticon [id]="tokenId"
                      [size]="50"
                      class="mr-md">
       </app-jdenticon>
 
       <div>
         <h2>
-          {{token.slp.detail.name}}
+          {{tokenOverview.name}}
         </h2>
 
         <p class="tokens-details__header--symbol">
-          {{token.slp.detail.symbol}}
+          {{tokenOverview.symbol}}
         </p>
       </div>
     </div>

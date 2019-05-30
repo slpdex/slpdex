@@ -98,7 +98,7 @@ export class TokensListComponent implements OnInit, OnDestroy {
 
   private fetchTokens = (sort: TokenSortByKey, asc: boolean) => {
     this.marketService
-      .getMarketOverview(sort, 0, 100, asc)
+      .getMarketOverview(sort, 0, 10, asc)
       .pipe(take(1))
       .subscribe(overview => {
         this.tokens = overview;

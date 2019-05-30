@@ -142,10 +142,14 @@ export class TokensDetailsOrderbookComponent
   };
 
   private listenForOffers = () => {
-    this.marketService.offers
+    this.marketService.marketToken
       .pipe(takeUntil(this.destroy$))
-      .subscribe(tokenOffer => {
-        this.tokenOffer = tokenOffer;
+      .subscribe(marketToken => {
+        if (!marketToken) {
+          return;
+        }
+
+        this.tokenOffer = marketToken.offers().toArray();
         this.mapTokenOffer();
       });
   };

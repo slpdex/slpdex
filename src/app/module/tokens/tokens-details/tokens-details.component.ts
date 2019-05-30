@@ -4,14 +4,14 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { EndpointsService } from '../../../endpoints.service';
+import { MarketService } from '../../../market.service';
 import { TokenDetailsC } from '../../../queries/tokenDetailsQuery';
 import { SLPRoutes } from '../../../slp-routes';
-import { MarketService } from '../../../market.service';
 
 export interface TokensDetails extends TokenDetailsC {
   timeSinceLastTrade: string;
@@ -35,7 +35,6 @@ export class TokensDetailsComponent implements OnInit, OnDestroy {
   constructor(
     private endpointsService: EndpointsService,
     private activatedRoute: ActivatedRoute,
-    private router: Router,
     private marketService: MarketService,
   ) {}
 
@@ -49,18 +48,9 @@ export class TokensDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.marketService.unsubscribeListener();
     this.destroy$.next();
     this.destroy$.unsubscribe();
   }
-
-  createOffer = () => {
-    this.router.navigate([SLPRoutes.offer], {
-      state: {
-        offer: 'wow',
-      },
-    });
-  };
 
   private getTokenDetails = (symbol: string) => {
     this.endpointsService
