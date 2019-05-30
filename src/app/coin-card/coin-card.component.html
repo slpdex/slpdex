@@ -3,7 +3,8 @@
 
   <ng-content select="[checkbox]"></ng-content>
 
-  <app-jdenticon [id]="item.id"
+  <app-jdenticon *ngIf="item.id"
+                 [id]="item.id"
                  class="mr-md">
   </app-jdenticon>
 

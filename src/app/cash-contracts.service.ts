@@ -25,13 +25,13 @@ export class CashContractsService {
   constructor(private notificationService: NotificationService) {}
 
   init = () => {
-    this.isSecretInStorageSubject.next(cc.Wallet.isSecretInStorage());
-
     this.loadWallet();
   };
 
   private loadWallet = async () => {
-    this.listenIsSecretInStorage.pipe(take(1)).subscribe(async isInStorage => {
+    this.isSecretInStorageSubject.next(cc.Wallet.isSecretInStorage());
+
+    this.listenIsSecretInStorage.subscribe(async isInStorage => {
       if (!isInStorage) {
         return;
       }
@@ -62,24 +62,6 @@ export class CashContractsService {
 
       this.emitWallet();
     });
-  };
-
-  showBroadcastResultNotification = (broadcast: cc.BroadcastResult) => {
-    if (broadcast.success == false) {
-      console.error(broadcast);
-      const msg = broadcast.msg;
-      this.notificationService.showNotification(
-        `Transaction broadcasted failed: ${msg}`,
-      );
-      return;
-    }
-    const tx = broadcast.txid;
-    this.notificationService.showNotification(
-      `Successfully broadcasted transaction to network.
-      <a href="https://explorer.bitcoin.com/bch/tx/${tx}">
-        ${tx.slice(0, 10)}...
-      </a>`,
-    );
   };
 
   sendBch = (address: string, amount: number) => {
@@ -136,11 +118,7 @@ export class CashContractsService {
 
   generateNewWallet = () => {
     cc.Wallet.storeRandomSecret();
-    this.loadIsSecretInStorage();
-  };
-
-  loadIsSecretInStorage = () => {
-    this.isSecretInStorageSubject.next(cc.Wallet.isSecretInStorage());
+    this.loadWallet();
   };
 
   createBuyOffer = async (
@@ -239,5 +217,23 @@ export class CashContractsService {
 
   private emitWallet = () => {
     this.walletSubject.next(this.wallet);
+  };
+
+  private showBroadcastResultNotification = (broadcast: cc.BroadcastResult) => {
+    if (broadcast.success == false) {
+      console.error(broadcast);
+      const msg = broadcast.msg;
+      this.notificationService.showNotification(
+        `Transaction broadcasted failed: ${msg}`,
+      );
+      return;
+    }
+    const tx = broadcast.txid;
+    this.notificationService.showNotification(
+      `Successfully broadcasted transaction to network.
+      <a href="https://explorer.bitcoin.com/bch/tx/${tx}">
+        ${tx.slice(0, 10)}...
+      </a>`,
+    );
   };
 }

@@ -55,7 +55,7 @@ export class WalletDetailsComponent implements OnInit, OnDestroy {
 
         this.wallet = wallet;
         this.setBchBalance();
-        this.setTokens();
+        this.setWalletTokens();
       });
 
     this.endpointsService
@@ -104,7 +104,7 @@ export class WalletDetailsComponent implements OnInit, OnDestroy {
     return token.id;
   };
 
-  private setTokens = () => {
+  private setWalletTokens = () => {
     const tokenIds = this.wallet.tokenIds();
 
     const tokens = tokenIds.map(tokenId => {
@@ -123,12 +123,4 @@ export class WalletDetailsComponent implements OnInit, OnDestroy {
     const bchBalance = convertSatsToBch(value);
     this.bchBalance$.next(bchBalance);
   };
-
-  // private setTransactions = () => {
-  //   const utxos = this.wallet['utxos'];
-
-  //   if (utxos && utxos._tail && utxos._tail.array && utxos._tail.array) {
-  //     this.transactions$.next(utxos._tail.array);
-  //   }
-  // };
 }
