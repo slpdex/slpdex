@@ -17,6 +17,12 @@
     </div>
   </div>
 
+  <div *ngIf="isLoading"
+       class="tokens-list__spinner">
+    <mat-spinner>
+    </mat-spinner>
+  </div>
+
   <div *ngFor="let token of tokens; let i = index"
        class="tokens-list__row"
        [routerLink]="['./', token.tokenId]">

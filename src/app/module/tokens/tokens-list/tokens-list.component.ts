@@ -28,6 +28,8 @@ export class TokensListComponent implements OnInit, OnDestroy {
   tokens: TokenOverview[] = [];
   slpRoutes = { ...SLPRoutes };
 
+  isLoading = true;
+
   tokensSort: TokensSort[] = [
     {
       name: '#',
@@ -101,6 +103,7 @@ export class TokensListComponent implements OnInit, OnDestroy {
       .getMarketOverview(sort, 0, 20, asc)
       .pipe(take(1))
       .subscribe(overview => {
+        this.isLoading = false;
         this.tokens = overview;
         this.changeDetectorRef.markForCheck();
 
