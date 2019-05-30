@@ -15,22 +15,25 @@
 
         <app-widget class="wallet-export__row">
 
-          <svg>
-            <use xlink:href="#key"></use>
-          </svg>
+          <app-icon [icon]="'key'"
+                    [size]="60"
+                    class="mb-sm">
+          </app-icon>
 
           <h3>
             Public
           </h3>
 
-          <div class="wallet-export__row--bottom">
+          <div class="input input-lg my-sm">
             <input #public
                    type="text"
-                   [value]="publicKey$ | async">
+                   [value]="publicKey$ | async"
+                   disabled="true">
 
             <app-button appCopy
                         [copyInputElement]="public"
-                        [copyNotificationText]="'Copied public key'">
+                        [copyNotificationText]="'Copied public key'"
+                        button-sm>
               Copy
             </app-button>
           </div>
@@ -38,9 +41,10 @@
 
         <app-widget class="wallet-export__row">
 
-          <svg>
-            <use xlink:href="#key"></use>
-          </svg>
+          <app-icon [icon]="'key'"
+                    [size]="60"
+                    class="mb-sm">
+          </app-icon>
 
           <h3>
             Private key (WIF)
@@ -56,10 +60,11 @@
                  alt="">
           </div>
 
-          <div class="wallet-export__row--bottom">
+          <div class="input input-lg my-sm">
             <input #wif
                    type="text"
-                   [value]="privateWif$ | async">
+                   [value]="privateWif$ | async"
+                   disabled="true">
 
             <app-button appCopy
                         [copyInputElement]="wif"

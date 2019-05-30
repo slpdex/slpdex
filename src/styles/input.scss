@@ -10,6 +10,17 @@
     }
   }
 
+  &.input-md {
+    input {
+      font-size: 18px;
+      padding: 20px 10px;
+    }
+
+    p {
+      font-size: 11px;
+    }
+  }
+
   input {
     background: darken(white, 5%);
     border: 0;

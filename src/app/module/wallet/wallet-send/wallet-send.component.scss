@@ -7,25 +7,6 @@ $wallet-send-width: 800px;
   display: flex;
   flex-direction: column;
 
-  input {
-    background: darken(white, 5%);
-    border: 0;
-    border-radius: 4px;
-    font-size: 18px;
-    height: 30px;
-    padding: 20px 10px;
-    width: 100%;
-
-    &::-webkit-inner-spin-button,
-    &::-webkit-outer-spin-button {
-      appearance: none;
-    }
-
-    &:focus {
-      outline: 0;
-    }
-  }
-
   &--title {
     color: white;
     margin-bottom: 40px;
@@ -63,23 +44,6 @@ $wallet-send-width: 800px;
     flex: 0 0 auto;
     margin-left: 10px;
     width: 280px;
-
-    &__input-wrapper {
-      position: relative;
-
-      &--usd {
-        align-items: center;
-        bottom: 0;
-        color: lighten($color-gray, 15%);
-        display: flex;
-        font-size: 11px;
-        font-weight: 600;
-        pointer-events: none;
-        position: absolute;
-        right: 10px;
-        top: 0;
-      }
-    }
 
     &--bottom {
       display: flex;

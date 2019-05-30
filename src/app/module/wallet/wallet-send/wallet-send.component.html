@@ -20,13 +20,15 @@
 
         <div class="wallet-send__select">
 
-          <input type="text"
-                 placeholder="Address"
-                 class="wallet-send__address"
-                 [(ngModel)]="selectedAddress">
+          <div class="input input-md wallet-send__address">
+            <input type="text"
+                   placeholder="Address"
+                   [(ngModel)]="selectedAddress">
+          </div>
 
           <div class="wallet-send__amount">
-            <div class="wallet-send__amount__input-wrapper">
+
+            <div class="input input-md">
               <input type="number"
                      placeholder="Amount"
                      [min]="0"
@@ -34,8 +36,7 @@
                      [(ngModel)]="selectedAmount"
                      (ngModelChange)="setFee()">
 
-              <p *ngIf="!(selected$ | async).isToken"
-                 class="wallet-send__amount__input-wrapper--usd">
+              <p *ngIf="!(selected$ | async).isToken">
                 {{(selectedAmount * usd) | usdFormatter}} USD
               </p>
             </div>
