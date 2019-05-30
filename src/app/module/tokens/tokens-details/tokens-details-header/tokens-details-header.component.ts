@@ -17,6 +17,7 @@ interface HeaderStat {
   heading: string;
   stat: string;
   color?: string;
+  isPrice?: boolean;
 }
 
 @Component({
@@ -83,17 +84,17 @@ export class TokensDetailsHeaderComponent implements OnInit, OnDestroy {
     this.headerStats = [
       {
         heading: 'Last price',
-        stat:
-          convertSatsToBch(
-            this.tokenOverview.lastTrade.pricePerToken,
-          ).toString() + ' BCH',
+        stat: convertSatsToBch(
+          this.tokenOverview.lastTrade.pricePerToken,
+        ).toString(),
+        isPrice: true,
       },
       {
         heading: 'Volume 24h',
-        stat:
-          convertSatsToBch(
-            this.tokenOverview.last24h.volumeSatoshis,
-          ).toString() + ' BCH',
+        stat: convertSatsToBch(
+          this.tokenOverview.last24h.volumeSatoshis,
+        ).toString(),
+        isPrice: true,
       },
       {
         heading: 'Change 24h',

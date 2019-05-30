@@ -29,7 +29,15 @@
 
       <p [class.header__bottom--green]="stats.color === 'green'"
          [class.header__bottom--red]="stats.color === 'red'">
-        {{stats.stat}}
+
+        <ng-container *ngIf=!stats.isPrice>
+          {{stats.stat}}
+        </ng-container>
+
+        <ng-container *ngIf="stats.isPrice">
+          {{stats.stat | bchSeparator}} BCH
+        </ng-container>
+
       </p>
     </div>
   </div>
