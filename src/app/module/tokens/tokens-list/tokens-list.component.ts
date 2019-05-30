@@ -64,7 +64,7 @@ export class TokensListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.fetchTokens('marketCapSatoshis', false);
+    this.smartFetchInitialTokens('marketCapSatoshis', false);
   }
 
   ngOnDestroy() {
@@ -77,10 +77,10 @@ export class TokensListComponent implements OnInit, OnDestroy {
       if (sort.name === item.name) {
         if (sort.sortBy === 'asc' || sort.sortBy === null) {
           sort.sortBy = 'desc';
-          this.fetchTokens(sort.sortKey, false);
+          this.smartFetchInitialTokens(sort.sortKey, false);
         } else {
           sort.sortBy = 'asc';
-          this.fetchTokens(sort.sortKey, true);
+          this.smartFetchInitialTokens(sort.sortKey, true);
         }
       } else {
         sort.sortBy = null;
@@ -96,12 +96,24 @@ export class TokensListComponent implements OnInit, OnDestroy {
     return item.name;
   };
 
-  private fetchTokens = (sort: TokenSortByKey, asc: boolean) => {
+  private smartFetchInitialTokens = (sort: TokenSortByKey, asc: boolean) => {
     this.marketService
-      .getMarketOverview(sort, 0, 10, asc)
+      .getMarketOverview(sort, 0, 20, asc)
       .pipe(take(1))
       .subscribe(overview => {
         this.tokens = overview;
+        this.changeDetectorRef.markForCheck();
+
+        this.smartFetchRestOfTokens(sort, asc);
+      });
+  };
+
+  private smartFetchRestOfTokens = (sort: TokenSortByKey, asc: boolean) => {
+    this.marketService
+      .getMarketOverview(sort, 20, 80, asc)
+      .pipe(take(1))
+      .subscribe(overview => {
+        this.tokens = [...this.tokens, ...overview];
         this.changeDetectorRef.markForCheck();
       });
   };
