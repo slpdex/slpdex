@@ -11,7 +11,7 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { TradeOfferParams, Wallet } from 'cashcontracts';
 import { combineLatest, Subject } from 'rxjs';
-import { map, take, takeUntil } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
 import SimpleBar from 'simplebar';
 import { defaultNetworkSettings, TokenOverview } from 'slpdex-market';
 import { MarketToken, TokenOffer } from 'slpdex-market/dist/token';
