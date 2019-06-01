@@ -27,6 +27,12 @@
     }
   }
 
+  &[icon-white] {
+    svg {
+      fill: white;
+    }
+  }
+
   svg {
     fill: $color-gray;
     height: 40px;

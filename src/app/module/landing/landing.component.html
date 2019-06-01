@@ -1,6 +1,6 @@
 <div class="landing__top">
   <div class="landing__bg">
-    <img src="assets/bg-optimized.jpg"
+    <img src="assets/bg/chicago_optimized.jpg"
          alt="">
   </div>
 
@@ -9,21 +9,48 @@
     <div class="landing__top__content">
 
       <div class="landing__top__content--left">
-        <div>
-          <p>NEXT GEN</p>
+
+        <h1>
+          Next gen DEX for SLP tokens
+        </h1>
+
+        <p class="landing__top__content--description">
+          SLPDEX is a peer-to-peer DEX marketplace for SLP tokens.
+          Buy & Sell tokens using the simple ledger protcol, powered by the Bitcoin Cash
+          blockchain.
+        </p>
+
+        <div class="landing__top__content--item">
+          <app-icon [icon]="'check'"
+                    [size]="40"
+                    class="mr-md"
+                    icon-white>
+          </app-icon>
+
+          <p>
+            Low fee (0.1%)
+          </p>
         </div>
 
-        <div>
-          <p>LOW FEE</p>
+        <div class="landing__top__content--item">
+          <app-icon [icon]="'check'"
+                    [size]="40"
+                    class="mr-md"
+                    icon-white>
+          </app-icon>
+
+          <p>
+            Full control of your keys
+          </p>
         </div>
 
-        <div>
-          <p>DECENTRALIZED</p>
+        <div class="landing__top__content--button">
+          <app-button button-md
+                      button-white>
+            Start trading
+          </app-button>
         </div>
 
-        <div>
-          <p>SLP TOKEN EXCHANGE</p>
-        </div>
       </div>
 
       <div class="landing__top__content--right">

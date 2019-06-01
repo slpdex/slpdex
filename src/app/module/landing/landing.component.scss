@@ -21,11 +21,12 @@
     &__content {
       align-items: center;
       display: flex;
+      justify-content: space-between;
       padding: 0 50px;
 
       &--left {
         flex-direction: column;
-        width: 60%;
+        width: 50%;
       }
 
       &--right {
@@ -33,13 +34,36 @@
         z-index: 10;
       }
 
-      p {
-        border-bottom: 4px solid white;
+      h1 {
         color: white;
-        display: inline-flex;
-        font-size: 40px;
-        font-weight: 600;
-        margin-bottom: 15px;
+        font-size: 50px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+      }
+
+      p {
+        color: white;
+        font-weight: 500;
+      }
+
+      &--description {
+        font-size: 15px;
+        line-height: 2;
+        margin: 20px 0;
+        max-width: 500px;
+      }
+
+      &--item {
+        align-items: center;
+        display: flex;
+        font-size: 22px;
+        margin-bottom: 20px;
+      }
+
+      &--button {
+        margin-top: 30px;
+        width: 200px;
       }
     }
 
