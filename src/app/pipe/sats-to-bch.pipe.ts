@@ -7,6 +7,6 @@ import BigNumber from 'bignumber.js';
 })
 export class SatsToBchPipe implements PipeTransform {
   transform(value: any, args?: any): any {
-    return convertSatsToBch(new BigNumber(value));
+    return convertSatsToBch(new BigNumber(value)).toNumber();
   }
 }
