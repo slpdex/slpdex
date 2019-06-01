@@ -39,6 +39,7 @@
     height: 100%;
     margin-left: 10px;
     min-height: 800px;
+    position: relative;
     width: 300px;
   }
 
@@ -62,6 +63,28 @@
       color: darken(white, 10%);
       font-size: 36px;
       font-weight: 800;
+    }
+  }
+
+  &__no-wallet {
+    align-items: center;
+    background: rgba(white, .8);
+    border-radius: 4px;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    left: 0;
+    padding: 20px;
+    position: absolute;
+    right: 0;
+    top: 0;
+
+    p {
+      font-weight: 600;
+      line-height: 1.5;
+      margin-bottom: 20px;
+      text-align: center;
     }
   }
 }

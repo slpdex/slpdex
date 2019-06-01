@@ -29,6 +29,18 @@
       <app-tokens-details-sell>
       </app-tokens-details-sell>
 
+      <div *ngIf="!walletConnected"
+           class="tokens-details__no-wallet">
+        <p>
+          Enable trading by connecting your wallet
+        </p>
+
+        <app-button button-sm
+                    [routerLink]="slpRoutes.wallet">
+          Connect wallet
+        </app-button>
+      </div>
+
     </app-widget>
 
   </div>
