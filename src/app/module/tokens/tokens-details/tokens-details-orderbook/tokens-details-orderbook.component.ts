@@ -1,25 +1,24 @@
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
-  Input,
   OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TradeOfferParams, Wallet } from 'cashcontracts';
-import { BehaviorSubject, Observable, Subject, forkJoin } from 'rxjs';
-import { take, takeUntil, tap, map } from 'rxjs/operators';
+import { combineLatest, Subject } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
 import SimpleBar from 'simplebar';
-import { TokenOffer } from 'slpdex-market/dist/token';
+import { defaultNetworkSettings, TokenOverview } from 'slpdex-market';
+import { MarketToken, TokenOffer } from 'slpdex-market/dist/token';
 import { CashContractsService } from '../../../../cash-contracts.service';
 import { EndpointsService } from '../../../../endpoints.service';
 import { convertSatsToBch } from '../../../../helpers';
 import { MarketService } from '../../../../market.service';
-import { TokensDetails } from '../tokens-details.component';
-import { defaultNetworkSettings } from 'slpdex-market';
 import BigNumber from 'bignumber.js';
 
 export interface TokenOfferExtended extends TokenOffer {
@@ -36,17 +35,15 @@ export interface TokenOfferExtended extends TokenOffer {
 })
 export class TokensDetailsOrderbookComponent
   implements OnInit, OnDestroy, AfterViewInit {
-  @Input() token$: Observable<TokensDetails>;
-
-  openOffers$ = new BehaviorSubject<TokenOfferExtended[]>([]);
-  selectedOffer$ = new BehaviorSubject<TokenOfferExtended>(null);
+  tokenOverview: TokenOverview = {} as TokenOverview;
+  openOffers: TokenOfferExtended[] = [];
+  selectedOffer: TokenOfferExtended;
 
   selectedAmount = 0;
   tokenTotalAmount = 0;
   selectedBchPrice = 0;
   usdPrice = 0;
 
-  private tokenOffer: TokenOffer[] = [];
   private tokenId: string;
   private wallet: Wallet;
   private destroy$ = new Subject();
@@ -58,6 +55,7 @@ export class TokensDetailsOrderbookComponent
     private activatedRoute: ActivatedRoute,
     private endpointsService: EndpointsService,
     private cashContractsService: CashContractsService,
+    private changeDetectorRef: ChangeDetectorRef,
   ) {}
 
   ngOnInit() {
@@ -69,23 +67,31 @@ export class TokensDetailsOrderbookComponent
         }
 
         this.wallet = wallet;
-
-        if (this.tokenOffer && this.tokenOffer.length) {
-          this.mapTokenOffer();
-        }
       });
 
-    this.endpointsService
-      .getBchUsdPrice()
-      .pipe(take(1))
+    this.endpointsService.bchUsdPrice
+      .pipe(takeUntil(this.destroy$))
       .subscribe(price => {
-        this.usdPrice = +price.ticker.price;
+        this.usdPrice = price;
       });
 
-    this.activatedRoute.params.pipe(take(1)).subscribe(async params => {
-      this.tokenId = params.id;
-      this.listenForOffers();
-    });
+    combineLatest([
+      this.activatedRoute.params,
+      this.marketService.marketOverview,
+      this.marketService.marketToken,
+    ])
+      .pipe(
+        takeUntil(this.destroy$),
+        map(([params, overview, token]) => {
+          this.tokenId = params.id;
+
+          this.findAndSetCurrentOverviewToken(overview);
+          this.populateOrderbook(token);
+
+          this.changeDetectorRef.markForCheck();
+        }),
+      )
+      .subscribe();
   }
 
   ngOnDestroy() {
@@ -97,98 +103,98 @@ export class TokensDetailsOrderbookComponent
     const simpleBar = new SimpleBar(this.list.nativeElement);
   }
 
-  select = (item: TokenOfferExtended) => {
-    this.openOffers$.pipe(take(1)).subscribe(offers => {
-      const newOffers = offers.map(offer => {
-        offer.selected = item === offer;
-        return offer;
-      });
+  private findAndSetCurrentOverviewToken = (overview: TokenOverview[]) => {
+    if (!overview.length) {
+      return;
+    }
 
-      this.tokenTotalAmount = item.sellAmountToken.toNumber();
-      this.selectedAmount = item.sellAmountToken.toNumber();
-      this.selectedBchPrice = item.bchPricePerToken.toNumber();
+    const currentToken = overview.find(x => x.tokenId === this.tokenId);
 
-      this.selectedOffer$.next(item);
-      this.openOffers$.next(newOffers);
+    if (!currentToken) {
+      return;
+    }
+
+    this.tokenOverview = currentToken;
+  };
+
+  private populateOrderbook = (token: MarketToken) => {
+    if (!token) {
+      return;
+    }
+
+    const tokenOffer = token.offers().toArray();
+
+    const openOffers = tokenOffer.map(item => {
+      const isCurrentSelectedOffer =
+        this.selectedOffer &&
+        this.selectedOffer.selected &&
+        this.selectedOffer.utxoEntry.txid === item.utxoEntry.txid;
+
+      const isMyOrder = this.wallet
+        ? item.receivingAddress === this.wallet.cashAddr()
+        : false;
+
+      return {
+        ...item,
+        bchPricePerToken: convertSatsToBch(item.pricePerToken),
+        selected: isCurrentSelectedOffer,
+        isMyOrder,
+      } as TokenOfferExtended;
     });
+
+    this.openOffers = openOffers;
+  };
+
+  select = (item: TokenOfferExtended) => {
+    const offersWithSelect = this.openOffers.map(offer => {
+      offer.selected = item === offer;
+      return offer;
+    });
+
+    this.tokenTotalAmount = item.sellAmountToken.toNumber();
+    this.selectedAmount = item.sellAmountToken.toNumber();
+    this.selectedBchPrice = item.bchPricePerToken.toNumber();
+
+    this.selectedOffer = item;
+    this.openOffers = offersWithSelect;
+    this.changeDetectorRef.markForCheck();
   };
 
   buy = () => {
-    forkJoin([this.selectedOffer$.pipe(take(1)), this.token$.pipe(take(1))])
-      .pipe(
-        map(([selectedOffer, tokenDetails]) => {
-          const params: TradeOfferParams = {
-            buyAmountToken: new BigNumber(this.selectedAmount),
-            feeAddress: defaultNetworkSettings.feeAddress,
-            feeDivisor: new BigNumber(defaultNetworkSettings.feeDivisor),
-            pricePerToken: selectedOffer.pricePerToken,
-            receivingAddress: selectedOffer.receivingAddress,
-            sellAmountToken: selectedOffer.sellAmountToken,
-            tokenId: this.tokenId,
-          };
+    if (!this.selectedOffer || !this.wallet || !this.tokenOverview) {
+      return;
+    }
 
-          console.log(selectedOffer);
-          console.log(params);
+    const params: TradeOfferParams = {
+      buyAmountToken: new BigNumber(this.selectedAmount),
+      feeAddress: defaultNetworkSettings.feeAddress,
+      feeDivisor: new BigNumber(defaultNetworkSettings.feeDivisor),
+      pricePerToken: this.selectedOffer.pricePerToken,
+      receivingAddress: this.selectedOffer.receivingAddress,
+      sellAmountToken: this.selectedOffer.sellAmountToken,
+      tokenId: this.tokenId,
+    };
 
-          this.cashContractsService.createBuyOffer(
-            selectedOffer.utxoEntry,
-            params,
-            tokenDetails.slp.detail,
-          );
-
-          this.clearSelectedOffer();
-        }),
-      )
-      .subscribe();
+    this.cashContractsService.createBuyOffer(
+      this.selectedOffer.utxoEntry,
+      params,
+      this.tokenOverview.decimals,
+    );
+    this.clearSelectedOffer();
   };
 
-  private listenForOffers = () => {
-    this.marketService.offers
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(tokenOffer => {
-        this.tokenOffer = tokenOffer;
-        this.mapTokenOffer();
-      });
-  };
-
-  private mapTokenOffer = () => {
-    this.selectedOffer$.pipe(take(1)).subscribe(selectedOffer => {
-      const openOffers = this.tokenOffer.map(item => {
-        const isCurrentSelectedOffer =
-          selectedOffer &&
-          selectedOffer.selected &&
-          selectedOffer.utxoEntry.txid === item.utxoEntry.txid;
-
-        const isMyOrder = this.wallet
-          ? item.receivingAddress === this.wallet.cashAddr()
-          : false;
-
-        return {
-          ...item,
-          bchPricePerToken: convertSatsToBch(item.pricePerToken),
-          selected: isCurrentSelectedOffer,
-          isMyOrder,
-        } as TokenOfferExtended;
-      });
-
-      this.openOffers$.next(openOffers);
-      console.log(openOffers);
-    });
+  trackByIndex = (index: number, item: TokenOfferExtended) => {
+    return index;
   };
 
   private clearSelectedOffer = () => {
-    this.selectedOffer$.next(null);
+    this.selectedOffer = null;
 
-    this.openOffers$
-      .pipe(
-        take(1),
-        map(offers => {
-          return offers.map(offer => {
-            offer.selected = false;
-            return offer;
-          });
-        }),
-      )
-      .subscribe();
+    this.openOffers.map(offer => {
+      offer.selected = false;
+      return offer;
+    });
+
+    this.changeDetectorRef.markForCheck();
   };
 }

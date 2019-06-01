@@ -1,5 +1,5 @@
 <app-button button-md
-            [attr.disabled]="!(selectedOffer$ | async)"
+            [attr.disabled]="!selectedOffer"
             class="mb-md"
             (click)="buy()">
   BUY
@@ -13,12 +13,12 @@
 
   <div class="input">
     <input type="number"
-           [disabled]="!(selectedOffer$ | async)"
+           [disabled]="!selectedOffer"
            [max]="tokenTotalAmount"
            [(ngModel)]="selectedAmount">
 
     <p>
-      {{(token$ | async).slp.detail.symbol}}
+      {{tokenOverview.symbol}}
     </p>
   </div>
 </div>
@@ -52,26 +52,28 @@
   <div class="orderbook__list"
        #list>
 
-    <ng-container *ngIf="openOffers$ | async as offers">
+    <div *ngFor="let offer of openOffers; trackBy: trackByIndex"
+         class="orderbook__item"
+         [class.orderbook__item--selected]="offer.selected"
+         (click)="select(offer)">
+      <p class="orderbook__item--price">
+        {{offer.pricePerToken | satsToBch | number:'1.8-8'}}
 
-      <div *ngFor="let offer of offers"
-           class="orderbook__item"
-           [class.orderbook__item--selected]="offer.selected"
-           (click)="select(offer)">
-        <p class="orderbook__item--price">
-          {{offer.pricePerToken | satsToBch | number:'1.8-8'}}
+        <span *ngIf="offer.isMyOrder"
+              class="orderbook__item--yours">
+          (Yours)
+        </span>
+      </p>
 
-          <span *ngIf="offer.isMyOrder"
-                class="orderbook__item--yours">
-            (Yours)
-          </span>
-        </p>
+      <p class="orderbook__item--amount">
+        {{offer.sellAmountToken}}
+      </p>
+    </div>
 
-        <p class="orderbook__item--amount">
-          {{offer.sellAmountToken}}
-        </p>
-      </div>
-    </ng-container>
+    <div *ngIf="!openOffers.length"
+         class="orderbook__item">
+      No orders yet
+    </div>
 
   </div>
 

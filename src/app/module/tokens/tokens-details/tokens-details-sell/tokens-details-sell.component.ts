@@ -2,20 +2,19 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  Input,
   OnDestroy,
   OnInit,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Wallet } from 'cashcontracts';
-import { Observable, Subject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
-import { defaultNetworkSettings } from 'slpdex-market';
+import { combineLatest, Subject } from 'rxjs';
+import { map, take, takeUntil } from 'rxjs/operators';
+import { defaultNetworkSettings, TokenOverview } from 'slpdex-market';
 import { CashContractsService } from '../../../../cash-contracts.service';
 import { EndpointsService } from '../../../../endpoints.service';
 import { convertBchToSats, convertSatsToBch } from '../../../../helpers';
-import { TokensDetails } from '../tokens-details.component';
 import BigNumber from 'bignumber.js';
+import { MarketService } from '../../../../market.service';
 
 @Component({
   selector: 'app-tokens-details-sell',
@@ -24,8 +23,7 @@ import BigNumber from 'bignumber.js';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TokensDetailsSellComponent implements OnInit, OnDestroy {
-  @Input() token$: Observable<TokensDetails>;
-
+  tokenOverview: TokenOverview = {} as TokenOverview;
   selectedTokenAmount = 0;
   selectedBchPrice = 0;
   totalTokenBalance = 0;
@@ -42,36 +40,50 @@ export class TokensDetailsSellComponent implements OnInit, OnDestroy {
     private cashContractsService: CashContractsService,
     private changeDetectorRef: ChangeDetectorRef,
     private endpointsService: EndpointsService,
+    private marketService: MarketService,
   ) {}
 
   ngOnInit() {
     this.setDefaultAmounts();
 
-    this.endpointsService
-      .getBchUsdPrice()
-      .pipe(take(1))
-      .subscribe(usdPrice => {
-        this.usdPrice = +usdPrice.ticker.price;
+    this.endpointsService.bchUsdPrice
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(price => {
+        this.usdPrice = price;
       });
 
-    this.activatedRoute.params.pipe(take(1)).subscribe(params => {
-      this.tokenId = params.id;
+    combineLatest([
+      this.activatedRoute.params,
+      this.marketService.marketOverview,
+      this.cashContractsService.listenWallet,
+    ])
+      .pipe(
+        takeUntil(this.destroy$),
+        map(([params, marketOverview, wallet]) => {
+          this.tokenId = params.id;
+          this.wallet = wallet;
 
-      this.cashContractsService.listenWallet
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(wallet => {
-          if (!wallet) {
+          if (!this.tokenId || !this.wallet) {
             return;
           }
 
-          this.wallet = wallet;
+          const tokenOverview = marketOverview.find(
+            x => x.tokenId === this.tokenId,
+          );
+
+          if (!tokenOverview) {
+            return;
+          }
+
+          this.tokenOverview = tokenOverview;
 
           const totalTokenBalance = wallet.tokenBalance(this.tokenId);
           this.totalTokenBalance = totalTokenBalance.toNumber();
 
           this.calculateTotalPrice();
-        });
-    });
+        }),
+      )
+      .subscribe();
   }
 
   ngOnDestroy() {
@@ -84,26 +96,29 @@ export class TokensDetailsSellComponent implements OnInit, OnDestroy {
 
     this.priceTimer = window.setTimeout(() => {
       this.selectedBchPrice = value;
-      this.changeDetectorRef.markForCheck();
+      this.calculateTotalPrice();
     }, 1000);
   };
 
-  sell = () => {
-    this.token$.pipe(take(1)).subscribe(async tokenDetails => {
-      await this.cashContractsService.createSellOffer(
-        {
-          sellAmountToken: new BigNumber(this.selectedTokenAmount),
-          pricePerToken: convertBchToSats(new BigNumber(this.selectedBchPrice)),
-          feeAddress: defaultNetworkSettings.feeAddress,
-          feeDivisor: new BigNumber(defaultNetworkSettings.feeDivisor),
-          receivingAddress: this.wallet.cashAddr(),
-          tokenId: this.tokenId,
-        },
-        tokenDetails.slp.detail,
-      );
 
-      this.setDefaultAmounts();
-    });
+  sell = async () => {
+    if (!this.selectedTokenAmount || !this.selectedBchPrice) {
+      return;
+    }
+
+    await this.cashContractsService.createSellOffer(
+      {
+        sellAmountToken: new BigNumber(this.selectedTokenAmount),
+        pricePerToken: convertBchToSats(new BigNumber(this.selectedBchPrice)),
+        feeAddress: defaultNetworkSettings.feeAddress,
+        feeDivisor: new BigNumber(defaultNetworkSettings.feeDivisor),
+        receivingAddress: this.wallet.cashAddr(),
+        tokenId: this.tokenId,
+      },
+      this.tokenOverview.decimals,
+    );
+
+    this.setDefaultAmounts();
   };
 
   setMaxTokens = () => {

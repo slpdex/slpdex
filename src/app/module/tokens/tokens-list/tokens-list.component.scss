@@ -8,6 +8,14 @@
     font-size: 14px;
   }
 
+  &__spinner {
+    align-items: center;
+    display: flex;
+    height: calc(100vh - #{$header-height} - 150px);
+    justify-content: center;
+    min-height: 400px;
+  }
+
   &__row {
     border-bottom: 1px solid darken(white, 10%);
     border-radius: 4px;

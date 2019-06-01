@@ -1,20 +1,19 @@
-<app-widget *ngIf="token$ | async as token"
-            class="header">
+<app-widget class="header">
   <div class="header__top">
 
     <div class="header__left">
-      <app-jdenticon [id]="token._id"
+      <app-jdenticon [id]="tokenId"
                      [size]="50"
                      class="mr-md">
       </app-jdenticon>
 
       <div>
         <h2>
-          {{token.slp.detail.name}}
+          {{tokenOverview.name}}
         </h2>
 
         <p class="tokens-details__header--symbol">
-          {{token.slp.detail.symbol}}
+          {{tokenOverview.symbol}}
         </p>
       </div>
     </div>
@@ -29,7 +28,15 @@
 
       <p [class.header__bottom--green]="stats.color === 'green'"
          [class.header__bottom--red]="stats.color === 'red'">
-        {{stats.stat}}
+
+        <ng-container *ngIf=!stats.isPrice>
+          {{stats.stat}}
+        </ng-container>
+
+        <ng-container *ngIf="stats.isPrice">
+          {{stats.stat | bchSeparator}} BCH
+        </ng-container>
+
       </p>
     </div>
   </div>

@@ -6,7 +6,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { Subject } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { TokenOverview, TokenSortByKey } from 'slpdex-market';
 import { MarketService } from '../../../market.service';
 import { SLPRoutes } from '../../../slp-routes';
@@ -27,6 +27,8 @@ interface TokensSort {
 export class TokensListComponent implements OnInit, OnDestroy {
   tokens: TokenOverview[] = [];
   slpRoutes = { ...SLPRoutes };
+
+  isLoading = true;
 
   tokensSort: TokensSort[] = [
     {
@@ -64,7 +66,20 @@ export class TokensListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.fetchTokens('marketCapSatoshis', false);
+    this.marketService.loadMarketOverview('marketCapSatoshis', false);
+
+    this.marketService.marketOverview
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(overview => {
+        if (!overview.length) {
+          return;
+        }
+
+        this.isLoading = false;
+
+        this.tokens = overview;
+        this.changeDetectorRef.markForCheck();
+      });
   }
 
   ngOnDestroy() {
@@ -77,10 +92,10 @@ export class TokensListComponent implements OnInit, OnDestroy {
       if (sort.name === item.name) {
         if (sort.sortBy === 'asc' || sort.sortBy === null) {
           sort.sortBy = 'desc';
-          this.fetchTokens(sort.sortKey, false);
+          this.marketService.loadMarketOverview(sort.sortKey, false);
         } else {
           sort.sortBy = 'asc';
-          this.fetchTokens(sort.sortKey, true);
+          this.marketService.loadMarketOverview(sort.sortKey, true);
         }
       } else {
         sort.sortBy = null;
@@ -94,15 +109,5 @@ export class TokensListComponent implements OnInit, OnDestroy {
 
   trackByName = (index: number, item: TokensSort) => {
     return item.name;
-  };
-
-  private fetchTokens = (sort: TokenSortByKey, asc: boolean) => {
-    this.marketService
-      .getMarketOverview(sort, 0, 100, asc)
-      .pipe(take(1))
-      .subscribe(overview => {
-        this.tokens = overview;
-        this.changeDetectorRef.markForCheck();
-      });
   };
 }

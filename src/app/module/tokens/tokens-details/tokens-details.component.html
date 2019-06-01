@@ -1,40 +1,48 @@
 <app-wrapper>
 
-  <ng-container *ngIf="tokenDetails$ | async as token">
+  <p class="bread">
+    <a [routerLink]="'/' + slpRoutes.tokens">Tokens</a> / {{tokenOverview.symbol}}
+  </p>
 
-    <p class="bread">
-      <a [routerLink]="'/' + slpRoutes.tokens">Tokens</a> / {{token.slp.detail.symbol}}
-    </p>
+  <div class="tokens-details">
 
-    <div class="tokens-details">
+    <div class="tokens-details__left">
 
-      <div class="tokens-details__left">
+      <app-tokens-details-header>
+      </app-tokens-details-header>
 
-        <app-tokens-details-header [token$]="tokenDetails$">
-        </app-tokens-details-header>
-
-        <app-widget class="tokens-details__chart mb-lg">
-          <p>CHART COMING SOON</p>
-        </app-widget>
-
-        <app-tokens-details-open-offers [token$]="tokenDetails$">
-        </app-tokens-details-open-offers>
-
-      </div>
-
-      <app-widget widget-sm
-                  class="tokens-details__right">
-
-        <app-tokens-details-orderbook [token$]="tokenDetails$">
-        </app-tokens-details-orderbook>
-
-        <app-tokens-details-sell [token$]="tokenDetails$">
-        </app-tokens-details-sell>
-
+      <app-widget class="tokens-details__chart mb-lg">
+        <p>CHART COMING SOON</p>
       </app-widget>
+
+      <app-tokens-details-open-offers>
+      </app-tokens-details-open-offers>
 
     </div>
 
-  </ng-container>
+    <app-widget widget-sm
+                class="tokens-details__right">
+
+      <app-tokens-details-orderbook>
+      </app-tokens-details-orderbook>
+
+      <app-tokens-details-sell>
+      </app-tokens-details-sell>
+
+      <div *ngIf="!walletConnected"
+           class="tokens-details__no-wallet">
+        <p>
+          Enable trading by connecting your wallet
+        </p>
+
+        <app-button button-sm
+                    [routerLink]="slpRoutes.wallet">
+          Connect wallet
+        </app-button>
+      </div>
+
+    </app-widget>
+
+  </div>
 
 </app-wrapper>

@@ -17,6 +17,12 @@
     </div>
   </div>
 
+  <div *ngIf="isLoading"
+       class="tokens-list__spinner">
+    <mat-spinner>
+    </mat-spinner>
+  </div>
+
   <div *ngFor="let token of tokens; let i = index"
        class="tokens-list__row"
        [routerLink]="['./', token.tokenId]">
@@ -44,15 +50,15 @@
     </div>
 
     <p class="tokens-list__col">
-      {{token.marketCapSatoshis || 0 | satsToBch}} BCH
+      {{(token.marketCapSatoshis || 0) | satsToBch | bchSeparator}} BCH
     </p>
 
     <p class="tokens-list__col">
-      {{token.lastTrade.pricePerToken || 0 | satsToBch}} BCH
+      {{(token.lastTrade.pricePerToken || 0) | satsToBch | bchSeparator}} BCH
     </p>
 
     <p class="tokens-list__col">
-      {{token.last24h.volumeSatoshis || 0 | satsToBch}} BCH
+      {{(token.last24h.volumeSatoshis || 0) | satsToBch | bchSeparator}} BCH
     </p>
 
     <p class="tokens-list__col"

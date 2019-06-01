@@ -9,7 +9,7 @@
                 class="open-offers__item py-sm">
 
       <p>
-        {{offer.sellAmountToken}} {{(token$ | async).slp.detail.symbol}}
+        {{offer.sellAmountToken}} {{tokenOverview.symbol}}
       </p>
 
       <p>
@@ -32,7 +32,7 @@
 
   <ng-template #noOffers>
     <p class="empty">
-      No open offers for {{(token$ | async).slp.detail.symbol}}
+      No open offers for {{tokenOverview.symbol}}
     </p>
   </ng-template>
 

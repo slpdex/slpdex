@@ -4,7 +4,6 @@ import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { convertBchToSats, convertSatsToBch, generateShortId } from './helpers';
 import { NotificationService } from './notification.service';
-import { TokenDetailsDetail } from './queries/tokenDetailsQuery';
 import BigNumber from 'bignumber.js';
 
 @Injectable({
@@ -125,9 +124,9 @@ export class CashContractsService {
   createBuyOffer = async (
     utxo: cc.UtxoEntry,
     params: cc.TradeOfferParams,
-    tokenDetails: TokenDetailsDetail,
+    decimals: number,
   ) => {
-    const tokenFactor = new BigNumber(10).pow(tokenDetails.decimals);
+    const tokenFactor = new BigNumber(10).pow(decimals);
     const verification = cc.verifyAdvancedTradeOffer(
       this.wallet,
       tokenFactor,
@@ -137,12 +136,9 @@ export class CashContractsService {
       this.notificationService.showNotification('Error: ' + verification.msg);
       return;
     }
-    const offer = cc.acceptTradeOfferTx(
-      this.wallet,
-      utxo,
-      params,
-      tokenDetails,
-    );
+    const offer = cc.acceptTradeOfferTx(this.wallet, utxo, params, {
+      decimals,
+    });
     console.log(offer);
 
     try {
@@ -153,12 +149,9 @@ export class CashContractsService {
     }
   };
 
-  createSellOffer = async (
-    params: cc.TradeOfferParams,
-    tokenDetails: TokenDetailsDetail,
-  ) => {
+  createSellOffer = async (params: cc.TradeOfferParams, decimals: number) => {
     return new Promise(async resolve => {
-      const tokenFactor = new BigNumber(10).pow(tokenDetails.decimals);
+      const tokenFactor = new BigNumber(10).pow(decimals);
       const verification = cc.verifyAdvancedTradeOffer(
         this.wallet,
         tokenFactor,
@@ -194,15 +187,12 @@ export class CashContractsService {
   cancelSellOffer = (
     utxo: cc.UtxoEntry,
     params: cc.TradeOfferParams,
-    tokenDetails: TokenDetailsDetail,
+    decimals: number,
   ) => {
     return new Promise(resolve => {
-      const cancelTx = cc.cancelTradeOfferTx(
-        this.wallet,
-        utxo,
-        params,
-        tokenDetails,
-      );
+      const cancelTx = cc.cancelTradeOfferTx(this.wallet, utxo, params, {
+        decimals,
+      });
 
       try {
         cancelTx.broadcast().then(broadcast => {

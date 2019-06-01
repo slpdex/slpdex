@@ -3,19 +3,15 @@ import {
   Component,
   OnDestroy,
   OnInit,
+  ChangeDetectorRef,
 } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import * as moment from 'moment';
-import { BehaviorSubject, Subject } from 'rxjs';
-import { take } from 'rxjs/operators';
-import { EndpointsService } from '../../../endpoints.service';
-import { TokenDetailsC } from '../../../queries/tokenDetailsQuery';
-import { SLPRoutes } from '../../../slp-routes';
+import { ActivatedRoute } from '@angular/router';
+import { combineLatest, Subject } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
+import { TokenOverview } from 'slpdex-market';
 import { MarketService } from '../../../market.service';
-
-export interface TokensDetails extends TokenDetailsC {
-  timeSinceLastTrade: string;
-}
+import { SLPRoutes } from '../../../slp-routes';
+import { CashContractsService } from '../../../cash-contracts.service';
 
 @Component({
   selector: 'app-tokens-details',
@@ -24,63 +20,54 @@ export interface TokensDetails extends TokenDetailsC {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TokensDetailsComponent implements OnInit, OnDestroy {
-  tokenDetails$ = new BehaviorSubject<TokensDetails>(null);
-
-  tests = [1, 2, 3, 4, 5];
-
+  tokenOverview: TokenOverview = {} as TokenOverview;
   slpRoutes = { ...SLPRoutes };
+  walletConnected = false;
 
   private destroy$ = new Subject();
+  private tokenId: string;
 
   constructor(
-    private endpointsService: EndpointsService,
     private activatedRoute: ActivatedRoute,
-    private router: Router,
     private marketService: MarketService,
+    private cashContractsService: CashContractsService,
+    private changeDetectorRef: ChangeDetectorRef,
   ) {}
 
   ngOnInit() {
-    this.activatedRoute.params.pipe(take(1)).subscribe(params => {
-      const tokenId = params.id;
-      this.getTokenDetails(tokenId);
+    this.marketService.loadMarketOverview('marketCapSatoshis', false);
 
-      this.marketService.loadOffersAndStartListener(tokenId);
-    });
+    combineLatest([
+      this.activatedRoute.params,
+      this.marketService.marketOverview,
+      this.cashContractsService.listenWallet,
+    ])
+      .pipe(
+        takeUntil(this.destroy$),
+        map(([params, marketOverview, wallet]) => {
+          if (wallet) {
+            this.walletConnected = true;
+            this.changeDetectorRef.markForCheck();
+          }
+
+          this.tokenId = params.id;
+          this.marketService.loadOffersAndStartListener(this.tokenId);
+
+          if (!marketOverview.length) {
+            return;
+          }
+
+          this.tokenOverview = marketOverview.find(
+            x => x.tokenId === this.tokenId,
+          );
+        }),
+      )
+      .subscribe();
   }
 
   ngOnDestroy() {
-    this.marketService.unsubscribeListener();
+    this.marketService.unsubscribeMarketTokenListener();
     this.destroy$.next();
     this.destroy$.unsubscribe();
   }
-
-  createOffer = () => {
-    this.router.navigate([SLPRoutes.offer], {
-      state: {
-        offer: 'wow',
-      },
-    });
-  };
-
-  private getTokenDetails = (symbol: string) => {
-    this.endpointsService
-      .getTokenDetails('TTTT')
-      .pipe(take(1))
-      .subscribe(data => {
-        console.log(data);
-
-        if (!data.c || !data.c.length) {
-          return;
-        }
-
-        const timeSinceLastTrade = moment
-          .unix(data.c[0].lastTrade.timestamp)
-          .fromNow();
-
-        this.tokenDetails$.next({
-          ...data.c[0],
-          timeSinceLastTrade,
-        });
-      });
-  };
 }

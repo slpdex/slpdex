@@ -5,20 +5,40 @@ import {
   TimeSinceLastBlock,
   timeSinceLastBlockQuery,
 } from './queries/timeSinceLastBlockQuery';
-import { TokenDetails, tokenDetailsQuery } from './queries/tokenDetailsQuery';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EndpointsService {
+  private bchUsdPriceSubject = new BehaviorSubject(0);
+  private bchUsdFetchNew = true;
+
   constructor(private httpClient: HttpClient) {}
 
-  getTokenDetails = (symbol: string) => {
-    return this.httpClient.get<TokenDetails>(tokenDetailsQuery(symbol));
-  };
+  get bchUsdPrice() {
+    this.loadBchUsdPrice();
+    return this.bchUsdPriceSubject.asObservable();
+  }
 
   getTimeSinceLastBlock = () => {
     return this.httpClient.get<TimeSinceLastBlock>(timeSinceLastBlockQuery());
+  };
+
+  private loadBchUsdPrice = () => {
+    if (!this.bchUsdFetchNew) {
+      return;
+    }
+
+    this.bchUsdFetchNew = false;
+
+    window.setTimeout(() => (this.bchUsdFetchNew = true), 60000);
+
+    this.httpClient.get<CryptoNator>(bchUsdQuery()).subscribe(bchUsdPrice => {
+      if (bchUsdPrice.success) {
+        this.bchUsdPriceSubject.next(+bchUsdPrice.ticker.price);
+      }
+    });
   };
 
   getBchUsdPrice = () => {

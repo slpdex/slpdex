@@ -57,15 +57,15 @@ export class WalletSendComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     combineLatest([
-      this.cashContractsService.listenWallet.pipe(takeUntil(this.destroy$)),
-      this.endpointsService.getBchUsdPrice().pipe(take(1)),
+      this.cashContractsService.listenWallet,
+      this.endpointsService.bchUsdPrice,
     ])
       .pipe(takeUntil(this.destroy$))
       .subscribe(values => {
-        const [wallet, usd] = values;
+        const [wallet, price] = values;
 
         this.wallet = wallet;
-        this.usd = +usd.ticker.price || 0;
+        this.usd = price;
 
         if (this.wallet) {
           this.handleWallet();

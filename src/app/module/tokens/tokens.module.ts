@@ -17,6 +17,7 @@ import { TokensDetailsComponent } from './tokens-details/tokens-details.componen
 import { TokensListComponent } from './tokens-list/tokens-list.component';
 import { TokensRoutingModule } from './tokens-routing.module';
 import { TokensComponent } from './tokens.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { TokensComponent } from './tokens.component';
     WrapperModule,
     JdenticonModule,
     SortModule,
+    MatProgressSpinnerModule,
     IconModule,
     PipeModule,
     FormsModule,

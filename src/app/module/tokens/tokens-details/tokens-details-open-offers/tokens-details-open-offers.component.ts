@@ -4,17 +4,20 @@ import {
   Component,
   OnDestroy,
   OnInit,
-  Input,
 } from '@angular/core';
-import { combineLatest, Subject, Observable } from 'rxjs';
-import { map, takeUntil, take } from 'rxjs/operators';
-import { TokenOffer, defaultNetworkSettings } from 'slpdex-market';
-import { CashContractsService } from '../../../../cash-contracts.service';
-import { MarketService } from '../../../../market.service';
-import { TokensDetails } from '../tokens-details.component';
 import { Wallet } from 'cashcontracts';
 import * as moment from 'moment';
 import BigNumber from 'bignumber.js';
+import { combineLatest, Subject } from 'rxjs';
+import { map, take, takeUntil } from 'rxjs/operators';
+import {
+  defaultNetworkSettings,
+  TokenOffer,
+  TokenOverview,
+} from 'slpdex-market';
+import { CashContractsService } from '../../../../cash-contracts.service';
+import { MarketService } from '../../../../market.service';
+import { ActivatedRoute } from '@angular/router';
 
 interface TokenOfferExtended extends TokenOffer {
   timeSince: string;
@@ -27,33 +30,48 @@ interface TokenOfferExtended extends TokenOffer {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TokensDetailsOpenOffersComponent implements OnInit, OnDestroy {
-  @Input() token$: Observable<TokensDetails>;
+  tokenOverview: TokenOverview = {} as TokenOverview;
   openOffers: TokenOfferExtended[] = [];
 
   private isLoading = false;
   private destroy$ = new Subject();
   private wallet: Wallet;
+  private tokenId: string;
 
   constructor(
     private marketService: MarketService,
     private cashContractsService: CashContractsService,
     private changeDetectorRef: ChangeDetectorRef,
+    private activatedRoute: ActivatedRoute,
   ) {}
 
   ngOnInit() {
     combineLatest([
-      this.marketService.offers,
+      this.marketService.marketToken.pipe(
+        map(marketToken => {
+          if (!marketToken) {
+            return [];
+          }
+
+          return marketToken.offers().toArray();
+        }),
+      ),
       this.cashContractsService.listenWallet,
+      this.marketService.marketOverview,
+      this.activatedRoute.params,
     ])
       .pipe(
         takeUntil(this.destroy$),
-        map(([offers, wallet]) => {
+        map(([offers, wallet, marketOverview, params]) => {
+          this.tokenId = params.id;
+
           if (!wallet) {
             return;
           }
+
           this.wallet = wallet;
 
-          const cashAddres = wallet.cashAddr();
+          const cashAddres = this.wallet.cashAddr();
 
           this.openOffers = offers
             .filter(offer => {
@@ -68,10 +86,17 @@ export class TokensDetailsOpenOffersComponent implements OnInit, OnDestroy {
               } as TokenOfferExtended;
             });
 
-          this.changeDetectorRef.markForCheck();
+          if (!marketOverview.length) {
+            return;
+          }
 
-          console.log(offers);
-          console.log(wallet);
+          const currentTokenOverview = marketOverview.find(
+            x => x.tokenId === this.tokenId,
+          );
+
+          this.tokenOverview = currentTokenOverview;
+
+          this.changeDetectorRef.markForCheck();
         }),
       )
       .subscribe();
@@ -82,29 +107,28 @@ export class TokensDetailsOpenOffersComponent implements OnInit, OnDestroy {
     this.destroy$.unsubscribe();
   }
 
-  cancel = (offer: TokenOfferExtended) => {
+  cancel = async (offer: TokenOfferExtended) => {
     if (this.isLoading) {
       return;
     }
 
     this.isLoading = true;
 
-    this.token$.pipe(take(1)).subscribe(async tokenDetails => {
-      await this.cashContractsService.cancelSellOffer(
-        offer.utxoEntry,
-        {
-          sellAmountToken: offer.sellAmountToken,
-          pricePerToken: offer.pricePerToken,
-          feeAddress: defaultNetworkSettings.feeAddress,
-          feeDivisor: new BigNumber(defaultNetworkSettings.feeDivisor),
-          receivingAddress: this.wallet.cashAddr(),
-          tokenId: this.marketService.tokenId(),
-        },
-        tokenDetails.slp.detail,
-      );
+    // TODO: Replace with marketoverview for 1 token
+    await this.cashContractsService.cancelSellOffer(
+      offer.utxoEntry,
+      {
+        sellAmountToken: offer.sellAmountToken,
+        pricePerToken: offer.pricePerToken,
+        feeAddress: defaultNetworkSettings.feeAddress,
+        feeDivisor: new BigNumber(defaultNetworkSettings.feeDivisor),
+        receivingAddress: this.wallet.cashAddr(),
+        tokenId: this.tokenId,
+      },
+      this.tokenOverview.decimals,
+    );
 
-      this.isLoading = false;
-    });
+    this.isLoading = false;
   };
 
   trackByTimestamp = (index: number, item: TokenOfferExtended) => {
