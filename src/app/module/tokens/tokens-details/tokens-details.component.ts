@@ -48,6 +48,7 @@ export class TokensDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.marketService.unsubscribeMarketTokenListener();
     this.destroy$.next();
     this.destroy$.unsubscribe();
   }

@@ -8,6 +8,7 @@ import * as Market from 'slpdex-market';
 })
 export class MarketService {
   private marketToken$ = new BehaviorSubject<Market.MarketToken>(null);
+  private marketTokenRef: Market.MarketToken;
 
   constructor() {}
 
@@ -33,15 +34,20 @@ export class MarketService {
     from(Market.MarketToken.create(id, Market.defaultNetworkSettings))
       .pipe(take(1))
       .subscribe(marketToken => {
-        this.marketToken$.next(marketToken);
+        this.marketTokenRef = marketToken;
 
-        this.startListener(marketToken);
+        this.marketToken$.next(this.marketTokenRef);
+        this.startMarketTokenListener();
       });
   };
 
-  private startListener = (marketToken: Market.MarketToken) => {
-    marketToken.addReceivedOfferListener(() => {
-      this.marketToken$.next(marketToken);
+  unsubscribeMarketTokenListener = () => {
+    this.marketTokenRef = null;
+  };
+
+  private startMarketTokenListener = () => {
+    this.marketTokenRef.addReceivedOfferListener(() => {
+      this.marketToken$.next(this.marketTokenRef);
     });
   };
 }
