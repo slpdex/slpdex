@@ -43,6 +43,7 @@ export class TokensDetailsHeaderComponent implements OnInit, OnDestroy {
   ngOnInit() {
     combineLatest([
       this.activatedRoute.params,
+      // TODO: Replace with 1 token fetch
       this.marketService.marketOverview,
     ])
       .pipe(
@@ -51,8 +52,6 @@ export class TokensDetailsHeaderComponent implements OnInit, OnDestroy {
           this.tokenId = params.id;
 
           if (!overview.length) {
-            // TODO: Replace with 1 token fetch
-            this.marketService.loadMarketOverview('marketCapSatoshis', false);
             return;
           }
 

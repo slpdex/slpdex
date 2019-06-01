@@ -124,9 +124,10 @@ export class CashContractsService {
   createBuyOffer = async (
     utxo: cc.UtxoEntry,
     params: cc.TradeOfferParams,
-    tokenDetails: TokenDetailsDetail,
+    decimals: number,
   ) => {
-    const tokenFactor = Math.pow(10, tokenDetails.decimals);
+    console.log(decimals);
+    const tokenFactor = Math.pow(10, decimals);
     const verification = cc.verifyAdvancedTradeOffer(
       this.wallet,
       tokenFactor,
@@ -136,12 +137,9 @@ export class CashContractsService {
       this.notificationService.showNotification('Error: ' + verification.msg);
       return;
     }
-    const offer = cc.acceptTradeOfferTx(
-      this.wallet,
-      utxo,
-      params,
-      tokenDetails,
-    );
+    const offer = cc.acceptTradeOfferTx(this.wallet, utxo, params, {
+      decimals,
+    });
     console.log(offer);
 
     try {

@@ -7,7 +7,7 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { EndpointsService } from '../../../endpoints.service';
 import { MarketService } from '../../../market.service';
 import { TokenDetailsC } from '../../../queries/tokenDetailsQuery';
@@ -45,6 +45,14 @@ export class TokensDetailsComponent implements OnInit, OnDestroy {
 
       this.marketService.loadOffersAndStartListener(tokenId);
     });
+
+    this.marketService.marketOverview
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(overview => {
+        if (!overview.length) {
+          this.marketService.loadMarketOverview('marketCapSatoshis', false);
+        }
+      });
   }
 
   ngOnDestroy() {
