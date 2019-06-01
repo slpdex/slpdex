@@ -58,11 +58,10 @@ export class WalletDetailsComponent implements OnInit, OnDestroy {
         this.setWalletTokens();
       });
 
-    this.endpointsService
-      .getBchUsdPrice()
-      .pipe(take(1))
-      .subscribe(usdPrice => {
-        this.usdPrice = +usdPrice.ticker.price;
+    this.endpointsService.bchUsdPrice
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(price => {
+        this.usdPrice = price;
 
         this.bchBalance$.pipe(takeUntil(this.destroy$)).subscribe(bch => {
           const usdPriceForBch = new BigNumber(this.usdPrice * +bch);

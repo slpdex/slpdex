@@ -68,11 +68,10 @@ export class TokensDetailsOrderbookComponent
         this.wallet = wallet;
       });
 
-    this.endpointsService
-      .getBchUsdPrice()
-      .pipe(take(1))
+    this.endpointsService.bchUsdPrice
+      .pipe(takeUntil(this.destroy$))
       .subscribe(price => {
-        this.usdPrice = +price.ticker.price;
+        this.usdPrice = price;
       });
 
     combineLatest([

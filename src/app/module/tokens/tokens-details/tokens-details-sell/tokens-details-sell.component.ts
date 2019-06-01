@@ -45,11 +45,10 @@ export class TokensDetailsSellComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.setDefaultAmounts();
 
-    this.endpointsService
-      .getBchUsdPrice()
-      .pipe(take(1))
-      .subscribe(usdPrice => {
-        this.usdPrice = +usdPrice.ticker.price;
+    this.endpointsService.bchUsdPrice
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(price => {
+        this.usdPrice = price;
       });
 
     combineLatest([
