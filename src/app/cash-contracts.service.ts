@@ -150,12 +150,9 @@ export class CashContractsService {
     }
   };
 
-  createSellOffer = async (
-    params: cc.TradeOfferParams,
-    tokenDetails: TokenDetailsDetail,
-  ) => {
+  createSellOffer = async (params: cc.TradeOfferParams, decimals: number) => {
     return new Promise(async resolve => {
-      const tokenFactor = Math.pow(10, tokenDetails.decimals);
+      const tokenFactor = Math.pow(10, decimals);
       const verification = cc.verifyAdvancedTradeOffer(
         this.wallet,
         tokenFactor,

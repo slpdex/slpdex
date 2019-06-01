@@ -2,19 +2,18 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  Input,
   OnDestroy,
   OnInit,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Wallet } from 'cashcontracts';
-import { Observable, Subject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
-import { defaultNetworkSettings } from 'slpdex-market';
+import { combineLatest, Subject } from 'rxjs';
+import { map, take, takeUntil } from 'rxjs/operators';
+import { defaultNetworkSettings, TokenOverview } from 'slpdex-market';
 import { CashContractsService } from '../../../../cash-contracts.service';
 import { EndpointsService } from '../../../../endpoints.service';
 import { convertBchToSats, convertSatsToBch } from '../../../../helpers';
-import { TokensDetails } from '../tokens-details.component';
+import { MarketService } from '../../../../market.service';
 
 @Component({
   selector: 'app-tokens-details-sell',
@@ -23,8 +22,7 @@ import { TokensDetails } from '../tokens-details.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TokensDetailsSellComponent implements OnInit, OnDestroy {
-  @Input() token$: Observable<TokensDetails>;
-
+  tokenOverview: TokenOverview = {} as TokenOverview;
   selectedTokenAmount = 0;
   selectedBchPrice = 0;
   totalTokenBalance = 0;
@@ -41,6 +39,7 @@ export class TokensDetailsSellComponent implements OnInit, OnDestroy {
     private cashContractsService: CashContractsService,
     private changeDetectorRef: ChangeDetectorRef,
     private endpointsService: EndpointsService,
+    private marketService: MarketService,
   ) {}
 
   ngOnInit() {
@@ -53,24 +52,38 @@ export class TokensDetailsSellComponent implements OnInit, OnDestroy {
         this.usdPrice = +usdPrice.ticker.price;
       });
 
-    this.activatedRoute.params.pipe(take(1)).subscribe(params => {
-      this.tokenId = params.id;
+    combineLatest([
+      this.activatedRoute.params,
+      this.marketService.marketOverview,
+      this.cashContractsService.listenWallet,
+    ])
+      .pipe(
+        takeUntil(this.destroy$),
+        map(([params, marketOverview, wallet]) => {
+          this.tokenId = params.id;
+          this.wallet = wallet;
 
-      this.cashContractsService.listenWallet
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(wallet => {
-          if (!wallet) {
+          if (!this.tokenId || !this.wallet) {
             return;
           }
 
-          this.wallet = wallet;
+          const tokenOverview = marketOverview.find(
+            x => x.tokenId === this.tokenId,
+          );
+
+          if (!tokenOverview) {
+            return;
+          }
+
+          this.tokenOverview = tokenOverview;
 
           const totalTokenBalance = wallet.tokenBalance(this.tokenId);
           this.totalTokenBalance = totalTokenBalance;
 
           this.calculateTotalPrice();
-        });
-    });
+        }),
+      )
+      .subscribe();
   }
 
   ngOnDestroy() {
@@ -87,22 +100,20 @@ export class TokensDetailsSellComponent implements OnInit, OnDestroy {
     }, 1000);
   };
 
-  sell = () => {
-    this.token$.pipe(take(1)).subscribe(async tokenDetails => {
-      await this.cashContractsService.createSellOffer(
-        {
-          sellAmountToken: this.selectedTokenAmount,
-          pricePerToken: convertBchToSats(+this.selectedBchPrice),
-          feeAddress: defaultNetworkSettings.feeAddress,
-          feeDivisor: defaultNetworkSettings.feeDivisor,
-          receivingAddress: this.wallet.cashAddr(),
-          tokenId: this.tokenId,
-        },
-        tokenDetails.slp.detail,
-      );
+  sell = async () => {
+    await this.cashContractsService.createSellOffer(
+      {
+        sellAmountToken: this.selectedTokenAmount,
+        pricePerToken: convertBchToSats(+this.selectedBchPrice),
+        feeAddress: defaultNetworkSettings.feeAddress,
+        feeDivisor: defaultNetworkSettings.feeDivisor,
+        receivingAddress: this.wallet.cashAddr(),
+        tokenId: this.tokenId,
+      },
+      this.tokenOverview.decimals,
+    );
 
-      this.setDefaultAmounts();
-    });
+    this.setDefaultAmounts();
   };
 
   setMaxTokens = () => {

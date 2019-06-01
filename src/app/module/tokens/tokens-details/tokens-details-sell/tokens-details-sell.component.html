@@ -10,7 +10,7 @@
            (keyup)="calculateTotalPrice()"
            [(ngModel)]="selectedTokenAmount">
     <p>
-      {{(token$ | async).slp.detail.symbol}}
+      {{tokenOverview.symbol}}
     </p>
   </div>
 </div>
