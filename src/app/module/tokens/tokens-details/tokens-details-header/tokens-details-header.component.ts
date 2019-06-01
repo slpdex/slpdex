@@ -41,13 +41,25 @@ export class TokensDetailsHeaderComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    combineLatest([this.activatedRoute.params, this.marketService.marketToken])
+    combineLatest([
+      this.activatedRoute.params,
+      this.marketService.marketOverview,
+    ])
       .pipe(
         takeUntil(this.destroy$),
-        map(([params, marketToken]) => {
+        map(([params, overview]) => {
           this.tokenId = params.id;
 
-          this.getOverview();
+          if (!overview.length) {
+            // TODO: Replace with 1 token fetch
+            this.marketService.loadMarketOverview('marketCapSatoshis', false);
+            return;
+          }
+
+          const currentToken = overview.find(x => x.tokenId === this.tokenId);
+          this.tokenOverview = currentToken;
+
+          this.createStats();
         }),
       )
       .subscribe();
@@ -60,21 +72,6 @@ export class TokensDetailsHeaderComponent implements OnInit, OnDestroy {
 
   trackByName = (index: number, item: HeaderStat) => {
     return item.heading;
-  };
-
-  private getOverview = () => {
-    this.marketService
-      .getMarketOverview('marketCapSatoshis', 0, 10, false) // TODO: fetch 1 token
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(tokenOverview => {
-        const currentToken = tokenOverview.find(
-          x => x.tokenId === this.tokenId,
-        );
-        this.tokenOverview = currentToken;
-
-        console.log(this.tokenOverview);
-        this.createStats();
-      });
   };
 
   private createStats = () => {

@@ -33,20 +33,6 @@ export class MarketService {
     });
   };
 
-  getMarketOverview = (
-    sortByKey: Market.TokenSortByKey,
-    skip: number,
-    limit: number,
-    ascending: boolean,
-  ): Observable<Market.TokenOverview[]> => {
-    return from(Market.MarketOverview.create()).pipe(
-      take(1),
-      map(overview => {
-        return overview.tokens(sortByKey, skip, limit, ascending).toArray();
-      }),
-    );
-  };
-
   loadOffersAndStartListener = (id: string) => {
     from(Market.MarketToken.create(id, Market.defaultNetworkSettings))
       .pipe(take(1))
