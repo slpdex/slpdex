@@ -4,7 +4,6 @@ import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { convertBchToSats, convertSatsToBch, generateShortId } from './helpers';
 import { NotificationService } from './notification.service';
-import { TokenDetailsDetail } from './queries/tokenDetailsQuery';
 
 @Injectable({
   providedIn: 'root',

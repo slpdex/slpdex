@@ -5,17 +5,11 @@ import {
   OnInit,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import * as moment from 'moment';
-import { BehaviorSubject, Subject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
-import { EndpointsService } from '../../../endpoints.service';
+import { combineLatest, Subject } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
+import { TokenOverview } from 'slpdex-market';
 import { MarketService } from '../../../market.service';
-import { TokenDetailsC } from '../../../queries/tokenDetailsQuery';
 import { SLPRoutes } from '../../../slp-routes';
-
-export interface TokensDetails extends TokenDetailsC {
-  timeSinceLastTrade: string;
-}
 
 @Component({
   selector: 'app-tokens-details',
@@ -24,35 +18,41 @@ export interface TokensDetails extends TokenDetailsC {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TokensDetailsComponent implements OnInit, OnDestroy {
-  tokenDetails$ = new BehaviorSubject<TokensDetails>(null);
-
-  tests = [1, 2, 3, 4, 5];
+  tokenOverview: TokenOverview = {} as TokenOverview;
 
   slpRoutes = { ...SLPRoutes };
 
   private destroy$ = new Subject();
+  private tokenId: string;
 
   constructor(
-    private endpointsService: EndpointsService,
     private activatedRoute: ActivatedRoute,
     private marketService: MarketService,
   ) {}
 
   ngOnInit() {
-    this.activatedRoute.params.pipe(take(1)).subscribe(params => {
-      const tokenId = params.id;
-      this.getTokenDetails(tokenId);
+    this.marketService.loadMarketOverview('marketCapSatoshis', false);
 
-      this.marketService.loadOffersAndStartListener(tokenId);
-    });
+    combineLatest([
+      this.activatedRoute.params,
+      this.marketService.marketOverview,
+    ])
+      .pipe(
+        takeUntil(this.destroy$),
+        map(([params, marketOverview]) => {
+          this.tokenId = params.id;
+          this.marketService.loadOffersAndStartListener(this.tokenId);
 
-    this.marketService.marketOverview
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(overview => {
-        if (!overview.length) {
-          this.marketService.loadMarketOverview('marketCapSatoshis', false);
-        }
-      });
+          if (!marketOverview.length) {
+            return;
+          }
+
+          this.tokenOverview = marketOverview.find(
+            x => x.tokenId === this.tokenId,
+          );
+        }),
+      )
+      .subscribe();
   }
 
   ngOnDestroy() {
@@ -60,26 +60,4 @@ export class TokensDetailsComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.unsubscribe();
   }
-
-  private getTokenDetails = (symbol: string) => {
-    this.endpointsService
-      .getTokenDetails('TTTT')
-      .pipe(take(1))
-      .subscribe(data => {
-        console.log(data);
-
-        if (!data.c || !data.c.length) {
-          return;
-        }
-
-        const timeSinceLastTrade = moment
-          .unix(data.c[0].lastTrade.timestamp)
-          .fromNow();
-
-        this.tokenDetails$.next({
-          ...data.c[0],
-          timeSinceLastTrade,
-        });
-      });
-  };
 }

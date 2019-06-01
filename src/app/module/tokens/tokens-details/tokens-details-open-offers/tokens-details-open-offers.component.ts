@@ -85,6 +85,10 @@ export class TokensDetailsOpenOffersComponent implements OnInit, OnDestroy {
               } as TokenOfferExtended;
             });
 
+          if (!marketOverview.length) {
+            return;
+          }
+
           const currentTokenOverview = marketOverview.find(
             x => x.tokenId === this.tokenId,
           );
