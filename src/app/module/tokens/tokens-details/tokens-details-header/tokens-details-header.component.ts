@@ -74,15 +74,23 @@ export class TokensDetailsHeaderComponent implements OnInit, OnDestroy {
     return item.heading;
   };
 
-  private displayStat = (stat: BigNumber | undefined, decimals: number=0, convert: 'TO_BCH' | 'TO_PERCENT' | undefined=undefined) => {
-    if (stat === undefined)
-      return 'n/a'
-    if (convert == 'TO_BCH')
-      stat = convertSatsToBch(stat)
-    else if (convert == 'TO_PERCENT')
-      return stat.times('100').toFixed(decimals) + '%'
-    return stat.toFixed(decimals)
-  }
+  private displayStat = (
+    stat: BigNumber | undefined,
+    decimals: number = 0,
+    convert: 'TO_BCH' | 'TO_PERCENT' | undefined = undefined,
+  ) => {
+    if (stat === undefined) {
+      return 'n/a';
+    }
+
+    if (convert === 'TO_BCH') {
+      stat = convertSatsToBch(stat);
+    } else if (convert == 'TO_PERCENT') {
+      return stat.times('100').toFixed(decimals) + '%';
+    }
+
+    return stat.toFixed(decimals);
+  };
 
   private createStats = () => {
     let changeColor = '';
@@ -98,17 +106,29 @@ export class TokensDetailsHeaderComponent implements OnInit, OnDestroy {
     this.headerStats = [
       {
         heading: 'Last price',
-        stat: this.displayStat(this.tokenOverview.lastTrade.pricePerToken, 8, 'TO_BCH'),
+        stat: this.displayStat(
+          this.tokenOverview.lastTrade.pricePerToken,
+          8,
+          'TO_BCH',
+        ),
         isPrice: true,
       },
       {
         heading: 'Volume 24h',
-        stat: this.displayStat(this.tokenOverview.last24h.volumeSatoshis, 8, 'TO_BCH'),
+        stat: this.displayStat(
+          this.tokenOverview.last24h.volumeSatoshis,
+          8,
+          'TO_BCH',
+        ),
         isPrice: true,
       },
       {
         heading: 'Change 24h',
-        stat: this.displayStat(this.tokenOverview.last24h.priceIncrease, 1, 'TO_PERCENT'),
+        stat: this.displayStat(
+          this.tokenOverview.last24h.priceIncrease,
+          1,
+          'TO_PERCENT',
+        ),
         color: changeColor,
       },
       {
