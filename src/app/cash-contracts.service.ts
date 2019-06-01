@@ -188,15 +188,12 @@ export class CashContractsService {
   cancelSellOffer = (
     utxo: cc.UtxoEntry,
     params: cc.TradeOfferParams,
-    tokenDetails: TokenDetailsDetail,
+    decimals: number,
   ) => {
     return new Promise(resolve => {
-      const cancelTx = cc.cancelTradeOfferTx(
-        this.wallet,
-        utxo,
-        params,
-        tokenDetails,
-      );
+      const cancelTx = cc.cancelTradeOfferTx(this.wallet, utxo, params, {
+        decimals,
+      });
 
       try {
         cancelTx.broadcast().then(broadcast => {
