@@ -44,7 +44,9 @@ export class MarketService {
       this.offersSubject$.next(this.fetchOffers());
 
       this.startListener();
-    } catch (e) {}
+    } catch (e) {
+      console.error(e)
+    }
   };
 
   private fetchOffers = () => {

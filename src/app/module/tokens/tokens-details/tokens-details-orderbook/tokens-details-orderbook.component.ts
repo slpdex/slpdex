@@ -20,9 +20,10 @@ import { convertSatsToBch } from '../../../../helpers';
 import { MarketService } from '../../../../market.service';
 import { TokensDetails } from '../tokens-details.component';
 import { defaultNetworkSettings } from 'slpdex-market';
+import BigNumber from 'bignumber.js';
 
 export interface TokenOfferExtended extends TokenOffer {
-  bchPricePerToken: number;
+  bchPricePerToken: BigNumber;
   selected?: boolean;
   isMyOrder?: boolean;
 }
@@ -103,9 +104,9 @@ export class TokensDetailsOrderbookComponent
         return offer;
       });
 
-      this.tokenTotalAmount = item.sellAmountToken;
-      this.selectedAmount = item.sellAmountToken;
-      this.selectedBchPrice = item.bchPricePerToken;
+      this.tokenTotalAmount = item.sellAmountToken.toNumber();
+      this.selectedAmount = item.sellAmountToken.toNumber();
+      this.selectedBchPrice = item.bchPricePerToken.toNumber();
 
       this.selectedOffer$.next(item);
       this.openOffers$.next(newOffers);
@@ -117,9 +118,9 @@ export class TokensDetailsOrderbookComponent
       .pipe(
         map(([selectedOffer, tokenDetails]) => {
           const params: TradeOfferParams = {
-            buyAmountToken: this.selectedAmount,
+            buyAmountToken: new BigNumber(this.selectedAmount),
             feeAddress: defaultNetworkSettings.feeAddress,
-            feeDivisor: defaultNetworkSettings.feeDivisor,
+            feeDivisor: new BigNumber(defaultNetworkSettings.feeDivisor),
             pricePerToken: selectedOffer.pricePerToken,
             receivingAddress: selectedOffer.receivingAddress,
             sellAmountToken: selectedOffer.sellAmountToken,

@@ -14,6 +14,7 @@ import { MarketService } from '../../../../market.service';
 import { TokensDetails } from '../tokens-details.component';
 import { Wallet } from 'cashcontracts';
 import * as moment from 'moment';
+import BigNumber from 'bignumber.js';
 
 interface TokenOfferExtended extends TokenOffer {
   timeSince: string;
@@ -95,7 +96,7 @@ export class TokensDetailsOpenOffersComponent implements OnInit, OnDestroy {
           sellAmountToken: offer.sellAmountToken,
           pricePerToken: offer.pricePerToken,
           feeAddress: defaultNetworkSettings.feeAddress,
-          feeDivisor: defaultNetworkSettings.feeDivisor,
+          feeDivisor: new BigNumber(defaultNetworkSettings.feeDivisor),
           receivingAddress: this.wallet.cashAddr(),
           tokenId: this.marketService.tokenId(),
         },

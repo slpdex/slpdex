@@ -1,12 +1,12 @@
 import BigNumber from 'bignumber.js';
 import QRCode from 'qrcode';
 
-export const convertSatsToBch = (sats: number) => {
-  return +new BigNumber(sats).div(100000000).toFormat(8);
+export const convertSatsToBch = (sats: BigNumber) => {
+  return sats.div(100_000_000);
 };
 
-export const convertBchToSats = (bch: number) => {
-  return Math.floor(new BigNumber(bch).times(100000000).toNumber());
+export const convertBchToSats = (bch: BigNumber) => {
+  return new BigNumber(bch).times(100000000);
 };
 
 export const generateShortId = (id: string) => {

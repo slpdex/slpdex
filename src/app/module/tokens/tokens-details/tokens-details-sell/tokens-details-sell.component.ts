@@ -15,6 +15,7 @@ import { CashContractsService } from '../../../../cash-contracts.service';
 import { EndpointsService } from '../../../../endpoints.service';
 import { convertBchToSats, convertSatsToBch } from '../../../../helpers';
 import { TokensDetails } from '../tokens-details.component';
+import BigNumber from 'bignumber.js';
 
 @Component({
   selector: 'app-tokens-details-sell',
@@ -66,7 +67,7 @@ export class TokensDetailsSellComponent implements OnInit, OnDestroy {
           this.wallet = wallet;
 
           const totalTokenBalance = wallet.tokenBalance(this.tokenId);
-          this.totalTokenBalance = totalTokenBalance;
+          this.totalTokenBalance = totalTokenBalance.toNumber();
 
           this.calculateTotalPrice();
         });
@@ -91,10 +92,10 @@ export class TokensDetailsSellComponent implements OnInit, OnDestroy {
     this.token$.pipe(take(1)).subscribe(async tokenDetails => {
       await this.cashContractsService.createSellOffer(
         {
-          sellAmountToken: this.selectedTokenAmount,
-          pricePerToken: convertBchToSats(+this.selectedBchPrice),
+          sellAmountToken: new BigNumber(this.selectedTokenAmount),
+          pricePerToken: convertBchToSats(new BigNumber(this.selectedBchPrice)),
           feeAddress: defaultNetworkSettings.feeAddress,
-          feeDivisor: defaultNetworkSettings.feeDivisor,
+          feeDivisor: new BigNumber(defaultNetworkSettings.feeDivisor),
           receivingAddress: this.wallet.cashAddr(),
           tokenId: this.tokenId,
         },
@@ -120,7 +121,7 @@ export class TokensDetailsSellComponent implements OnInit, OnDestroy {
   private setDefaultAmounts = () => {
     window.clearTimeout(this.priceTimer);
     this.selectedTokenAmount = 0;
-    this.selectedBchPrice = convertSatsToBch(1);
+    this.selectedBchPrice = convertSatsToBch(new BigNumber(1)).toNumber();
     this.calculateTotalPrice();
   };
 }
