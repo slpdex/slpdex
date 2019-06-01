@@ -6,7 +6,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { Subject } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { TokenOverview, TokenSortByKey } from 'slpdex-market';
 import { MarketService } from '../../../market.service';
 import { SLPRoutes } from '../../../slp-routes';
@@ -66,7 +66,20 @@ export class TokensListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.smartFetchInitialTokens('marketCapSatoshis', false);
+    this.marketService.loadMarketOverview('marketCapSatoshis', false);
+
+    this.marketService.marketOverview
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(overview => {
+        if (!overview.length) {
+          return;
+        }
+
+        this.isLoading = false;
+
+        this.tokens = overview;
+        this.changeDetectorRef.markForCheck();
+      });
   }
 
   ngOnDestroy() {
@@ -79,10 +92,10 @@ export class TokensListComponent implements OnInit, OnDestroy {
       if (sort.name === item.name) {
         if (sort.sortBy === 'asc' || sort.sortBy === null) {
           sort.sortBy = 'desc';
-          this.smartFetchInitialTokens(sort.sortKey, false);
+          this.marketService.loadMarketOverview(sort.sortKey, false);
         } else {
           sort.sortBy = 'asc';
-          this.smartFetchInitialTokens(sort.sortKey, true);
+          this.marketService.loadMarketOverview(sort.sortKey, true);
         }
       } else {
         sort.sortBy = null;
@@ -96,28 +109,5 @@ export class TokensListComponent implements OnInit, OnDestroy {
 
   trackByName = (index: number, item: TokensSort) => {
     return item.name;
-  };
-
-  private smartFetchInitialTokens = (sort: TokenSortByKey, asc: boolean) => {
-    this.marketService
-      .getMarketOverview(sort, 0, 20, asc)
-      .pipe(take(1))
-      .subscribe(overview => {
-        this.isLoading = false;
-        this.tokens = overview;
-        this.changeDetectorRef.markForCheck();
-
-        this.smartFetchRestOfTokens(sort, asc);
-      });
-  };
-
-  private smartFetchRestOfTokens = (sort: TokenSortByKey, asc: boolean) => {
-    this.marketService
-      .getMarketOverview(sort, 20, 80, asc)
-      .pipe(take(1))
-      .subscribe(overview => {
-        this.tokens = [...this.tokens, ...overview];
-        this.changeDetectorRef.markForCheck();
-      });
   };
 }

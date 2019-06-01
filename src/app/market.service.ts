@@ -10,11 +10,28 @@ export class MarketService {
   private marketToken$ = new BehaviorSubject<Market.MarketToken>(null);
   private marketTokenRef: Market.MarketToken;
 
+  private marketOverview$ = new BehaviorSubject<Market.TokenOverview[]>([]);
+
   constructor() {}
 
   get marketToken() {
     return this.marketToken$.asObservable();
   }
+
+  get marketOverview() {
+    return this.marketOverview$.asObservable();
+  }
+
+  loadMarketOverview = (
+    sortByKey: Market.TokenSortByKey,
+    ascending: boolean,
+  ) => {
+    this.marketOverview$.pipe(take(1)).subscribe(tokenOverview => {
+      tokenOverview.length
+        ? this.loadMarketOverviewAll(sortByKey, ascending)
+        : this.loadMarketOverviewSmartInit(sortByKey, ascending);
+    });
+  };
 
   getMarketOverview = (
     sortByKey: Market.TokenSortByKey,
@@ -43,6 +60,59 @@ export class MarketService {
 
   unsubscribeMarketTokenListener = () => {
     this.marketTokenRef = null;
+  };
+
+  private loadMarketOverviewAll = (
+    sortByKey: Market.TokenSortByKey,
+    ascending: boolean,
+  ) => {
+    this.loadMarketOverviewQuery()
+      .pipe(
+        take(1),
+        map(overview =>
+          overview.tokens(sortByKey, 0, 100, ascending).toArray(),
+        ),
+      )
+      .subscribe(overview => {
+        this.marketOverview$.next(overview);
+      });
+  };
+
+  private loadMarketOverviewSmartInit = (
+    sortByKey: Market.TokenSortByKey,
+    ascending: boolean,
+  ) => {
+    this.loadMarketOverviewQuery()
+      .pipe(
+        take(1),
+        map(overview => overview.tokens(sortByKey, 0, 20, ascending).toArray()),
+      )
+      .subscribe(overview => {
+        this.marketOverview$.next(overview);
+
+        this.loadMarketOverviewSmartRemaining(sortByKey, ascending, overview);
+      });
+  };
+
+  private loadMarketOverviewSmartRemaining = (
+    sortByKey: Market.TokenSortByKey,
+    ascending: boolean,
+    currentOverview: Market.TokenOverview[],
+  ) => {
+    this.loadMarketOverviewQuery()
+      .pipe(
+        take(1),
+        map(overview =>
+          overview.tokens(sortByKey, 20, 80, ascending).toArray(),
+        ),
+      )
+      .subscribe(overview => {
+        this.marketOverview$.next([...currentOverview, ...overview]);
+      });
+  };
+
+  private loadMarketOverviewQuery = () => {
+    return from(Market.MarketOverview.create());
   };
 
   private startMarketTokenListener = () => {
