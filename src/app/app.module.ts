@@ -7,7 +7,6 @@ import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderModule } from './header/header.module';
-import { LandingModule } from './module/landing/landing.module';
 import { SvgsComponent } from './svgs/svgs.component';
 
 @NgModule({
@@ -17,7 +16,6 @@ import { SvgsComponent } from './svgs/svgs.component';
     BrowserAnimationsModule,
     AppRoutingModule,
     HeaderModule,
-    LandingModule,
     HttpClientModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
