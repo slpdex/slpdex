@@ -96,11 +96,15 @@ export class TokensDetailsSellComponent implements OnInit, OnDestroy {
 
     this.priceTimer = window.setTimeout(() => {
       this.selectedBchPrice = value;
-      this.changeDetectorRef.markForCheck();
+      this.calculateTotalPrice();
     }, 1000);
   };
 
   sell = async () => {
+    if (!this.selectedTokenAmount || !this.selectedBchPrice) {
+      return;
+    }
+
     await this.cashContractsService.createSellOffer(
       {
         sellAmountToken: this.selectedTokenAmount,
