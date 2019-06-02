@@ -6,3 +6,11 @@
   justify-content: center;
   padding: 5px;
 }
+
+:host {
+  &[jdenticon-transparent] {
+    .jdenticon {
+      background: 0;
+    }
+  }
+}
