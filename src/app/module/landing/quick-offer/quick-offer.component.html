@@ -2,7 +2,14 @@
             (mouseenter)="stopSlideShow()"
             (mouseleave)="startSlideShow()">
 
-  <h2>Choose between <span>{{tokenCount}}</span> different SLP tokens</h2>
+  <h2>
+    Choose between
+    <span [countUp]="tokenCount"
+          [options]="{ duration: 3}"
+          [reanimateOnClick]="false">
+    </span>
+    different SLP tokens
+  </h2>
 
   <div class="quick-offer__content">
 

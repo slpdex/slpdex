@@ -25,7 +25,7 @@ export class QuickOfferComponent implements OnInit, OnDestroy, AfterViewInit {
   selectedTokenLeft: TokenOverview = {} as TokenOverview;
   selectedTokenRight: TokenOverview = {} as TokenOverview;
 
-  tokenCount = 1337;
+  tokenCount = 0;
 
   slpRoutes = { ...SLPRoutes };
 
