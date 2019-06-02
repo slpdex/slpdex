@@ -3,6 +3,8 @@ import {
   OnInit,
   ChangeDetectionStrategy,
   Input,
+  OnChanges,
+  SimpleChanges,
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { getJdenticon } from '../helpers';
@@ -13,7 +15,7 @@ import { getJdenticon } from '../helpers';
   styleUrls: ['./jdenticon.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class JdenticonComponent implements OnInit {
+export class JdenticonComponent implements OnInit, OnChanges {
   @Input() id: string;
   @Input() size: number;
 
@@ -21,9 +23,13 @@ export class JdenticonComponent implements OnInit {
 
   constructor(private domSanitizer: DomSanitizer) {}
 
-  ngOnInit() {
-    this.svgBase64 = this.domSanitizer.bypassSecurityTrustHtml(
-      getJdenticon(this.id, this.size ? this.size : undefined),
-    );
+  ngOnInit() {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.id) {
+      this.svgBase64 = this.domSanitizer.bypassSecurityTrustHtml(
+        getJdenticon(this.id, this.size ? this.size : undefined),
+      );
+    }
   }
 }
