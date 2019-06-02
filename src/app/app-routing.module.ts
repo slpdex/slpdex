@@ -9,11 +9,6 @@ const routes: Routes = [
       import('./module/landing/landing.module').then(m => m.LandingModule),
   },
   {
-    path: SLPRoutes.offer,
-    loadChildren: () =>
-      import('./module/offer/offer.module').then(m => m.OfferModule),
-  },
-  {
     path: SLPRoutes.tokens,
     loadChildren: () =>
       import('./module/tokens/tokens.module').then(m => m.TokensModule),
