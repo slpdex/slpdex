@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { Wallet } from 'cashcontracts';
 import * as moment from 'moment';
+import BigNumber from 'bignumber.js';
 import { combineLatest, Subject } from 'rxjs';
 import { map, take, takeUntil } from 'rxjs/operators';
 import {
@@ -120,7 +121,7 @@ export class TokensDetailsOpenOffersComponent implements OnInit, OnDestroy {
         sellAmountToken: offer.sellAmountToken,
         pricePerToken: offer.pricePerToken,
         feeAddress: defaultNetworkSettings.feeAddress,
-        feeDivisor: defaultNetworkSettings.feeDivisor,
+        feeDivisor: new BigNumber(defaultNetworkSettings.feeDivisor),
         receivingAddress: this.wallet.cashAddr(),
         tokenId: this.tokenId,
       },

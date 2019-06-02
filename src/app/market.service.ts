@@ -75,7 +75,6 @@ export class MarketService {
       )
       .subscribe(overview => {
         this.marketOverview$.next(overview);
-
         this.loadMarketOverviewSmartRemaining(sortByKey, ascending, overview);
       });
   };

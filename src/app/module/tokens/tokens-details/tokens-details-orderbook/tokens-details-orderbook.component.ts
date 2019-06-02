@@ -19,9 +19,10 @@ import { CashContractsService } from '../../../../cash-contracts.service';
 import { EndpointsService } from '../../../../endpoints.service';
 import { convertSatsToBch } from '../../../../helpers';
 import { MarketService } from '../../../../market.service';
+import BigNumber from 'bignumber.js';
 
 export interface TokenOfferExtended extends TokenOffer {
-  bchPricePerToken: number;
+  bchPricePerToken: BigNumber;
   selected?: boolean;
   isMyOrder?: boolean;
 }
@@ -150,9 +151,9 @@ export class TokensDetailsOrderbookComponent
       return offer;
     });
 
-    this.tokenTotalAmount = item.sellAmountToken;
-    this.selectedAmount = item.sellAmountToken;
-    this.selectedBchPrice = item.bchPricePerToken;
+    this.tokenTotalAmount = item.sellAmountToken.toNumber();
+    this.selectedAmount = item.sellAmountToken.toNumber();
+    this.selectedBchPrice = item.bchPricePerToken.toNumber();
 
     this.selectedOffer = item;
     this.openOffers = offersWithSelect;
@@ -165,9 +166,9 @@ export class TokensDetailsOrderbookComponent
     }
 
     const params: TradeOfferParams = {
-      buyAmountToken: this.selectedAmount,
+      buyAmountToken: new BigNumber(this.selectedAmount),
       feeAddress: defaultNetworkSettings.feeAddress,
-      feeDivisor: defaultNetworkSettings.feeDivisor,
+      feeDivisor: new BigNumber(defaultNetworkSettings.feeDivisor),
       pricePerToken: this.selectedOffer.pricePerToken,
       receivingAddress: this.selectedOffer.receivingAddress,
       sellAmountToken: this.selectedOffer.sellAmountToken,

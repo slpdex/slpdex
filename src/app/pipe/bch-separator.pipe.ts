@@ -6,11 +6,11 @@ import BigNumber from 'bignumber.js';
 })
 export class BchSeparatorPipe implements PipeTransform {
   transform(value: string, args?: any): any {
-    if (!value) {
+    if (!value || value == 'n/a') {
       return value;
     }
 
-    value = new BigNumber(+value).toFixed(8);
+    value = new BigNumber(value).toFixed(8);
 
     const values = value.split('.');
 

@@ -13,6 +13,7 @@ import { defaultNetworkSettings, TokenOverview } from 'slpdex-market';
 import { CashContractsService } from '../../../../cash-contracts.service';
 import { EndpointsService } from '../../../../endpoints.service';
 import { convertBchToSats, convertSatsToBch } from '../../../../helpers';
+import BigNumber from 'bignumber.js';
 import { MarketService } from '../../../../market.service';
 
 @Component({
@@ -77,7 +78,7 @@ export class TokensDetailsSellComponent implements OnInit, OnDestroy {
           this.tokenOverview = tokenOverview;
 
           const totalTokenBalance = wallet.tokenBalance(this.tokenId);
-          this.totalTokenBalance = totalTokenBalance;
+          this.totalTokenBalance = totalTokenBalance.toNumber();
 
           this.calculateTotalPrice();
         }),
@@ -99,6 +100,7 @@ export class TokensDetailsSellComponent implements OnInit, OnDestroy {
     }, 1000);
   };
 
+
   sell = async () => {
     if (!this.selectedTokenAmount || !this.selectedBchPrice) {
       return;
@@ -106,10 +108,10 @@ export class TokensDetailsSellComponent implements OnInit, OnDestroy {
 
     await this.cashContractsService.createSellOffer(
       {
-        sellAmountToken: this.selectedTokenAmount,
-        pricePerToken: convertBchToSats(+this.selectedBchPrice),
+        sellAmountToken: new BigNumber(this.selectedTokenAmount),
+        pricePerToken: convertBchToSats(new BigNumber(this.selectedBchPrice)),
         feeAddress: defaultNetworkSettings.feeAddress,
-        feeDivisor: defaultNetworkSettings.feeDivisor,
+        feeDivisor: new BigNumber(defaultNetworkSettings.feeDivisor),
         receivingAddress: this.wallet.cashAddr(),
         tokenId: this.tokenId,
       },
@@ -134,7 +136,7 @@ export class TokensDetailsSellComponent implements OnInit, OnDestroy {
   private setDefaultAmounts = () => {
     window.clearTimeout(this.priceTimer);
     this.selectedTokenAmount = 0;
-    this.selectedBchPrice = convertSatsToBch(1);
+    this.selectedBchPrice = convertSatsToBch(new BigNumber(1)).toNumber();
     this.calculateTotalPrice();
   };
 }

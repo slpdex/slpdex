@@ -76,7 +76,7 @@ export class WalletDetailsComponent implements OnInit, OnDestroy {
   }
 
   openSendToken = (token: {
-    balance: number;
+    balance: BigNumber;
     id: string;
     timestamp: string;
     symbol: string;
@@ -120,6 +120,6 @@ export class WalletDetailsComponent implements OnInit, OnDestroy {
   private setBchBalance = () => {
     const value = this.wallet.nonTokenBalance();
     const bchBalance = convertSatsToBch(value);
-    this.bchBalance$.next(bchBalance);
+    this.bchBalance$.next(bchBalance.toNumber());
   };
 }

@@ -7,12 +7,13 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { generateShortId } from '../helpers';
+import BigNumber from 'bignumber.js';
 
 export interface CoinCard {
   name: string;
   symbol: string;
   isToken?: boolean;
-  balance?: number;
+  balance?: BigNumber;
   id?: string;
   shortId?: string;
 }

@@ -12,6 +12,7 @@ import { TokenOverview } from 'slpdex-market';
 import { MarketService } from '../../../../market.service';
 import { convertSatsToBch } from '../../../../helpers';
 import * as moment from 'moment';
+import BigNumber from 'bignumber.js';
 
 interface HeaderStat {
   heading: string;
@@ -73,30 +74,61 @@ export class TokensDetailsHeaderComponent implements OnInit, OnDestroy {
     return item.heading;
   };
 
+  private displayStat = (
+    stat: BigNumber | undefined,
+    decimals: number = 0,
+    convert: 'TO_BCH' | 'TO_PERCENT' | undefined = undefined,
+  ) => {
+    if (stat === undefined) {
+      return 'n/a';
+    }
+
+    if (convert === 'TO_BCH') {
+      stat = convertSatsToBch(stat);
+    } else if (convert == 'TO_PERCENT') {
+      return stat.times('100').toFixed(decimals) + '%';
+    }
+
+    return stat.toFixed(decimals);
+  };
+
   private createStats = () => {
-    const change24 = this.tokenOverview.last24h.priceIncrease * 100;
     let changeColor = '';
 
-    if (this.tokenOverview.last24h.priceIncrease > 0) {
+    if (this.tokenOverview.last24h.priceIncrease === undefined) {
+      changeColor = 'grey';
+    } else if (this.tokenOverview.last24h.priceIncrease.gt(0)) {
       changeColor = 'green';
-    } else if (this.tokenOverview.last24h.priceIncrease < 0) {
+    } else if (this.tokenOverview.last24h.priceIncrease.gt(0)) {
       changeColor = 'red';
     }
 
     this.headerStats = [
       {
         heading: 'Last price',
-        stat: convertSatsToBch(this.tokenOverview.lastTrade.pricePerToken || 0),
+        stat: this.displayStat(
+          this.tokenOverview.lastTrade.pricePerToken,
+          8,
+          'TO_BCH',
+        ),
         isPrice: true,
       },
       {
         heading: 'Volume 24h',
-        stat: convertSatsToBch(this.tokenOverview.last24h.volumeSatoshis),
+        stat: this.displayStat(
+          this.tokenOverview.last24h.volumeSatoshis,
+          8,
+          'TO_BCH',
+        ),
         isPrice: true,
       },
       {
         heading: 'Change 24h',
-        stat: (change24 || 0) + '%',
+        stat: this.displayStat(
+          this.tokenOverview.last24h.priceIncrease,
+          1,
+          'TO_PERCENT',
+        ),
         color: changeColor,
       },
       {

@@ -12,10 +12,11 @@ import { CashContractsService } from '../../../cash-contracts.service';
 import { CoinCard } from '../../../coin-card/coin-card.component';
 import { EndpointsService } from '../../../endpoints.service';
 import { convertBchToSats, convertSatsToBch } from '../../../helpers';
+import BigNumber from 'bignumber.js';
 
 export interface WalletSendSelected {
   name: string;
-  balance: number;
+  balance: BigNumber;
   isToken: boolean;
   tokenId?: string;
 }
@@ -83,11 +84,11 @@ export class WalletSendComponent implements OnInit, OnDestroy {
 
     this.selected$.next({
       name: 'Bitcoin Cash',
-      balance,
+      balance: balance,
       isToken: false,
     });
 
-    this.selectedAmount = balance;
+    this.selectedAmount = balance.toNumber();
     this.setFee();
   };
 
@@ -99,7 +100,7 @@ export class WalletSendComponent implements OnInit, OnDestroy {
       tokenId: token.id,
     });
 
-    this.selectedAmount = token.balance;
+    this.selectedAmount = token.balance.toNumber();
     this.setFee();
   };
 
@@ -112,14 +113,14 @@ export class WalletSendComponent implements OnInit, OnDestroy {
       if (selected.isToken) {
         this.cashContractsService.sendToken(
           this.selectedAddress,
-          this.selectedAmount,
+          new BigNumber(this.selectedAmount),
           selected.tokenId,
           selected.name,
         );
       } else {
         this.cashContractsService.sendBch(
           this.selectedAddress,
-          this.selectedAmount,
+          new BigNumber(this.selectedAmount),
         );
       }
     });
@@ -127,26 +128,26 @@ export class WalletSendComponent implements OnInit, OnDestroy {
 
   setMax = () => {
     this.selected$.pipe(take(1)).subscribe(selected => {
-      this.selectedAmount = selected.balance;
+      this.selectedAmount = selected.balance.toNumber();
     });
   };
 
   setFee = () => {
     this.selected$.pipe(take(1)).subscribe(selected => {
-      let sats = 0;
+      let sats = new BigNumber(0);
 
       if (selected.isToken) {
         sats = this.cashContractsService.getTokenFee(
           selected.tokenId,
-          this.selectedAmount || 0,
+          new BigNumber(this.selectedAmount || 0),
         );
       } else {
         sats = this.cashContractsService.getBchFee(
-          convertBchToSats(this.selectedAmount || 0),
+          convertBchToSats(new BigNumber(this.selectedAmount || 0)),
         );
       }
 
-      this.fee = convertSatsToBch(sats) * this.usd;
+      this.fee = convertSatsToBch(sats).times(this.usd).toNumber();
     });
   };
 
@@ -169,14 +170,14 @@ export class WalletSendComponent implements OnInit, OnDestroy {
         tokenId: this.initSelected.tokenId,
       });
 
-      this.selectedAmount = this.initSelected.balance;
+      this.selectedAmount = this.initSelected.balance.toNumber();
     } else {
       this.selected$.next({
         name: bchItem.name,
         balance: bchItem.balance,
         isToken: false,
       });
-      this.selectedAmount = bchItem.balance;
+      this.selectedAmount = bchItem.balance.toNumber();
     }
 
     this.setFee();

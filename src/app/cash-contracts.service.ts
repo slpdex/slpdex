@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { convertBchToSats, convertSatsToBch, generateShortId } from './helpers';
 import { NotificationService } from './notification.service';
+import BigNumber from 'bignumber.js';
 
 @Injectable({
   providedIn: 'root',
@@ -63,7 +64,7 @@ export class CashContractsService {
     });
   };
 
-  sendBch = (address: string, amount: number) => {
+  sendBch = (address: string, amount: BigNumber) => {
     console.log(address, amount);
     this.notificationService.showNotification(
       `Trying to send ${amount} BCH to <a href="https://explorer.bitcoin.com/bch/address/${address}">
@@ -72,7 +73,7 @@ export class CashContractsService {
 
     this.walletSubject.pipe(take(1)).subscribe(async wallet => {
       const sats = convertBchToSats(amount);
-      const satsMinusFee = sats - cc.feeSendNonToken(wallet, sats);
+      const satsMinusFee = sats.minus(cc.feeSendNonToken(wallet, sats));
       const item = cc.sendToAddressTx(wallet, address, satsMinusFee);
       const broadcast = await item.broadcast();
       this.showBroadcastResultNotification(broadcast);
@@ -83,7 +84,7 @@ export class CashContractsService {
 
   sendToken = (
     address: string,
-    amount: number,
+    amount: BigNumber,
     tokenId: string,
     name: string,
   ) => {
@@ -103,11 +104,11 @@ export class CashContractsService {
     });
   };
 
-  getBchFee = (amount: number) => {
+  getBchFee = (amount: BigNumber) => {
     return cc.feeSendNonToken(this.wallet, amount);
   };
 
-  getTokenFee = (tokenId: string, amount: number) => {
+  getTokenFee = (tokenId: string, amount: BigNumber) => {
     return cc.feeSendToken(this.wallet, tokenId, amount);
   };
 
@@ -125,8 +126,7 @@ export class CashContractsService {
     params: cc.TradeOfferParams,
     decimals: number,
   ) => {
-    console.log(decimals);
-    const tokenFactor = Math.pow(10, decimals);
+    const tokenFactor = new BigNumber(10).pow(decimals);
     const verification = cc.verifyAdvancedTradeOffer(
       this.wallet,
       tokenFactor,
@@ -151,7 +151,7 @@ export class CashContractsService {
 
   createSellOffer = async (params: cc.TradeOfferParams, decimals: number) => {
     return new Promise(async resolve => {
-      const tokenFactor = Math.pow(10, decimals);
+      const tokenFactor = new BigNumber(10).pow(decimals);
       const verification = cc.verifyAdvancedTradeOffer(
         this.wallet,
         tokenFactor,
