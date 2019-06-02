@@ -1,45 +1,76 @@
-<h3>QUICK OFFER</h3>
+<app-widget class="quick-offer"
+            (mouseenter)="stopSlideShow()"
+            (mouseleave)="startSlideShow()">
 
-<p class="quick-offer__label">SEND</p>
+  <h2>Choose between <span>1337</span> different SLP tokens</h2>
 
-<div class="quick-offer__row">
+  <div class="quick-offer__content">
 
-  <div class="quick-offer__amount">
-    1000
+    <div #tokenBoxLeft
+         class="quick-offer__wrapper">
+      <div class="quick-offer__box">
+        <app-widget widget-sm
+                    widget-shadow-light
+                    [routerLink]="[slpRoutes.tokens, selectedTokenLeft.tokenId]">
+
+          <app-jdenticon [id]="selectedTokenLeft.tokenId"
+                         [size]="60"
+                         jdenticon-transparent>
+          </app-jdenticon>
+
+          <p>
+            {{selectedTokenLeft.symbol}}
+          </p>
+        </app-widget>
+      </div>
+    </div>
+
+    <div #tokenBoxRight
+         class="quick-offer__wrapper quick-offer__animate--right quick-offer__hide">
+      <div class="quick-offer__box">
+        <app-widget widget-sm
+                    widget-shadow-light
+                    [routerLink]="[slpRoutes.tokens, selectedTokenRight.tokenId]">
+
+          <app-jdenticon [id]="selectedTokenRight.tokenId"
+                         [size]="60"
+                         jdenticon-transparent>
+          </app-jdenticon>
+
+          <p>
+            {{selectedTokenRight.symbol}}
+          </p>
+        </app-widget>
+      </div>
+    </div>
+
+    <app-icon [icon]="'exchange'"
+              [size]="30"
+              class="mx-xl">
+    </app-icon>
+
+    <div #bchBox
+         class="quick-offer__wrapper">
+      <div class="quick-offer__box">
+        <app-widget widget-sm
+                    widget-shadow-light
+                    [routerLink]="slpRoutes.tokens">
+
+          <img src="assets/bch.png">
+
+          <p>
+            BCH
+          </p>
+        </app-widget>
+      </div>
+    </div>
+
   </div>
 
-  <div class="quick-offer__token">
-    TTTT
-  </div>
+  <app-button button-md
+              button-full
+              [routerLink]="slpRoutes.tokens">
+    See all tokens
+  </app-button>
 
-</div>
-
-<div class="quick-offer__icon">
-  <svg>
-    <use xlink:href="#exchange"></use>
-  </svg>
-</div>
-
-<p class="quick-offer__label">RECEIVE</p>
-
-<div class="quick-offer__row">
-
-  <div class="quick-offer__amount">
-    1000
-  </div>
-
-  <div class="quick-offer__token">
-    TTTT
-  </div>
-
-</div>
-
-<a #button
-   class="quick-offer__button"
-   (click)="createoffer()">
-  Create offer
-</a>
-
-<div #dummy
-     class="quick-offer__dummy">
-</div>
+</app-widget>
