@@ -3,8 +3,9 @@ import {
   ChangeDetectionStrategy,
   Component,
 } from '@angular/core';
-import { CashContractsService } from './cash-contracts.service';
+import { NavigationEnd, Router } from '@angular/router';
 import { SwUpdate } from '@angular/service-worker';
+import { CashContractsService } from './cash-contracts.service';
 
 @Component({
   selector: 'app-root',
@@ -18,6 +19,7 @@ export class AppComponent implements AfterViewInit {
   constructor(
     private cashContractsService: CashContractsService,
     private swUpdate: SwUpdate,
+    private router: Router,
   ) {}
 
   ngAfterViewInit() {
@@ -29,5 +31,13 @@ export class AppComponent implements AfterViewInit {
         window.location.reload();
       });
     }
+
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        gtag('config', 'UA-141268227-1', {
+          page_path: event.urlAfterRedirects,
+        });
+      }
+    });
   }
 }
