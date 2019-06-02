@@ -33,7 +33,10 @@
             <app-button appCopy
                         [copyInputElement]="public"
                         [copyNotificationText]="'Copied public key'"
-                        button-sm>
+                        button-sm
+                        ga-on="click"
+                        ga-event-category="walletExport"
+                        ga-event-action="copyPublic">
               Copy
             </app-button>
           </div>
@@ -68,7 +71,10 @@
 
             <app-button appCopy
                         [copyInputElement]="wif"
-                        [copyNotificationText]="'Copied private key (WIF)'">
+                        [copyNotificationText]="'Copied private key (WIF)'"
+                        ga-on="click"
+                        ga-event-category="walletExport"
+                        ga-event-action="copyWif">
               Copy
             </app-button>
           </div>

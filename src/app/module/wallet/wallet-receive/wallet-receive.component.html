@@ -28,7 +28,10 @@
                  disabled="true">
           <app-button appCopy
                       [copyInputElement]="bchInput"
-                      [copyNotificationText]="'Copied address to clipboard'">
+                      [copyNotificationText]="'Copied address to clipboard'"
+                      ga-on="click"
+                      ga-event-category="walletReceive"
+                      ga-event-action="copyBch">
             Copy
           </app-button>
         </div>
@@ -51,7 +54,10 @@
                  disabled="true">
           <app-button appCopy
                       [copyInputElement]="slpInput"
-                      [copyNotificationText]="'Copied address to clipboard'">
+                      [copyNotificationText]="'Copied address to clipboard'"
+                      ga-on="click"
+                      ga-event-category="walletReceive"
+                      ga-event-action="copySlp">
             Copy
           </app-button>
         </div>

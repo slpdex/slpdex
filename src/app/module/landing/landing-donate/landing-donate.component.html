@@ -14,7 +14,10 @@
   <div class="landing-donate__button">
     <app-button button-green
                 button-lg
-                [routerLink]="slpRoutes.donate">
+                [routerLink]="slpRoutes.donate"
+                ga-on="click"
+                ga-event-category="landing"
+                ga-event-action="donate">
       DONATE
     </app-button>
   </div>

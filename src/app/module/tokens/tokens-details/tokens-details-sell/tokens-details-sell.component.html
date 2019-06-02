@@ -57,6 +57,9 @@
 <app-button button-md
             button-red
             [attr.disabled]="!selectedTokenAmount"
-            (click)="sell()">
+            (click)="sell()"
+            ga-on="click"
+            ga-event-category="tokenDetails"
+            ga-event-action="sell">
   SELL
 </app-button>

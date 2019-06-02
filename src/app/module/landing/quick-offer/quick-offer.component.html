@@ -10,7 +10,10 @@
          class="quick-offer__wrapper">
       <div class="quick-offer__box">
         <app-widget widget-sm
-                    [routerLink]="[slpRoutes.tokens, selectedTokenLeft.tokenId]">
+                    [routerLink]="[slpRoutes.tokens, selectedTokenLeft.tokenId]"
+                    ga-on="click"
+                    ga-event-category="landing"
+                    ga-event-action="goToToken">
 
           <app-jdenticon [id]="selectedTokenLeft.tokenId"
                          [size]="60"
@@ -28,7 +31,10 @@
          class="quick-offer__wrapper quick-offer__animate--right quick-offer__hide">
       <div class="quick-offer__box">
         <app-widget widget-sm
-                    [routerLink]="[slpRoutes.tokens, selectedTokenRight.tokenId]">
+                    [routerLink]="[slpRoutes.tokens, selectedTokenRight.tokenId]"
+                    ga-on="click"
+                    ga-event-category="landing"
+                    ga-event-action="goToToken">
 
           <app-jdenticon [id]="selectedTokenRight.tokenId"
                          [size]="60"
@@ -67,7 +73,10 @@
 
   <app-button button-md
               button-full
-              [routerLink]="slpRoutes.tokens">
+              [routerLink]="slpRoutes.tokens"
+              ga-on="click"
+              ga-event-category="landing"
+              ga-event-action="allTokens">
     See all tokens
   </app-button>
 

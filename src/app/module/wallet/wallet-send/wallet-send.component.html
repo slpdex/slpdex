@@ -65,7 +65,10 @@
         <app-button button-full
                     button-lg
                     class="wallet-send__widget--button"
-                    (click)="send()">
+                    (click)="send()"
+                    ga-on="click"
+                    ga-event-category="walletSend"
+                    ga-event-action="send">
           Send
         </app-button>
 

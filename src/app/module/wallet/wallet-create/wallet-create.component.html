@@ -27,13 +27,19 @@
 
       <app-button [routerLink]="'../' + slpRoutes.walletExport"
                   button-orange
-                  button-md>
+                  button-md
+                  ga-on="click"
+                  ga-event-category="walletCreate"
+                  ga-event-action="export">
         Export
       </app-button>
     </app-widget>
 
     <app-widget class="wallet-create__box"
-                (click)="create()">
+                (click)="create()"
+                ga-on="click"
+                ga-event-category="walletCreate"
+                ga-event-action="newWallet">
       <app-icon [icon]="'add'"
                 [size]="60"
                 class="mb-md">

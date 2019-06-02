@@ -31,7 +31,10 @@
             <app-button appCopy
                         button-sm
                         [copyInputElement]="bchInput"
-                        [copyNotificationText]="'Copied address to clipboard'">
+                        [copyNotificationText]="'Copied address to clipboard'"
+                        ga-on="click"
+                        ga-event-category="donate"
+                        ga-event-action="copy">
               Copy
             </app-button>
 

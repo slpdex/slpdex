@@ -1,7 +1,10 @@
 <app-button button-md
             [attr.disabled]="!selectedOffer"
             class="mb-md"
-            (click)="buy()">
+            (click)="buy()"
+            ga-on="click"
+            ga-event-category="tokenDetails"
+            ga-event-action="buy">
   BUY
 </app-button>
 
@@ -55,7 +58,10 @@
     <div *ngFor="let offer of openOffers; trackBy: trackByIndex"
          class="orderbook__item"
          [class.orderbook__item--selected]="offer.selected"
-         (click)="select(offer)">
+         (click)="select(offer)"
+         ga-on="click"
+         ga-event-category="tokenDetails"
+         ga-event-action="selectSellOffer">
       <p class="orderbook__item--price">
         {{offer.pricePerToken | satsToBch | number:'1.8-8'}}
 
