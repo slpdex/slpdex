@@ -5,15 +5,15 @@
   flex-direction: column;
 
   h2 {
-    color: lighten($color-gray, 20%);
-    font-size: 20px;
+    color: lighten($color-gray, 30%);
+    font-size: 18px;
     font-weight: 600;
     line-height: 1.5;
     margin-bottom: 30px;
     text-align: center;
 
     span {
-      border-bottom: 1px solid lighten($color-gray, 20%);
+      border-bottom: 2px solid lighten($color-gray, 40%);
     }
   }
 
