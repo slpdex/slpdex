@@ -1,4 +1,4 @@
-<div class="landing__top">
+<div class="landing">
   <div class="landing__bg">
     <img src="assets/bg/chicago_optimized.jpg"
          alt="">
@@ -6,23 +6,25 @@
 
   <app-wrapper>
 
-    <div class="landing__top__content">
+    <div class="landing__top">
+      <h1>
+        Next gen DEX for SLP tokens
+      </h1>
+    </div>
 
-      <div class="landing__top__content--left">
+    <div class="landing__content">
 
-        <h1>
-          Next gen DEX for SLP tokens
-        </h1>
+      <div class="landing__content--left">
 
-        <p class="landing__top__content--description">
+        <p class="landing__content--description">
           SLPDEX is a peer-to-peer DEX marketplace for SLP tokens.
           Buy & Sell tokens using the simple ledger protcol, powered by the Bitcoin Cash
           blockchain.
         </p>
 
-        <div class="landing__top__content--item">
+        <div class="landing__content--item">
           <app-icon [icon]="'check'"
-                    [size]="40"
+                    [size]="30"
                     class="mr-md"
                     icon-white>
           </app-icon>
@@ -32,9 +34,9 @@
           </p>
         </div>
 
-        <div class="landing__top__content--item">
+        <div class="landing__content--item">
           <app-icon [icon]="'check'"
-                    [size]="40"
+                    [size]="30"
                     class="mr-md"
                     icon-white>
           </app-icon>
@@ -44,16 +46,17 @@
           </p>
         </div>
 
-        <div class="landing__top__content--button">
+        <div class="landing__content--button">
           <app-button button-md
+                      button-full
                       button-white>
-            Start trading
+            Get started
           </app-button>
         </div>
 
       </div>
 
-      <div class="landing__top__content--right">
+      <div class="landing__content--right">
         <app-quick-offer>
         </app-quick-offer>
       </div>
@@ -62,13 +65,13 @@
 
   </app-wrapper>
 
-  <div class="landing__top__showcase">
-    <div class="landing__top__showcase--wrapper">
+  <div class="landing__showcase">
+    <div class="landing__showcase--wrapper">
       <a href="https://www.bitcoin.com/"
          target="_blank"
          aria-label="Visit bitcoin.com"
          rel="noopener"
-         class="landing__top__showcase--img">
+         class="landing__showcase--img">
         <img src="assets/bitcoin-com.png"
              alt="">
       </a>
@@ -77,7 +80,7 @@
          target="_blank"
          aria-label="Visit simpleledger.cash"
          rel="noopener"
-         class="landing__top__showcase--img">
+         class="landing__showcase--img">
         <img src="assets/slp.png"
              alt="">
       </a>
@@ -86,7 +89,7 @@
          target="_blank"
          aria-label="Visit bitcoincash.org"
          rel="noopener"
-         class="landing__top__showcase--img">
+         class="landing__showcase--img">
         <img src="assets/bitcoin-cash.png"
              alt="">
       </a>
@@ -95,7 +98,7 @@
          target="_blank"
          aria-label="Visit badger.bitcoin.com"
          rel="noopener"
-         class="landing__top__showcase--badger">
+         class="landing__showcase--badger">
         Badger
       </a>
     </div>

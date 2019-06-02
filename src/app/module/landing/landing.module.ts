@@ -11,6 +11,8 @@ import { LandingRoutingModule } from './landing-routing.module';
 import { LandingTeamComponent } from './landing-team/landing-team.component';
 import { LandingComponent } from './landing.component';
 import { QuickOfferComponent } from './quick-offer/quick-offer.component';
+import { WidgetModule } from '../../widget/widget.module';
+import { JdenticonModule } from '../../jdenticon/jdenticon.module';
 
 @NgModule({
   declarations: [
@@ -25,6 +27,8 @@ import { QuickOfferComponent } from './quick-offer/quick-offer.component';
     CommonModule,
     RouterModule,
     IconModule,
+    JdenticonModule,
+    WidgetModule,
     LandingRoutingModule,
     ButtonModule,
     WrapperModule,
