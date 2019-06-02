@@ -6,6 +6,7 @@ import {
   timeSinceLastBlockQuery,
 } from './queries/timeSinceLastBlockQuery';
 import { BehaviorSubject } from 'rxjs';
+import { tokenCountQuery, TokenCount } from './queries/tokenCountQuery';
 
 @Injectable({
   providedIn: 'root',
@@ -20,6 +21,10 @@ export class EndpointsService {
     this.loadBchUsdPrice();
     return this.bchUsdPriceSubject.asObservable();
   }
+
+  getTokenCount = () => {
+    return this.httpClient.get<TokenCount>(tokenCountQuery());
+  };
 
   getTimeSinceLastBlock = () => {
     return this.httpClient.get<TimeSinceLastBlock>(timeSinceLastBlockQuery());

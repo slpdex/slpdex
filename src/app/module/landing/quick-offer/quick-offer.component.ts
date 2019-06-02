@@ -9,10 +9,11 @@ import {
   AfterViewInit,
 } from '@angular/core';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, take } from 'rxjs/operators';
 import { MarketService } from '../../../market.service';
 import { TokenOverview } from 'slpdex-market';
 import { SLPRoutes } from '../../../slp-routes';
+import { EndpointsService } from '../../../endpoints.service';
 
 @Component({
   selector: 'app-quick-offer',
@@ -23,6 +24,8 @@ import { SLPRoutes } from '../../../slp-routes';
 export class QuickOfferComponent implements OnInit, OnDestroy, AfterViewInit {
   selectedTokenLeft: TokenOverview = {} as TokenOverview;
   selectedTokenRight: TokenOverview = {} as TokenOverview;
+
+  tokenCount = 1337;
 
   slpRoutes = { ...SLPRoutes };
 
@@ -51,10 +54,19 @@ export class QuickOfferComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(
     private marketService: MarketService,
     private changeDetectorRef: ChangeDetectorRef,
+    private endpointsService: EndpointsService,
   ) {}
 
   ngOnInit() {
     this.marketService.loadMarketOverview('marketCapSatoshis', false);
+
+    this.endpointsService
+      .getTokenCount()
+      .pipe(take(1))
+      .subscribe(tokenCount => {
+        this.tokenCount = tokenCount.t[0].count;
+        this.changeDetectorRef.markForCheck();
+      });
   }
 
   ngOnDestroy() {

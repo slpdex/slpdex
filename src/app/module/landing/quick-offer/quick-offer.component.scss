@@ -13,7 +13,8 @@
     text-align: center;
 
     span {
-      border-bottom: 2px solid lighten($color-gray, 40%);
+      border-bottom: 2px solid $color-green-light;
+      color: $color-green-light;
     }
   }
 
