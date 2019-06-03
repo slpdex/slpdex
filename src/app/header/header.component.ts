@@ -3,6 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   OnInit,
+  AfterViewInit,
 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -15,7 +16,7 @@ import { SLPRoutes } from '../slp-routes';
   styleUrls: ['./header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, AfterViewInit {
   hasLoaded = false;
   routes = { ...SLPRoutes };
   timeSinceLastBlock$ = new Subject<string>();
@@ -26,15 +27,17 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.getTimeSinceLastBlock();
-    setInterval(() => this.getTimeSinceLastBlock(), 20000);
-
     window.onload = e => {
       setTimeout(() => {
         this.hasLoaded = true;
         this.changeDetectorRef.markForCheck();
       }, 1000);
     };
+  }
+
+  ngAfterViewInit() {
+    this.getTimeSinceLastBlock();
+    setInterval(() => this.getTimeSinceLastBlock(), 20000);
   }
 
   getTimeSinceLastBlock = () => {
