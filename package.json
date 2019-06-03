@@ -10,7 +10,7 @@
     "lint": "ng lint",
     "ng": "ng",
     "postinstall": "node clean-moment-locales.js",
-    "prod": "node clean-prod.js && ng build --aot --prod --build-optimizer --output-path=prod/ --base-href=https://github.com/slpdex/slpdex.github.io/ --delete-output-path=false && node copy-index.js",
+    "prod": "node clean-prod.js && ng build --aot --prod --build-optimizer --output-path=prod/ --delete-output-path=false && node copy-index.js",
     "push-prod": "cd prod && git add . && git commit -m \"build(slpdev): release\" && git push",
     "release": "npm run prod && npm run push-prod",
     "start": "ng serve",
