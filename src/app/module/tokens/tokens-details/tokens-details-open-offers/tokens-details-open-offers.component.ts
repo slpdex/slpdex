@@ -5,11 +5,11 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { Wallet } from 'cashcontracts';
-import * as moment from 'moment';
+import { ActivatedRoute } from '@angular/router';
 import BigNumber from 'bignumber.js';
+import { Wallet } from 'cashcontracts';
 import { combineLatest, Subject } from 'rxjs';
-import { map, take, takeUntil } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
 import {
   defaultNetworkSettings,
   TokenOffer,
@@ -17,7 +17,6 @@ import {
 } from 'slpdex-market';
 import { CashContractsService } from '../../../../cash-contracts.service';
 import { MarketService } from '../../../../market.service';
-import { ActivatedRoute } from '@angular/router';
 
 interface TokenOfferExtended extends TokenOffer {
   timeSince: string;
@@ -62,7 +61,7 @@ export class TokensDetailsOpenOffersComponent implements OnInit, OnDestroy {
     ])
       .pipe(
         takeUntil(this.destroy$),
-        map(([offers, wallet, marketOverview, params]) => {
+        map(async ([offers, wallet, marketOverview, params]) => {
           this.tokenId = params.id;
 
           if (!wallet) {
@@ -72,6 +71,7 @@ export class TokensDetailsOpenOffersComponent implements OnInit, OnDestroy {
           this.wallet = wallet;
 
           const cashAddres = this.wallet.cashAddr();
+          const moment = await import('moment');
 
           this.openOffers = offers
             .filter(offer => {

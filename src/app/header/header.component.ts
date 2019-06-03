@@ -4,7 +4,6 @@ import {
   Component,
   OnInit,
 } from '@angular/core';
-import * as moment from 'moment';
 import { Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { EndpointsService } from '../endpoints.service';
@@ -42,8 +41,9 @@ export class HeaderComponent implements OnInit {
     this.endpointsService
       .getTimeSinceLastBlock()
       .pipe(take(1))
-      .subscribe(data => {
+      .subscribe(async data => {
         const timestamp = data.c.last_block_time;
+        const moment = await import('moment');
 
         this.timeSinceLastBlock$.next(moment.unix(timestamp).fromNow(true));
       });

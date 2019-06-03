@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import * as Noty from 'noty';
+import { Options } from 'noty';
 
 @Injectable({
   providedIn: 'root',
 })
 export class NotificationService {
-  private defaultOptions: Noty.Options = {
+  private defaultOptions: Options = {
     timeout: 10000,
     theme: 'metroui',
     layout: 'bottomRight',
@@ -13,8 +13,11 @@ export class NotificationService {
 
   constructor() {}
 
-  showNotification = (text: string) => {
-    new Noty({
+  showNotification = async (text: string) => {
+    const module = await import('noty');
+    const noty: typeof Noty = (module as any).default;
+
+    new noty({
       ...this.defaultOptions,
       text,
     }).show();

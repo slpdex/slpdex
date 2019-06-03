@@ -11,7 +11,6 @@ import { map, takeUntil } from 'rxjs/operators';
 import { TokenOverview } from 'slpdex-market';
 import { MarketService } from '../../../../market.service';
 import { convertSatsToBch } from '../../../../helpers';
-import * as moment from 'moment';
 import BigNumber from 'bignumber.js';
 
 interface HeaderStat {
@@ -92,7 +91,7 @@ export class TokensDetailsHeaderComponent implements OnInit, OnDestroy {
     return stat.toFixed(decimals);
   };
 
-  private createStats = () => {
+  private createStats = async () => {
     let changeColor = '';
 
     if (this.tokenOverview.last24h.priceIncrease === undefined) {
@@ -102,6 +101,8 @@ export class TokensDetailsHeaderComponent implements OnInit, OnDestroy {
     } else if (this.tokenOverview.last24h.priceIncrease.gt(0)) {
       changeColor = 'red';
     }
+
+    const moment = await import('moment');
 
     this.headerStats = [
       {
