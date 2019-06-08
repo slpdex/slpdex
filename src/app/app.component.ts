@@ -3,7 +3,6 @@ import {
   ChangeDetectionStrategy,
   Component,
 } from '@angular/core';
-import { SwUpdate } from '@angular/service-worker';
 import { CashContractsService } from './cash-contracts.service';
 
 @Component({
@@ -17,17 +16,16 @@ export class AppComponent implements AfterViewInit {
 
   constructor(
     private cashContractsService: CashContractsService,
-    private swUpdate: SwUpdate,
-  ) {}
+  ) // private swUpdate: SwUpdate,
+  {}
 
   ngAfterViewInit() {
     this.cashContractsService.init();
-
-    if (this.swUpdate.activated) {
-      this.swUpdate.available.subscribe(async () => {
-        await this.swUpdate.activateUpdate();
-        window.location.reload();
-      });
-    }
+    // if (this.swUpdate.activated) {
+    //   this.swUpdate.available.subscribe(async () => {
+    //     await this.swUpdate.activateUpdate();
+    //     window.location.reload();
+    //   });
+    // }
   }
 }
