@@ -84,7 +84,7 @@ export class TokensDetailsHeaderComponent implements OnInit, OnDestroy {
 
     if (convert === 'TO_BCH') {
       stat = convertSatsToBch(stat);
-    } else if (convert == 'TO_PERCENT') {
+    } else if (convert === 'TO_PERCENT') {
       return stat.times('100').toFixed(decimals) + '%';
     }
 

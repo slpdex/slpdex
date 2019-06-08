@@ -6,7 +6,7 @@ import BigNumber from 'bignumber.js';
 })
 export class BchSeparatorPipe implements PipeTransform {
   transform(value: string, args?: any): any {
-    if (!value || value == 'n/a') {
+    if (!value || value === 'n/a') {
       return value;
     }
 

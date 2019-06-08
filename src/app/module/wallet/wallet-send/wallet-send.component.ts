@@ -84,7 +84,7 @@ export class WalletSendComponent implements OnInit, OnDestroy {
 
     this.selected$.next({
       name: 'Bitcoin Cash',
-      balance: balance,
+      balance,
       isToken: false,
     });
 
