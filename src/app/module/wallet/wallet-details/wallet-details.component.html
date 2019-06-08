@@ -69,18 +69,12 @@
         <h3>Tokens</h3>
 
         <app-coin-card *ngFor="let token of (tokens$ | async); trackBy: trackById"
+                       class="mb-sm"
                        [item]="token"
-                       class="mb-sm">
-
-          <app-button right
-                      class="ml-md"
-                      (click)="openSendToken(token)"
-                      ga-on="click"
-                      ga-event-category="wallet"
-                      ga-event-action="sendToken">
-            Send
-          </app-button>
-
+                       ga-on="click"
+                       ga-event-category="wallet"
+                       ga-event-action="sendToken"
+                       (click)="openSendToken(token)">
         </app-coin-card>
 
         <app-widget *ngIf="(tokens$ | async).length === 0 && (isLoading$ | async) === false"
@@ -95,9 +89,18 @@
       </div>
 
       <div class="wallet-details__transactions">
-        <h3>Transactions</h3>
+        <h3>Last 10 transactions</h3>
 
-        <app-widget class="wallet-details__transaction-empty">
+        <ng-container *ngIf="history.length">
+          <app-coin-card *ngFor="let item of history; trackBy: trackById"
+                         [item]="item"
+                         class="mb-sm"
+                         (click)="openTxExplorer(item)">
+          </app-coin-card>
+        </ng-container>
+
+        <app-widget *ngIf="!history.length"
+                    class="wallet-details__transaction-empty">
           <svg>
             <use xlink:href="#empty"></use>
           </svg>

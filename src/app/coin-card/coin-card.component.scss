@@ -10,9 +10,9 @@
   display: flex;
 
   &__bch {
-    height: 45px;
+    height: 40px;
     margin-right: 15px;
-    width: 45px;
+    width: 40px;
   }
 
   &__left {
@@ -23,13 +23,21 @@
   }
 
   &__right {
-    align-items: center;
     display: flex;
+    flex-direction: column;
     margin-left: auto;
 
     &--address {
       border-bottom: 1px solid $color-gray;
       font-weight: 500;
     }
+  }
+
+  &--green {
+    color: $color-green;
+  }
+
+  &--red {
+    color: $color-red;
   }
 }

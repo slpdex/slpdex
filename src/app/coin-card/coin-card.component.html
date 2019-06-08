@@ -17,13 +17,14 @@
       {{item.name}}
     </p>
 
-    <p>
+    <p [class.coin-card--green]="item.enableBalanceColor && item.balance.toNumber() > 0"
+       [class.coin-card--red]="item.enableBalanceColor && item.balance.toNumber() < 0">
       <ng-container *ngIf="item.isToken; else bch">
         {{item.balance}}
       </ng-container>
 
       <ng-template #bch>
-        {{item.balance | bchSeparator}}
+        {{item.balance | bchSeparator}} BCH
       </ng-template>
 
       {{item.symbol}}
@@ -32,14 +33,19 @@
 
   <div class="coin-card__right">
 
-    <a class="coin-card__right--address"
+    <a *ngIf="!item.timeSince"
+       class="coin-card__right--address"
        [href]="'https://explorer.bitcoin.com/bch/tx/' + item.id"
        target="_blank"
-       [attr.title]="item.id">
+       [attr.title]="item.id"
+       (click)="stopEventPropagation($event)">
       {{item.shortId}}
     </a>
 
-    <ng-content select="[right]"></ng-content>
+    <p *ngIf="item.timeSince">
+      {{item.timeSince}}
+    </p>
+
   </div>
 
 </app-widget>

@@ -16,6 +16,8 @@ export interface CoinCard {
   balance?: BigNumber;
   id?: string;
   shortId?: string;
+  timeSince?: string;
+  enableBalanceColor?: boolean;
 }
 
 @Component({
@@ -39,4 +41,8 @@ export class CoinCardComponent implements OnInit, OnChanges {
       };
     }
   }
+
+  stopEventPropagation = (event: Event) => {
+    event.stopPropagation();
+  };
 }

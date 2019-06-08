@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as cc from 'cashcontracts';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, from } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { convertBchToSats, convertSatsToBch, generateShortId } from './helpers';
 import { NotificationService } from './notification.service';
@@ -28,40 +28,8 @@ export class CashContractsService {
     this.loadWallet();
   };
 
-  private loadWallet = async () => {
-    this.isSecretInStorageSubject.next(cc.Wallet.isSecretInStorage());
-
-    this.listenIsSecretInStorage.subscribe(async isInStorage => {
-      if (!isInStorage) {
-        return;
-      }
-
-      this.wallet = await cc.Wallet.loadFromStorage();
-
-      this.wallet.addReceivedTxListener(direction => {
-        if (direction.direction === 'incoming') {
-          let msg: string;
-
-          if (direction.nonTokenDelta) {
-            msg = `${convertSatsToBch(direction.nonTokenDelta)} BCH`;
-          } else {
-            direction.tokenDelta.forEach((value, key) => {
-              const tokenName = this.wallet.tokenDetails(key).name;
-
-              msg = `${value} ${tokenName}`;
-            });
-          }
-
-          this.notificationService.showNotification(
-            `Incoming transaction detected - ${msg}`,
-          );
-        }
-
-        this.emitWallet();
-      });
-
-      this.emitWallet();
-    });
+  getTransactionHistory = (slpAddress: string, cashAddress: string) => {
+    return from(cc.AddressTxHistory.create(slpAddress, cashAddress));
   };
 
   sendBch = (address: string, amount: BigNumber) => {
@@ -206,12 +174,48 @@ export class CashContractsService {
     });
   };
 
+  private loadWallet = async () => {
+    this.isSecretInStorageSubject.next(cc.Wallet.isSecretInStorage());
+
+    this.listenIsSecretInStorage.subscribe(async isInStorage => {
+      if (!isInStorage) {
+        return;
+      }
+
+      this.wallet = await cc.Wallet.loadFromStorage();
+
+      this.wallet.addReceivedTxListener(direction => {
+        if (direction.direction === 'incoming') {
+          let msg: string;
+
+          if (direction.nonTokenDelta) {
+            msg = `${convertSatsToBch(direction.nonTokenDelta)} BCH`;
+          } else {
+            direction.tokenDelta.forEach((value, key) => {
+              const tokenName = this.wallet.tokenDetails(key).name;
+
+              msg = `${value} ${tokenName}`;
+            });
+          }
+
+          this.notificationService.showNotification(
+            `Incoming transaction detected - ${msg}`,
+          );
+        }
+
+        this.emitWallet();
+      });
+
+      this.emitWallet();
+    });
+  };
+
   private emitWallet = () => {
     this.walletSubject.next(this.wallet);
   };
 
   private showBroadcastResultNotification = (broadcast: cc.BroadcastResult) => {
-    if (broadcast.success == false) {
+    if (broadcast.success === false) {
       console.error(broadcast);
       const msg = broadcast.msg;
       this.notificationService.showNotification(
