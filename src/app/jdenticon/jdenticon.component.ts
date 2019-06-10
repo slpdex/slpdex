@@ -5,6 +5,7 @@ import {
   Input,
   OnChanges,
   SimpleChanges,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { getJdenticon } from '../helpers';
@@ -21,15 +22,19 @@ export class JdenticonComponent implements OnInit, OnChanges {
 
   svgBase64: SafeHtml;
 
-  constructor(private domSanitizer: DomSanitizer) {}
+  constructor(
+    private domSanitizer: DomSanitizer,
+    private changeDetectorRef: ChangeDetectorRef,
+  ) {}
 
   ngOnInit() {}
 
-  ngOnChanges(changes: SimpleChanges): void {
+  async ngOnChanges(changes: SimpleChanges) {
     if (changes.id) {
       this.svgBase64 = this.domSanitizer.bypassSecurityTrustHtml(
-        getJdenticon(this.id, this.size ? this.size : undefined),
+        await getJdenticon(this.id, this.size ? this.size : undefined),
       );
+      this.changeDetectorRef.markForCheck();
     }
   }
 }

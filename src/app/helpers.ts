@@ -20,7 +20,9 @@ export const generateBase64QrCode = async (value: string): Promise<string> => {
   return QRCode.toDataURL(value, { margin: 0 });
 };
 
-export const getJdenticon = (id: string, size = 30) => {
+export const getJdenticon = async (id: string, size = 30) => {
+  const jdenticon = await import('jdenticon/dist/jdenticon.js');
+
   // tslint:disable-next-line: no-string-literal
-  return window['jdenticon'].toSvg(id, size);
+  return jdenticon.toSvg(id, size);
 };
