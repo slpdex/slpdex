@@ -1,6 +1,10 @@
 @import 'helpers';
 
 :host {
+  @media (max-width: 800px) {
+    padding: 30px;
+  }
+
   @include mat-elevation(4);
   background: white;
   border-radius: 4px;

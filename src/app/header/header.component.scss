@@ -9,11 +9,15 @@
 }
 
 .header {
+  @media (max-width: 600px) {
+    padding: 0 20px;
+  }
+
   display: flex;
   flex-direction: column;
   margin: 0 auto;
   max-width: calc(#{$content-width} + 30px);
-  padding: 0 30px;
+  padding: 0 40px;
   width: 100%;
 
   &__top {
@@ -72,6 +76,10 @@
     margin-left: auto;
 
     a {
+      @media (max-width: 600px) {
+        font-size: 18px;
+      }
+
       border-bottom: 2px solid transparent;
       font-size: 20px;
       font-weight: 600;
