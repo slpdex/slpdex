@@ -3,6 +3,7 @@
 .tokens-list {
   display: flex;
   flex-direction: column;
+  overflow-x: auto;
 
   p {
     font-size: 14px;
@@ -21,7 +22,9 @@
     border-radius: 4px;
     cursor: pointer;
     display: flex;
+    min-width: 900px;
     padding: 10px;
+    white-space: nowrap;
 
     &:focus,
     &:active {
@@ -71,6 +74,7 @@
 
   &--name {
     flex: 0 0 auto;
-    width: 30%;
+    white-space: normal;
+    width: 25%;
   }
 }

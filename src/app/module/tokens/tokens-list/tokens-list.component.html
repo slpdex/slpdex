@@ -1,6 +1,6 @@
 <div class="tokens-list">
 
-  <div class="tokens-list__row tokens-list__top">
+  <div class="tokens-list__row">
     <div *ngFor="let sort of tokensSort; trackBy: trackByName"
          class="tokens-list__col"
          [class.tokens-list--count]="sort.name === '#'"
@@ -62,9 +62,9 @@
     </p>
 
     <p class="tokens-list__col"
-       [class.tokens-list__price--positive]="token.last24h.priceIncrease > 0"
-       [class.tokens-list__price--negative]="token.last24h.priceIncrease < 0">
-      {{(token.last24h.priceIncrease || 0) * 100}}%
+       [class.tokens-list__price--positive]="token.last24h.priceIncrease?.toNumber() > 0"
+       [class.tokens-list__price--negative]="token.last24h.priceIncrease?.toNumber() < 0">
+      {{(token.last24h.priceIncrease?.toFixed(2) || 0) * 100}}%
     </p>
 
   </div>
