@@ -1,9 +1,17 @@
 @import 'helpers';
 
 :host {
+  @media (max-width: 900px) {
+    padding: 20px 70px;
+  }
+
+  @media (max-width: 500px) {
+    padding: 0 0 60px;
+  }
+
   background: white;
   display: flex;
-  padding: 50px 0;
+  padding: 50px 0 80px;
 }
 
 .landing-content {
@@ -12,13 +20,23 @@
   justify-content: space-between;
 
   &__box {
+    @media (max-width: 900px) {
+      flex: 0 0 auto;
+      width: 50%;
+    }
+
+    @media (max-width: 500px) {
+      flex: 0 0 auto;
+      height: 240px;
+      width: 100%;
+    }
+
     align-items: center;
     display: flex;
     flex: 1;
     flex-direction: column;
-    height: 300px;
+    height: 260px;
     max-width: 400px;
-    min-width: 200px;
     padding: 0 20px;
 
     p {
