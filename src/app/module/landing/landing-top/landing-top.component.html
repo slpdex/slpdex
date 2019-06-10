@@ -9,7 +9,10 @@
 
       <app-coin-card *ngFor="let gainer of gainers"
                      [item]="gainer"
-                     coin-card-dark>
+                     coin-card-dark
+                     ga-on="click"
+                     ga-event-category="landing"
+                     ga-event-action="gainer">
       </app-coin-card>
     </div>
 
@@ -21,7 +24,10 @@
       <app-coin-card *ngFor="let loser of losers"
                      [item]="loser"
                      [routerLink]="[slpRoutes.tokens, loser.id]"
-                     coin-card-dark>
+                     coin-card-dark
+                     ga-on="click"
+                     ga-event-category="landing"
+                     ga-event-action="loser">
       </app-coin-card>
     </div>
 
@@ -29,7 +35,10 @@
 
   <div class="landing__footer">
     <app-button button-md
-                [routerLink]="slpRoutes.tokens">
+                [routerLink]="slpRoutes.tokens"
+                ga-on="click"
+                ga-event-category="landing"
+                ga-event-action="goToToken2">
       See all tokens
     </app-button>
 
