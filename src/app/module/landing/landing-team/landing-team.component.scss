@@ -3,7 +3,7 @@
 :host {
   background: $color-gray;
   display: flex;
-  padding: 100px 0 50px;
+  padding: 80px 0 50px;
 }
 
 h3,
@@ -21,7 +21,7 @@ p {
   &__members {
     display: flex;
     justify-content: center;
-    margin: 30px 0;
+    margin: 30px 0 40px;
 
     img {
       @include mat-elevation(4);
