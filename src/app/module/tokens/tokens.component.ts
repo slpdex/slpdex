@@ -9,5 +9,9 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 export class TokensComponent implements OnInit {
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    window.scroll({
+      top: 0,
+    });
+  }
 }
