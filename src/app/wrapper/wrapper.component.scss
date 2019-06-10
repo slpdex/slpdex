@@ -1,6 +1,10 @@
 @import 'helpers';
 
 :host {
+  @media (max-width: 600px) {
+    padding: 0 20px;
+  }
+
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
