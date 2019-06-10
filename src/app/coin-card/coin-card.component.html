@@ -17,16 +17,19 @@
       {{item.name}}
     </p>
 
-    <p [class.coin-card--green]="item.enableBalanceColor && item.balance.toNumber() > 0"
-       [class.coin-card--red]="item.enableBalanceColor && item.balance.toNumber() < 0">
-      <ng-container *ngIf="item.isToken; else bch">
+    <p [class.coin-card--green]="item.enableBalanceColor && (item.balance?.toNumber() > 0 || item.percentage?.toNumber() > 0)"
+       [class.coin-card--red]="item.enableBalanceColor && (item.balance?.toNumber() < 0 || item.percentage?.toNumber() < 0)">
+      <ng-container *ngIf="item.isToken && item.balance">
         {{item.balance}}
       </ng-container>
 
-      <ng-template #bch>
+      <ng-container *ngIf="!item.isToken && item.balance">
         {{item.balance | bchSeparator}} BCH
-      </ng-template>
+      </ng-container>
 
+      <ng-container *ngIf="item.percentage">
+        {{item.percentage.times(100).toFixed(2)}} %
+      </ng-container>
       {{item.symbol}}
     </p>
   </div>

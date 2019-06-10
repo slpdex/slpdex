@@ -1,0 +1,34 @@
+<app-wrapper>
+
+  <div class="landing">
+
+    <div class="landing__box">
+      <h3>Top 10 Gainers</h3>
+
+      <app-coin-card *ngFor="let gainer of gainers"
+                     [item]="gainer"
+                     coin-card-dark>
+      </app-coin-card>
+    </div>
+
+    <div class="landing__box">
+      <h3>Top 10 losers</h3>
+
+      <app-coin-card *ngFor="let loser of losers"
+                     [item]="loser"
+                     [routerLink]="[slpRoutes.tokens, loser.id]"
+                     coin-card-dark>
+      </app-coin-card>
+    </div>
+
+  </div>
+
+  <div class="landing__footer">
+    <app-button button-md
+                [routerLink]="slpRoutes.tokens">
+      See all tokens
+    </app-button>
+
+  </div>
+
+</app-wrapper>

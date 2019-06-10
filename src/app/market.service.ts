@@ -48,6 +48,18 @@ export class MarketService {
     this.marketTokenRef = null;
   };
 
+  getTop10GainersAndLosers = () => {
+    return this.loadMarketOverviewQuery().pipe(
+      take(1),
+      map(overview => {
+        return {
+          gainers: overview.tokens('priceIncrease', 0, 10, false).toArray(),
+          losers: overview.tokens('priceIncrease', 0, 10, true).toArray(),
+        };
+      }),
+    );
+  };
+
   private loadMarketOverviewAll = (
     sortByKey: Market.TokenSortByKey,
     ascending: boolean,

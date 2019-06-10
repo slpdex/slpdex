@@ -1,6 +1,25 @@
 @import 'helpers';
 
 :host {
+  &[coin-card-dark] {
+    .coin-card {
+      &__right {
+        &--address {
+          border-color: white;
+        }
+      }
+    }
+    app-widget {
+      background: lighten($color-gray, 15%);
+      color: white;
+
+      a,
+      p {
+        color: white;
+      }
+    }
+  }
+
   display: block;
 }
 
@@ -34,10 +53,10 @@
   }
 
   &--green {
-    color: $color-green;
+    color: $color-green !important;
   }
 
   &--red {
-    color: $color-red;
+    color: $color-red !important;
   }
 }

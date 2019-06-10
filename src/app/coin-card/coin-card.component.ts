@@ -14,6 +14,7 @@ export interface CoinCard {
   symbol: string;
   isToken?: boolean;
   balance?: BigNumber;
+  percentage?: BigNumber;
   id?: string;
   shortId?: string;
   timeSince?: string;
