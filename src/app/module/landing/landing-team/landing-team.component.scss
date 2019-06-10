@@ -19,9 +19,15 @@ p {
   }
 
   &__members {
+    @media (max-width: 500px) {
+      align-items: center;
+      flex-direction: column;
+      justify-content: unset;
+    }
+
     display: flex;
     justify-content: center;
-    margin: 30px 0 40px;
+    margin: 10px 0 20px;
 
     img {
       @include mat-elevation(4);
@@ -38,7 +44,7 @@ p {
     align-items: center;
     display: flex;
     flex-direction: column;
-    padding: 0 20px;
+    padding: 10px 20px;
     width: 340px;
 
     &--name {
@@ -49,6 +55,7 @@ p {
 
     &--title {
       font-size: 20px;
+      text-align: center;
     }
   }
 
