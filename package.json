@@ -5,7 +5,7 @@
   "scripts": {
     "analyze": "ng build --aot --prod --build-optimizer --stats-json && webpack-bundle-analyzer dist/slpdex/stats-es2015.json",
     "build": "ng build",
-    "dev": "ng serve --hmr",
+    "dev": "ng serve",
     "e2e": "ng e2e",
     "lint": "ng lint",
     "ng": "ng",
@@ -34,6 +34,7 @@
     "cashcontracts": "^0.1.25",
     "core-js": "2.6.8",
     "countup.js-angular2": "^7.3.0",
+    "jdenticon": "^2.1.1",
     "js-base64": "^2.5.1",
     "moment": "^2.24.0",
     "noty": "^3.2.0-beta",

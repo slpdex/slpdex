@@ -40,6 +40,7 @@
        class="coin-card__right--address"
        [href]="'https://explorer.bitcoin.com/bch/tx/' + item.id"
        target="_blank"
+       rel="noopener"
        [attr.title]="item.id"
        (click)="stopEventPropagation($event)">
       {{item.shortId}}
