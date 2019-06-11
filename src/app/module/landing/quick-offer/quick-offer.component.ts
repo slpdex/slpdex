@@ -57,15 +57,7 @@ export class QuickOfferComponent implements OnInit, OnDestroy, AfterViewInit {
     private endpointsService: EndpointsService,
   ) {}
 
-  ngOnInit() {
-    this.endpointsService
-      .getTokenCount()
-      .pipe(take(1))
-      .subscribe(tokenCount => {
-        this.tokenCount = tokenCount.t[0].count;
-        this.changeDetectorRef.markForCheck();
-      });
-  }
+  ngOnInit() {}
 
   ngOnDestroy() {
     this.stopSlideShow();
@@ -74,6 +66,14 @@ export class QuickOfferComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit() {
+    this.endpointsService
+      .getTokenCount()
+      .pipe(take(1))
+      .subscribe(tokenCount => {
+        this.tokenCount = tokenCount.t[0].count;
+        this.changeDetectorRef.markForCheck();
+      });
+
     this.marketService.loadMarketOverview('marketCapSatoshis', false);
     setTimeout(() => this.listenMarketOverview(), 1000);
   }
