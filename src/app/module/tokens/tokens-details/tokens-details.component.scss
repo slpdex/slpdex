@@ -20,12 +20,22 @@
 }
 
 .tokens-details {
+  @media (max-width: 900px) {
+    flex-direction: column;
+    height: auto;
+  }
+
   display: flex;
   height: calc(100vh - #{$header-height} - 50px);
   margin-bottom: 200px;
   min-height: 800px;
 
   &__left {
+    @media (max-width: 900px) {
+      margin-bottom: 20px;
+      margin-right: 0;
+    }
+
     display: flex;
     flex-direction: column;
     margin-right: 10px;
@@ -33,6 +43,11 @@
   }
 
   &__right {
+    @media (max-width: 900px) {
+      margin-left: 0;
+      width: 100%;
+    }
+
     display: flex;
     flex: 0 0 auto;
     flex-direction: column;
@@ -63,6 +78,7 @@
       color: darken(white, 10%);
       font-size: 36px;
       font-weight: 700;
+      text-align: center;
     }
   }
 

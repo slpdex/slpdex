@@ -6,10 +6,18 @@
   }
 
   &__item {
+    @media (max-width: 500px) {
+      flex-direction: column;
+    }
+
     align-items: center;
     margin-bottom: 10px;
 
     > * {
+      @media (max-width: 500px) {
+        margin: 5px 0;
+      }
+
       flex: 1;
       font-size: 14px;
     }

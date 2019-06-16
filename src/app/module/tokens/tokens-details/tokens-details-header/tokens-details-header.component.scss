@@ -14,13 +14,29 @@
   }
 
   &__bottom {
+    @media (max-width: 600px) {
+      padding-left: 0;
+    }
+
+    @media (max-width: 500px) {
+      align-items: center;
+      flex-direction: column;
+    }
+
     display: flex;
     margin-top: 20px;
     padding-left: 75px;
 
     &--item {
+      @media (max-width: 500px) {
+        margin-bottom: 10px;
+        margin-right: 0;
+        text-align: center;
+      }
+
       flex: 1;
       font-size: 12px;
+      margin-right: 10px;
 
       h4 {
         font-weight: 600;
