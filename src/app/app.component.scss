@@ -8,3 +8,32 @@
   position: relative;
   width: 100%;
 }
+
+.info {
+  align-items: center;
+  background: $color-gray;
+  color: white;
+  display: flex;
+  font-size: 11px;
+  justify-content: center;
+  padding: 10px 30px;
+  z-index: 100;
+
+  &__box {
+    display: flex;
+    flex-direction: column;
+    max-width: 1200px;
+    width: 100%;
+
+    span {
+      border-bottom: 1px solid white;
+      cursor: pointer;
+      font-weight: 500;
+    }
+  }
+
+  p {
+    line-height: 1.5;
+    margin: 5px 0;
+  }
+}

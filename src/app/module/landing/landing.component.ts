@@ -1,15 +1,18 @@
 import {
-  Component,
-  OnInit,
+  AfterViewInit,
   ChangeDetectionStrategy,
+  Component,
+  ElementRef,
   OnDestroy,
+  OnInit,
+  ViewChild,
 } from '@angular/core';
-import { CashContractsService } from '../../cash-contracts.service';
+import { Router } from '@angular/router';
+import { Wallet } from 'cashcontracts';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Router } from '@angular/router';
+import { CashContractsService } from '../../cash-contracts.service';
 import { SLPRoutes } from '../../slp-routes';
-import { Wallet } from 'cashcontracts';
 
 @Component({
   selector: 'app-landing',
@@ -17,10 +20,12 @@ import { Wallet } from 'cashcontracts';
   styleUrls: ['./landing.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LandingComponent implements OnInit, OnDestroy {
+export class LandingComponent implements OnInit, OnDestroy, AfterViewInit {
   private slpRoutes = { ...SLPRoutes };
   private destroy$ = new Subject();
   private wallet: Wallet;
+
+  @ViewChild('bg', { static: false }) bg: ElementRef<HTMLElement>;
 
   constructor(
     private cashContractsService: CashContractsService,
@@ -38,6 +43,12 @@ export class LandingComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.unsubscribe();
+  }
+
+  // TODO: Remove this when release
+  ngAfterViewInit() {
+    const infoHeight = document.querySelector('.info').clientHeight;
+    this.bg.nativeElement.style.top = infoHeight + 'px';
   }
 
   getStarted = () => {

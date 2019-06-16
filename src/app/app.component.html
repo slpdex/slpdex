@@ -1,5 +1,31 @@
 <app-svgs></app-svgs>
 
+<div class="info">
+
+  <app-icon [icon]="'heart'"
+            [size]="60"
+            icon-white
+            class="mr-md">
+  </app-icon>
+
+  <div class="info__box">
+
+    <p>
+      SLPDEX is currently in development and we're working hard to get the first BETA released. We are currently in
+      need of funding to keep growing and to hire more members, improve infrastructure & functionality. We are doing
+      everything we can to improve the community with powerful tools to keep Bitcoin Cash competitive.
+    </p>
+
+    <p>
+      If you wish to help us get started, please click <span [routerLink]="slpRoutes.donate">here</span> to donate. Your
+      donation helps a lot and will be used to secure a
+      sustainable development & innovation progress for slpdex, Thank you.
+    </p>
+
+  </div>
+
+</div>
+
 <app-header></app-header>
 
 <router-outlet></router-outlet>

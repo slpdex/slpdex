@@ -5,6 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderModule } from './header/header.module';
+import { IconModule } from './icon/icon.module';
 import { SvgsComponent } from './svgs/svgs.component';
 
 @NgModule({
@@ -15,6 +16,7 @@ import { SvgsComponent } from './svgs/svgs.component';
     AppRoutingModule,
     HeaderModule,
     HttpClientModule,
+    IconModule,
     // ServiceWorkerModule.register('ngsw-worker.js', {
     //   enabled: environment.production,
     // }),
