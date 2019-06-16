@@ -37,13 +37,28 @@ $wallet-send-width: 800px;
   }
 
   &__address {
-    flex: 1;
+    @media (max-width: 750px) {
+      flex: 1 1 50%;
+    }
+
+    @media (max-width: 600px) {
+      flex: 1 1 40%;
+    }
+
+    flex: 1 1 60%;
   }
 
   &__amount {
-    flex: 0 0 auto;
-    margin-left: 10px;
-    width: 280px;
+    @media (max-width: 750px) {
+      flex: 1 1 50%;
+    }
+
+    @media (max-width: 600px) {
+      flex: 1 1 60%;
+    }
+
+    flex: 1 1 40%;
+    padding-left: 10px;
 
     &--bottom {
       display: flex;

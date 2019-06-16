@@ -61,13 +61,13 @@ h3 {
   }
 
   &__content {
+    @media (max-width: 900px) {
+      flex-direction: column;
+      margin-top: 20px;
+    }
+
     display: flex;
     margin: 30px 0 100px;
-  }
-
-  &__tokens,
-  &__transactions {
-    flex: 1;
   }
 
   &__tokens {
@@ -96,6 +96,15 @@ h3 {
       font-size: 20px;
       margin-bottom: 20px;
     }
+  }
+
+  &__tokens,
+  &__transactions {
+    @media (max-width: 900px) {
+      margin: 0 0 20px;
+    }
+
+    flex: 1;
   }
 
   &--bch {
