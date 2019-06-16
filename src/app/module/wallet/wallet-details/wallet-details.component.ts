@@ -32,7 +32,6 @@ export class WalletDetailsComponent implements OnInit, OnDestroy {
   usdPrice$ = new BehaviorSubject<string>('0');
   isLoading$ = new BehaviorSubject<boolean>(true);
 
-  transactions$ = new BehaviorSubject([]);
   tokens$ = new BehaviorSubject<CoinCard[]>([]);
 
   history: CoinCardExtended[] = [];
@@ -136,7 +135,9 @@ export class WalletDetailsComponent implements OnInit, OnDestroy {
           const historyItem = item[1];
 
           let newItem = {
-            timeSince: moment.unix(historyItem.timestamp).fromNow(),
+            timeSince: historyItem.timestamp
+              ? moment.unix(historyItem.timestamp).fromNow()
+              : 'Unconfirmed',
             enableBalanceColor: true,
             txId,
           } as CoinCardExtended;
