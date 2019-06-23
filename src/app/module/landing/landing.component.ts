@@ -1,11 +1,8 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
-  ElementRef,
   OnDestroy,
   OnInit,
-  ViewChild,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { Wallet } from 'cashcontracts';
@@ -20,12 +17,10 @@ import { SLPRoutes } from '../../slp-routes';
   styleUrls: ['./landing.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LandingComponent implements OnInit, OnDestroy, AfterViewInit {
+export class LandingComponent implements OnInit, OnDestroy {
   private slpRoutes = { ...SLPRoutes };
   private destroy$ = new Subject();
   private wallet: Wallet;
-
-  @ViewChild('bg', { static: false }) bg: ElementRef<HTMLElement>;
 
   constructor(
     private cashContractsService: CashContractsService,
@@ -43,12 +38,6 @@ export class LandingComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.unsubscribe();
-  }
-
-  // TODO: Remove this when release
-  ngAfterViewInit() {
-    const infoHeight = document.querySelector('.info').clientHeight;
-    this.bg.nativeElement.style.top = infoHeight + 'px';
   }
 
   getStarted = () => {
