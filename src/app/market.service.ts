@@ -25,7 +25,13 @@ export class MarketService {
   loadMarketOverview = (
     sortByKey: Market.TokenSortByKey,
     ascending: boolean,
+    search: string = undefined,
   ) => {
+    if (search) {
+      this.loadMarketOverviewSearch(search);
+      return;
+    }
+
     this.marketOverview$.pipe(take(1)).subscribe(tokenOverview => {
       tokenOverview.length
         ? this.loadMarketOverviewAll(sortByKey, ascending)
@@ -58,6 +64,17 @@ export class MarketService {
         };
       }),
     );
+  };
+
+  private loadMarketOverviewSearch = (search: string) => {
+    this.loadMarketOverviewQuery()
+      .pipe(
+        take(1),
+        map(overview => overview.searchTokens(search).toArray()),
+      )
+      .subscribe(overview => {
+        this.marketOverview$.next(overview);
+      });
   };
 
   private loadMarketOverviewAll = (

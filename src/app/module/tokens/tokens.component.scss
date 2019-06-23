@@ -23,24 +23,45 @@
 
   &__filter {
     display: flex;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     width: 100%;
 
-    // input {
-    //   background: rgba(white, .4);
-    //   border: 0;
-    //   border-radius: 4px;
-    //   color: white;
-    //   height: 40px;
-    //   outline: 0;
-    //   padding: 10px 15px;
-    //   width: 100%;
-    // }
+    &__search {
+      display: flex;
+      max-width: 200px;
+      position: relative;
+      width: 100%;
 
-    svg {
-      fill: $color-gray;
-      height: 30px;
-      width: 30px;
+      &--icon {
+        align-items: center;
+        bottom: 0;
+        display: flex;
+        justify-content: center;
+        left: 5px;
+        pointer-events: none;
+        position: absolute;
+        top: 0;
+        z-index: 1;
+      }
+
+      &--show {
+        opacity: 1 !important;
+      }
+
+      .input {
+        opacity: 0;
+        transition: opacity .2s ease;
+
+        &:hover,
+        &:focus {
+          opacity: 1;
+          transition: opacity .2s ease;
+        }
+      }
+
+      input {
+        text-indent: 25px;
+      }
     }
   }
 }

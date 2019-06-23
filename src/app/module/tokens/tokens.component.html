@@ -4,15 +4,26 @@
 
     <app-widget>
       <div class="tokens__filter">
-        <svg>
-          <use xlink:href="#search"></use>
-        </svg>
 
-        <!-- <input type="text"
-             placeholder="Search tokens..."> -->
+        <div class="tokens__filter__search">
+
+          <div class="tokens__filter__search--icon">
+            <app-icon [icon]="'search'"
+                      [size]="24">
+            </app-icon>
+          </div>
+
+          <div [class.tokens__filter__search--show]="searchVal"
+               class="input">
+            <input type="text"
+                   placeholder="Search tokens.."
+                   [(ngModel)]="searchVal">
+          </div>
+        </div>
+
       </div>
 
-      <app-tokens-list>
+      <app-tokens-list [searchVal]="searchVal">
       </app-tokens-list>
 
     </app-widget>

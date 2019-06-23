@@ -7,6 +7,8 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TokensComponent implements OnInit {
+  searchVal: string;
+
   constructor() {}
 
   ngOnInit() {

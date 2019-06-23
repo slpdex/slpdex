@@ -4,6 +4,9 @@ import {
   Component,
   OnDestroy,
   OnInit,
+  Input,
+  OnChanges,
+  SimpleChanges,
 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -24,7 +27,9 @@ interface TokensSort {
   styleUrls: ['./tokens-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TokensListComponent implements OnInit, OnDestroy {
+export class TokensListComponent implements OnInit, OnDestroy, OnChanges {
+  @Input() searchVal: string;
+
   tokens: TokenOverview[] = [];
   slpRoutes = { ...SLPRoutes };
 
@@ -58,6 +63,8 @@ export class TokensListComponent implements OnInit, OnDestroy {
     },
   ];
 
+  private searchTimer: number;
+
   private destroy$ = new Subject();
 
   constructor(
@@ -87,6 +94,16 @@ export class TokensListComponent implements OnInit, OnDestroy {
     this.destroy$.unsubscribe();
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.searchVal) {
+      window.clearTimeout(this.searchTimer);
+
+      if (this.searchVal) {
+        this.debounceSearch();
+      }
+    }
+  }
+
   sortColumn = (item: TokensSort) => {
     this.tokensSort = this.tokensSort.map(sort => {
       if (sort.name === item.name) {
@@ -109,5 +126,15 @@ export class TokensListComponent implements OnInit, OnDestroy {
 
   trackByName = (index: number, item: TokensSort) => {
     return item.name;
+  };
+
+  private getMarketOverviewSearch = (search: string) => {
+    this.marketService.loadMarketOverview('marketCapSatoshis', false, search);
+  };
+
+  debounceSearch = () => {
+    this.searchTimer = window.setTimeout(() => {
+      this.getMarketOverviewSearch(this.searchVal);
+    }, 800);
   };
 }
