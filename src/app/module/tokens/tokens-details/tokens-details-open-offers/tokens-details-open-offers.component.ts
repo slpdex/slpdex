@@ -56,12 +56,12 @@ export class TokensDetailsOpenOffersComponent implements OnInit, OnDestroy {
         }),
       ),
       this.cashContractsService.listenWallet,
-      this.marketService.marketOverview,
+      this.marketService.marketOverviewToken,
       this.activatedRoute.params,
     ])
       .pipe(
         takeUntil(this.destroy$),
-        map(async ([offers, wallet, marketOverview, params]) => {
+        map(async ([offers, wallet, marketOverviewToken, params]) => {
           this.tokenId = params.id;
 
           if (!wallet) {
@@ -86,15 +86,11 @@ export class TokensDetailsOpenOffersComponent implements OnInit, OnDestroy {
               } as TokenOfferExtended;
             });
 
-          if (!marketOverview.length) {
+          if (!marketOverviewToken) {
             return;
           }
 
-          const currentTokenOverview = marketOverview.find(
-            x => x.tokenId === this.tokenId,
-          );
-
-          this.tokenOverview = currentTokenOverview;
+          this.tokenOverview = marketOverviewToken;
 
           this.changeDetectorRef.markForCheck();
         }),
@@ -114,7 +110,6 @@ export class TokensDetailsOpenOffersComponent implements OnInit, OnDestroy {
 
     this.isLoading = true;
 
-    // TODO: Replace with marketoverview for 1 token
     await this.cashContractsService.cancelSellOffer(
       offer.utxoEntry,
       {

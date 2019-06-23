@@ -43,20 +43,18 @@ export class TokensDetailsHeaderComponent implements OnInit, OnDestroy {
   ngOnInit() {
     combineLatest([
       this.activatedRoute.params,
-      // TODO: Replace with 1 token fetch
-      this.marketService.marketOverview,
+      this.marketService.marketOverviewToken,
     ])
       .pipe(
         takeUntil(this.destroy$),
         map(([params, overview]) => {
           this.tokenId = params.id;
 
-          if (!overview.length) {
+          if (!overview) {
             return;
           }
 
-          const currentToken = overview.find(x => x.tokenId === this.tokenId);
-          this.tokenOverview = currentToken;
+          this.tokenOverview = overview;
 
           this.createStats();
         }),

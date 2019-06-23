@@ -54,12 +54,12 @@ export class TokensDetailsSellComponent implements OnInit, OnDestroy {
 
     combineLatest([
       this.activatedRoute.params,
-      this.marketService.marketOverview,
+      this.marketService.marketOverviewToken,
       this.cashContractsService.listenWallet,
     ])
       .pipe(
         takeUntil(this.destroy$),
-        map(([params, marketOverview, wallet]) => {
+        map(([params, marketOverviewToken, wallet]) => {
           this.tokenId = params.id;
           this.wallet = wallet;
 
@@ -67,15 +67,11 @@ export class TokensDetailsSellComponent implements OnInit, OnDestroy {
             return;
           }
 
-          const tokenOverview = marketOverview.find(
-            x => x.tokenId === this.tokenId,
-          );
-
-          if (!tokenOverview) {
+          if (!marketOverviewToken) {
             return;
           }
 
-          this.tokenOverview = tokenOverview;
+          this.tokenOverview = marketOverviewToken;
 
           const totalTokenBalance = wallet.tokenBalance(this.tokenId);
           this.totalTokenBalance = totalTokenBalance.toNumber();
@@ -99,7 +95,6 @@ export class TokensDetailsSellComponent implements OnInit, OnDestroy {
       this.calculateTotalPrice();
     }, 1000);
   };
-
 
   sell = async () => {
     if (!this.selectedTokenAmount || !this.selectedBchPrice) {

@@ -12,6 +12,10 @@ export class MarketService {
 
   private marketOverview$ = new BehaviorSubject<Market.TokenOverview[]>([]);
 
+  private marketOverviewToken$ = new BehaviorSubject<Market.TokenOverview>(
+    null,
+  );
+
   constructor() {}
 
   get marketToken() {
@@ -21,6 +25,23 @@ export class MarketService {
   get marketOverview() {
     return this.marketOverview$.asObservable();
   }
+
+  get marketOverviewToken() {
+    return this.marketOverviewToken$.asObservable();
+  }
+
+  loadMarketOverviewToken = (tokenId: string) => {
+    this.marketOverviewToken$.next(null);
+
+    this.loadMarketOverviewQuery()
+      .pipe(
+        take(1),
+        map(overview => overview.searchTokens(tokenId).toArray()),
+      )
+      .subscribe(overview => {
+        this.marketOverviewToken$.next(overview[0]);
+      });
+  };
 
   loadMarketOverview = (
     sortByKey: Market.TokenSortByKey,

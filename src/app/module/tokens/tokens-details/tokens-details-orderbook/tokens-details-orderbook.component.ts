@@ -77,15 +77,15 @@ export class TokensDetailsOrderbookComponent
 
     combineLatest([
       this.activatedRoute.params,
-      this.marketService.marketOverview,
+      this.marketService.marketOverviewToken,
       this.marketService.marketToken,
     ])
       .pipe(
         takeUntil(this.destroy$),
-        map(([params, overview, token]) => {
+        map(([params, marketOverviewToken, token]) => {
           this.tokenId = params.id;
 
-          this.findAndSetCurrentOverviewToken(overview);
+          this.findAndSetCurrentOverviewToken(marketOverviewToken);
           this.populateOrderbook(token);
 
           this.changeDetectorRef.markForCheck();
@@ -103,18 +103,12 @@ export class TokensDetailsOrderbookComponent
     const simpleBar = new SimpleBar(this.list.nativeElement);
   }
 
-  private findAndSetCurrentOverviewToken = (overview: TokenOverview[]) => {
-    if (!overview.length) {
+  private findAndSetCurrentOverviewToken = (overview: TokenOverview) => {
+    if (!overview) {
       return;
     }
 
-    const currentToken = overview.find(x => x.tokenId === this.tokenId);
-
-    if (!currentToken) {
-      return;
-    }
-
-    this.tokenOverview = currentToken;
+    this.tokenOverview = overview;
   };
 
   private populateOrderbook = (token: MarketToken) => {
