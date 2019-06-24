@@ -2,16 +2,16 @@
 
 :host {
   @media (max-width: 900px) {
-    padding: 30px 0px 60px;
+    padding: 50px 0px;
   }
 
   @media (max-width: 500px) {
-    padding: 10px 0 60px;
+    padding: 30px 0;
   }
 
   background: white;
   display: flex;
-  padding: 50px 0 80px;
+  padding: 60px 0;
 }
 
 .landing-content {
@@ -36,6 +36,7 @@
     flex: 1;
     flex-direction: column;
     height: 260px;
+    justify-content: center;
     max-width: 400px;
     padding: 0 20px;
 
@@ -48,11 +49,6 @@
 
   h3 {
     font-size: 20px;
-    margin-bottom: 20px;
-  }
-
-  svg {
-    fill: $color-gray;
-    width: 80px;
+    margin: 20px 0;
   }
 }

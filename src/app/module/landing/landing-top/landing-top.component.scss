@@ -1,18 +1,15 @@
 @import 'helpers';
 
 :host {
-  background: white;
+  background: darken(white, 5%);
   display: flex;
-  padding: 0 0 100px;
+  padding: 80px 0 80px;
 }
 
 h3 {
-  @media (max-width: 700px) {
-    text-align: center;
-  }
-
   font-size: 26px;
   margin-bottom: 20px;
+  text-align: center;
 }
 
 .landing {
