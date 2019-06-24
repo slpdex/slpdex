@@ -6,14 +6,14 @@ import {
   OnInit,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import BigNumber from 'bignumber.js';
 import { Wallet } from 'cashcontracts';
 import { combineLatest, Subject } from 'rxjs';
-import { map, take, takeUntil } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
 import { defaultNetworkSettings, TokenOverview } from 'slpdex-market';
 import { CashContractsService } from '../../../../cash-contracts.service';
 import { EndpointsService } from '../../../../endpoints.service';
-import { convertBchToSats, convertSatsToBch } from '../../../../helpers';
-import BigNumber from 'bignumber.js';
+import { convertBchToSats } from '../../../../helpers';
 import { MarketService } from '../../../../market.service';
 
 @Component({
@@ -24,16 +24,16 @@ import { MarketService } from '../../../../market.service';
 })
 export class TokensDetailsSellComponent implements OnInit, OnDestroy {
   tokenOverview: TokenOverview = {} as TokenOverview;
-  selectedTokenAmount = 0;
-  selectedBchPrice = 0;
-  totalTokenBalance = 0;
-  totalPrice = 0;
   usdPrice = 0;
+
+  selectedTokenAmount: number;
+  selectedBchPrice: number;
+  totalTokenBalance: number;
+  totalPrice: number;
 
   private wallet: Wallet;
   private tokenId: string;
   private destroy$ = new Subject();
-  private priceTimer: number;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -72,9 +72,7 @@ export class TokensDetailsSellComponent implements OnInit, OnDestroy {
           }
 
           this.tokenOverview = marketOverviewToken;
-
-          const totalTokenBalance = wallet.tokenBalance(this.tokenId);
-          this.totalTokenBalance = totalTokenBalance.toNumber();
+          this.totalTokenBalance = wallet.tokenBalance(this.tokenId).toNumber();
 
           this.calculateTotalPrice();
         }),
@@ -87,21 +85,12 @@ export class TokensDetailsSellComponent implements OnInit, OnDestroy {
     this.destroy$.unsubscribe();
   }
 
-  priceChanged = value => {
-    window.clearTimeout(this.priceTimer);
-
-    this.priceTimer = window.setTimeout(() => {
-      this.selectedBchPrice = value;
-      this.calculateTotalPrice();
-    }, 1000);
-  };
-
   sell = async () => {
     if (!this.selectedTokenAmount || !this.selectedBchPrice) {
       return;
     }
 
-    await this.cashContractsService.createSellOffer(
+    const success = await this.cashContractsService.createSellOffer(
       {
         sellAmountToken: new BigNumber(this.selectedTokenAmount),
         pricePerToken: convertBchToSats(new BigNumber(this.selectedBchPrice)),
@@ -113,25 +102,29 @@ export class TokensDetailsSellComponent implements OnInit, OnDestroy {
       this.tokenOverview.decimals,
     );
 
-    this.setDefaultAmounts();
+    if (success) {
+      this.setDefaultAmounts();
+    }
   };
 
   setMaxTokens = () => {
     this.selectedTokenAmount = this.totalTokenBalance;
+    this.calculateTotalPrice();
   };
 
   calculateTotalPrice = () => {
-    this.totalPrice = +(
-      this.selectedTokenAmount * +this.selectedBchPrice
-    ).toFixed(8);
+    if (!this.selectedTokenAmount || !this.selectedBchPrice) {
+      this.totalPrice = 0;
+    } else {
+      this.totalPrice = this.selectedTokenAmount * this.selectedBchPrice;
+    }
 
     this.changeDetectorRef.markForCheck();
   };
 
   private setDefaultAmounts = () => {
-    window.clearTimeout(this.priceTimer);
     this.selectedTokenAmount = 0;
-    this.selectedBchPrice = convertSatsToBch(new BigNumber(1)).toNumber();
+    this.selectedBchPrice = 0;
     this.calculateTotalPrice();
   };
 }

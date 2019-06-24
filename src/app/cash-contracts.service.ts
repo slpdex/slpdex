@@ -128,7 +128,7 @@ export class CashContractsService {
 
       if (!verification.success) {
         this.notificationService.showNotification('Error: ' + verification.msg);
-        setTimeout(() => resolve(), 1000);
+        setTimeout(() => resolve(false), 1000);
         return;
       }
 
@@ -142,13 +142,13 @@ export class CashContractsService {
 
       if (!broadcast1.success) {
         this.showBroadcastResultNotification(broadcast1);
-        setTimeout(() => resolve(), 1000);
+        setTimeout(() => resolve(false), 1000);
         return;
       }
 
       const broadcast2 = await offer[1].broadcast();
       this.showBroadcastResultNotification(broadcast2);
-      setTimeout(() => resolve(), 1000);
+      setTimeout(() => resolve(true), 1000);
     });
   };
 

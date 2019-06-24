@@ -28,9 +28,7 @@
   <div class="input">
     <input type="number"
            (keyup)="calculateTotalPrice()"
-           [ngModel]="selectedBchPrice | number:'1.8-8'"
-           (ngModelChange)="priceChanged($event)">
-
+           [(ngModel)]="selectedBchPrice">
     <p>BCH</p>
   </div>
 </div>
@@ -43,8 +41,7 @@
   <div class="input">
     <input type="number"
            [disabled]="true"
-           [value]="totalPrice | number:'1.8-8'">
-
+           [value]="totalPrice">
     <p>BCH</p>
   </div>
 
@@ -56,7 +53,7 @@
 
 <app-button button-md
             button-red
-            [attr.disabled]="!selectedTokenAmount"
+            [attr.disabled]="totalPrice * usdPrice < 0.001"
             (click)="sell()"
             ga-on="click"
             ga-event-category="tokenDetails"
