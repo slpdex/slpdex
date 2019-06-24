@@ -198,6 +198,10 @@ export class TokensDetailsOrderbookComponent
       return offer;
     });
 
+    this.selectedAmount = 0;
+    this.tokenTotalAmount = 0;
+    this.selectedBchPrice = 0;
+
     this.changeDetectorRef.markForCheck();
   };
 }
