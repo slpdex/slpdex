@@ -74,6 +74,8 @@
   }
 
   &[disabled='true'] {
+    pointer-events: none;
+
     .button {
       background: darken(white, 30%) !important;
       color: white !important;
