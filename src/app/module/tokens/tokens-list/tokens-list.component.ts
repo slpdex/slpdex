@@ -73,7 +73,7 @@ export class TokensListComponent implements OnInit, OnDestroy, OnChanges {
   ) {}
 
   ngOnInit() {
-    this.marketService.loadMarketOverview('marketCapSatoshis', false);
+    this.loadMarketOverview();
 
     this.marketService.marketOverview
       .pipe(takeUntil(this.destroy$))
@@ -100,6 +100,8 @@ export class TokensListComponent implements OnInit, OnDestroy, OnChanges {
 
       if (this.searchVal) {
         this.debounceSearch();
+      } else {
+        this.loadMarketOverview();
       }
     }
   }
@@ -128,13 +130,17 @@ export class TokensListComponent implements OnInit, OnDestroy, OnChanges {
     return item.name;
   };
 
-  private getMarketOverviewSearch = (search: string) => {
-    this.marketService.loadMarketOverview('marketCapSatoshis', false, search);
-  };
-
   debounceSearch = () => {
     this.searchTimer = window.setTimeout(() => {
       this.getMarketOverviewSearch(this.searchVal);
     }, 800);
+  };
+
+  private loadMarketOverview = () => {
+    this.marketService.loadMarketOverview('marketCapSatoshis', false);
+  };
+
+  private getMarketOverviewSearch = (search: string) => {
+    this.marketService.loadMarketOverview('marketCapSatoshis', false, search);
   };
 }
