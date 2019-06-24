@@ -135,6 +135,10 @@ export class QuickOfferComponent implements OnInit, OnDestroy, AfterViewInit {
   };
 
   private setTokens = () => {
+    if (!this.tokenOverview || !this.tokenOverview.length) {
+      return;
+    }
+
     this.selectedTokenIndex++;
 
     if (this.selectedTokenIndex >= this.tokenOverview.length) {
