@@ -6,8 +6,9 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
-import { generateShortId } from '../helpers';
 import BigNumber from 'bignumber.js';
+import { generateShortId } from '../helpers';
+import { SLPRoutes } from '../slp-routes';
 
 export interface CoinCard {
   name: string;
@@ -29,6 +30,8 @@ export interface CoinCard {
 })
 export class CoinCardComponent implements OnInit, OnChanges {
   @Input() item: CoinCard;
+
+  slpRoutes = { ...SLPRoutes };
 
   constructor() {}
 

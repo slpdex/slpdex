@@ -37,15 +37,11 @@
 
   <div class="coin-card__right">
 
-    <a *ngIf="!item.timeSince"
-       class="coin-card__right--address"
-       [href]="'https://explorer.bitcoin.com/bch/tx/' + item.id"
-       target="_blank"
-       rel="noopener"
-       [attr.title]="item.id"
-       (click)="stopEventPropagation($event)">
-      {{item.shortId}}
-    </a>
+    <app-button *ngIf="!item.timeSince && item.isToken"
+                [routerLink]="['/' + slpRoutes.tokens, item.id]"
+                button-sm>
+      Trade
+    </app-button>
 
     <p *ngIf="item.timeSince">
       {{item.timeSince}}
