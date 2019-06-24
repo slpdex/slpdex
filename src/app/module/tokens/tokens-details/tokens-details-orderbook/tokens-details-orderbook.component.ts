@@ -4,11 +4,13 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  HostListener,
   OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import BigNumber from 'bignumber.js';
 import { TradeOfferParams, Wallet } from 'cashcontracts';
 import { combineLatest, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
@@ -19,7 +21,6 @@ import { CashContractsService } from '../../../../cash-contracts.service';
 import { EndpointsService } from '../../../../endpoints.service';
 import { convertSatsToBch } from '../../../../helpers';
 import { MarketService } from '../../../../market.service';
-import BigNumber from 'bignumber.js';
 
 export interface TokenOfferExtended extends TokenOffer {
   bchPricePerToken: BigNumber;
@@ -50,12 +51,20 @@ export class TokensDetailsOrderbookComponent
 
   @ViewChild('list', { static: false }) list: ElementRef<HTMLElement>;
 
+  @HostListener('document:click', ['$event'])
+  click(event) {
+    if (!this.elementRef.nativeElement.contains(event.target)) {
+      this.clearSelectedOffer();
+    }
+  }
+
   constructor(
     private marketService: MarketService,
     private activatedRoute: ActivatedRoute,
     private endpointsService: EndpointsService,
     private cashContractsService: CashContractsService,
     private changeDetectorRef: ChangeDetectorRef,
+    private elementRef: ElementRef,
   ) {}
 
   ngOnInit() {
