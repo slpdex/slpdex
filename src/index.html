@@ -6,6 +6,9 @@
   <title>SLPDEX - SLP Token DEX</title>
   <base href="/">
 
+  <meta http-equiv="X-UA-Compatible"
+        content="IE=edge">
+
   <meta name="viewport"
         content="initial-scale=1, maximum-scale=1">
 
@@ -43,6 +46,12 @@
 </head>
 
 <body>
+  <!-- TextEncoding polyfill for Edge -->
+  <script src="https://cdn.jsdelivr.net/npm/text-encoding@0.7.0/lib/encoding.min.js"></script>
+
+  <!-- EventSource polyfill for Edge -->
+  <script src="https://cdn.jsdelivr.net/npm/event-source-polyfill@1.0.5/src/eventsource.min.js"></script>
+
   <!-- Google Analytics -->
   <script>
     window.ga = window.ga || function () { (ga.q = ga.q || []).push(arguments) }; ga.l = +new Date;
@@ -65,7 +74,7 @@
     WebFontConfig = {
       google: {
         families: [
-          'Montserrat:400,500,600,700',
+          'Montserrat:400,500,600,700&display=swap',
         ]
       }
     };

@@ -66,8 +66,14 @@
         <app-widget widget-sm
                     [routerLink]="slpRoutes.tokens">
 
-          <img src="assets/bch.webp"
-               alt="Bitcoin Cash logo">
+          <picture>
+            <source srcset="assets/bch.webp"
+                    type="image/webp">
+            <source srcset="assets/bch.png"
+                    type="image/png">
+            <img src="assets/bch.png"
+                 alt="Bitcoin Cash logo">
+          </picture>
 
           <p>
             BCH

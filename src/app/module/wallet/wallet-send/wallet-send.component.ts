@@ -5,14 +5,14 @@ import {
   OnInit,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import * as cc from 'cashcontracts';
+import BigNumber from 'bignumber.js';
+import { Wallet } from 'cashcontracts';
 import { BehaviorSubject, combineLatest, Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { CashContractsService } from '../../../cash-contracts.service';
 import { CoinCard } from '../../../coin-card/coin-card.component';
 import { EndpointsService } from '../../../endpoints.service';
 import { convertBchToSats, convertSatsToBch } from '../../../helpers';
-import BigNumber from 'bignumber.js';
 
 export interface WalletSendSelected {
   name: string;
@@ -39,7 +39,7 @@ export class WalletSendComponent implements OnInit, OnDestroy {
   usd = 0;
   fee = 0;
 
-  wallet: cc.Wallet;
+  wallet: Wallet;
 
   private destroy$ = new Subject();
 
@@ -147,7 +147,9 @@ export class WalletSendComponent implements OnInit, OnDestroy {
         );
       }
 
-      this.fee = convertSatsToBch(sats).times(this.usd).toNumber();
+      this.fee = convertSatsToBch(sats)
+        .times(this.usd)
+        .toNumber();
     });
   };
 

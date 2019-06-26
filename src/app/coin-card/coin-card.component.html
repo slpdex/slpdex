@@ -8,9 +8,15 @@
                  class="mr-md">
   </app-jdenticon>
 
-  <img *ngIf="!item.id"
-       src="assets/bch.webp"
-       class="coin-card__bch">
+  <picture>
+    <source srcset="assets/bch.webp"
+            type="image/webp">
+    <source srcset="assets/bch.png"
+            type="image/png">
+    <img *ngIf="!item.id"
+         src="assets/bch.png"
+         class="coin-card__bch">
+  </picture>
 
   <div class="coin-card__left">
     <p class="coin-card__left--name">

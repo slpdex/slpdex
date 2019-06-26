@@ -1,15 +1,15 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   OnDestroy,
   OnInit,
-  ChangeDetectorRef,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import BigNumber from 'bignumber.js';
-import * as cc from 'cashcontracts';
+import { Wallet } from 'cashcontracts';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { take, takeUntil, map } from 'rxjs/operators';
+import { map, take, takeUntil } from 'rxjs/operators';
 import { CashContractsService } from '../../../cash-contracts.service';
 import { CoinCard } from '../../../coin-card/coin-card.component';
 import { EndpointsService } from '../../../endpoints.service';
@@ -41,7 +41,7 @@ export class WalletDetailsComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject();
 
   private usdPrice = 0;
-  private wallet: cc.Wallet;
+  private wallet: Wallet;
 
   constructor(
     private endpointsService: EndpointsService,

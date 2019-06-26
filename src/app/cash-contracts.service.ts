@@ -1,18 +1,32 @@
 import { Injectable } from '@angular/core';
-import * as cc from 'cashcontracts';
+import BigNumber from 'bignumber.js';
+import {
+  acceptTradeOfferTx,
+  AddressTxHistory,
+  BroadcastResult,
+  cancelTradeOfferTx,
+  createAdvancedTradeOfferTxs,
+  feeSendNonToken,
+  feeSendToken,
+  sendToAddressTx,
+  sendTokensToAddressTx,
+  TradeOfferParams,
+  UtxoEntry,
+  verifyAdvancedTradeOffer,
+  Wallet,
+} from 'cashcontracts';
 import { BehaviorSubject, from } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { convertBchToSats, convertSatsToBch, generateShortId } from './helpers';
 import { NotificationService } from './notification.service';
-import BigNumber from 'bignumber.js';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CashContractsService {
   private isSecretInStorageSubject = new BehaviorSubject<boolean>(false);
-  private walletSubject = new BehaviorSubject<cc.Wallet>(null);
-  private wallet: cc.Wallet;
+  private walletSubject = new BehaviorSubject<Wallet>(null);
+  private wallet: Wallet;
 
   get listenIsSecretInStorage() {
     return this.isSecretInStorageSubject.asObservable();
@@ -29,7 +43,7 @@ export class CashContractsService {
   };
 
   getTransactionHistory = (slpAddress: string, cashAddress: string) => {
-    return from(cc.AddressTxHistory.create(slpAddress, cashAddress));
+    return from(AddressTxHistory.create(slpAddress, cashAddress));
   };
 
   sendBch = (address: string, amount: BigNumber) => {
@@ -41,8 +55,8 @@ export class CashContractsService {
 
     this.walletSubject.pipe(take(1)).subscribe(async wallet => {
       const sats = convertBchToSats(amount);
-      const satsMinusFee = sats.minus(cc.feeSendNonToken(wallet, sats));
-      const item = cc.sendToAddressTx(wallet, address, satsMinusFee);
+      const satsMinusFee = sats.minus(feeSendNonToken(wallet, sats));
+      const item = sendToAddressTx(wallet, address, satsMinusFee);
       const broadcast = await item.broadcast();
       this.showBroadcastResultNotification(broadcast);
 
@@ -64,7 +78,7 @@ export class CashContractsService {
     );
 
     this.walletSubject.pipe(take(1)).subscribe(async wallet => {
-      const item = cc.sendTokensToAddressTx(wallet, address, tokenId, amount);
+      const item = sendTokensToAddressTx(wallet, address, tokenId, amount);
       const broadcast = await item.broadcast();
       this.showBroadcastResultNotification(broadcast);
 
@@ -73,11 +87,11 @@ export class CashContractsService {
   };
 
   getBchFee = (amount: BigNumber) => {
-    return cc.feeSendNonToken(this.wallet, amount);
+    return feeSendNonToken(this.wallet, amount);
   };
 
   getTokenFee = (tokenId: string, amount: BigNumber) => {
-    return cc.feeSendToken(this.wallet, tokenId, amount);
+    return feeSendToken(this.wallet, tokenId, amount);
   };
 
   getWif = () => {
@@ -85,17 +99,17 @@ export class CashContractsService {
   };
 
   generateNewWallet = () => {
-    cc.Wallet.storeRandomSecret();
+    Wallet.storeRandomSecret();
     this.loadWallet();
   };
 
   createBuyOffer = async (
-    utxo: cc.UtxoEntry,
-    params: cc.TradeOfferParams,
+    utxo: UtxoEntry,
+    params: TradeOfferParams,
     decimals: number,
   ) => {
     const tokenFactor = new BigNumber(10).pow(decimals);
-    const verification = cc.verifyAdvancedTradeOffer(
+    const verification = verifyAdvancedTradeOffer(
       this.wallet,
       tokenFactor,
       params,
@@ -104,7 +118,7 @@ export class CashContractsService {
       this.notificationService.showNotification('Error: ' + verification.msg);
       return;
     }
-    const offer = cc.acceptTradeOfferTx(this.wallet, utxo, params, {
+    const offer = acceptTradeOfferTx(this.wallet, utxo, params, {
       decimals,
     });
     console.log(offer);
@@ -117,10 +131,10 @@ export class CashContractsService {
     }
   };
 
-  createSellOffer = async (params: cc.TradeOfferParams, decimals: number) => {
+  createSellOffer = async (params: TradeOfferParams, decimals: number) => {
     return new Promise(async resolve => {
       const tokenFactor = new BigNumber(10).pow(decimals);
-      const verification = cc.verifyAdvancedTradeOffer(
+      const verification = verifyAdvancedTradeOffer(
         this.wallet,
         tokenFactor,
         params,
@@ -132,7 +146,7 @@ export class CashContractsService {
         return;
       }
 
-      const offer = cc.createAdvancedTradeOfferTxs(
+      const offer = createAdvancedTradeOfferTxs(
         this.wallet,
         tokenFactor,
         params,
@@ -153,12 +167,12 @@ export class CashContractsService {
   };
 
   cancelSellOffer = (
-    utxo: cc.UtxoEntry,
-    params: cc.TradeOfferParams,
+    utxo: UtxoEntry,
+    params: TradeOfferParams,
     decimals: number,
   ) => {
     return new Promise(resolve => {
-      const cancelTx = cc.cancelTradeOfferTx(this.wallet, utxo, params, {
+      const cancelTx = cancelTradeOfferTx(this.wallet, utxo, params, {
         decimals,
       });
 
@@ -175,14 +189,14 @@ export class CashContractsService {
   };
 
   private loadWallet = async () => {
-    this.isSecretInStorageSubject.next(cc.Wallet.isSecretInStorage());
+    this.isSecretInStorageSubject.next(Wallet.isSecretInStorage());
 
     this.listenIsSecretInStorage.subscribe(async isInStorage => {
       if (!isInStorage) {
         return;
       }
 
-      this.wallet = await cc.Wallet.loadFromStorage();
+      this.wallet = await Wallet.loadFromStorage();
 
       this.wallet.addReceivedTxListener(direction => {
         if (direction.direction === 'incoming') {
@@ -214,7 +228,7 @@ export class CashContractsService {
     this.walletSubject.next(this.wallet);
   };
 
-  private showBroadcastResultNotification = (broadcast: cc.BroadcastResult) => {
+  private showBroadcastResultNotification = (broadcast: BroadcastResult) => {
     if (broadcast.success === false) {
       console.error(broadcast);
       const msg = broadcast.msg;
