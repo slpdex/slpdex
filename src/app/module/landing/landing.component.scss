@@ -169,6 +169,10 @@
     padding: 0 40px;
     width: 100%;
 
+    picture {
+      display: flex;
+    }
+
     &--wrapper {
       display: flex;
       justify-content: space-around;
