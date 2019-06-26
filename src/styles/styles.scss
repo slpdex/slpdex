@@ -48,38 +48,38 @@ a {
   }
 }
 
-.placeholder {
-  animation: PulseAnimation 2s infinite;
-  background: linear-gradient(
-    90deg,
-    darken(white, 10%),
-    darken(white, 2%),
-    darken(white, 10%) 100%
-  );
-  background-size: 300% 300%;
-  border-radius: 4px;
-  width: 100%;
+// .placeholder {
+//   animation: PulseAnimation 2s infinite;
+//   background: linear-gradient(
+//     90deg,
+//     darken(white, 10%),
+//     darken(white, 2%),
+//     darken(white, 10%) 100%
+//   );
+//   background-size: 300% 300%;
+//   border-radius: 4px;
+//   width: 100%;
 
-  &--header {
-    height: 50px;
-    max-width: 300px;
-  }
+//   &--header {
+//     height: 50px;
+//     max-width: 300px;
+//   }
 
-  &--text-small {
-    height: 30px;
-    max-width: 200px;
-  }
+//   &--text-small {
+//     height: 30px;
+//     max-width: 200px;
+//   }
 
-  &--text {
-    height: 30px;
-    max-width: 400px;
-  }
+//   &--text {
+//     height: 30px;
+//     max-width: 400px;
+//   }
 
-  &--text-long {
-    height: 30px;
-    max-width: 600px;
-  }
-}
+//   &--text-long {
+//     height: 30px;
+//     max-width: 600px;
+//   }
+// }
 
 @include generate-size-helpers(m, margin);
 @include generate-size-helpers(p, padding);
