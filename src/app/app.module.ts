@@ -11,7 +11,7 @@ import { SentryErrorHandler } from './sentry-error-handler.service';
 import { SvgsComponent } from './svgs/svgs.component';
 
 Sentry.init({
-  dsn: 'https://157b399a3a0746f1a6fd150b04c6ebb6@sentry.io/1491592',
+  dsn: 'https://c4806b4ac4114ff3b240bab7124a82c9@sentry.io/1492075',
 });
 
 @NgModule({
