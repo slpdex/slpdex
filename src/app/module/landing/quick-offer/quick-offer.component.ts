@@ -1,19 +1,19 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   OnDestroy,
   OnInit,
   ViewChild,
-  ChangeDetectorRef,
-  AfterViewInit,
 } from '@angular/core';
 import { Subject } from 'rxjs';
-import { takeUntil, take } from 'rxjs/operators';
-import { MarketService } from '../../../market.service';
+import { delay, take, takeUntil } from 'rxjs/operators';
 import { TokenOverview } from 'slpdex-market';
-import { SLPRoutes } from '../../../slp-routes';
 import { EndpointsService } from '../../../endpoints.service';
+import { MarketService } from '../../../market.service';
+import { SLPRoutes } from '../../../slp-routes';
 
 @Component({
   selector: 'app-quick-offer',
@@ -75,7 +75,7 @@ export class QuickOfferComponent implements OnInit, OnDestroy, AfterViewInit {
       });
 
     this.marketService.loadMarketOverview('marketCapSatoshis', false);
-    setTimeout(() => this.listenMarketOverview(), 1000);
+    this.listenMarketOverview();
   }
 
   stopSlideShow = () => {
@@ -84,7 +84,10 @@ export class QuickOfferComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private listenMarketOverview = () => {
     this.marketService.marketOverview
-      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        delay(1000),
+        takeUntil(this.destroy$),
+      )
       .subscribe(overview => {
         if (!overview.length) {
           return;
