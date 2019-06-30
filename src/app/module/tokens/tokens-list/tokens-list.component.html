@@ -23,9 +23,9 @@
     </mat-spinner>
   </div>
 
-  <div *ngFor="let token of tokens; let i = index"
-       class="tokens-list__row"
-       [routerLink]="['./', token.tokenId]">
+  <a *ngFor="let token of tokens; let i = index"
+     class="tokens-list__row"
+     [routerLink]="['./', token.tokenId]">
 
     <div class="tokens-list__col tokens-list--count">
       {{i + 1}}
@@ -67,6 +67,6 @@
       {{(token.last24h.priceIncrease?.toFixed(2) || 0) * 100}}%
     </p>
 
-  </div>
+  </a>
 
 </div>
