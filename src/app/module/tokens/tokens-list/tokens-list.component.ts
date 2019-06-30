@@ -107,6 +107,10 @@ export class TokensListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   sortColumn = (item: TokensSort) => {
+    if (item.ignoreSorting) {
+      return;
+    }
+
     this.tokensSort = this.tokensSort.map(sort => {
       if (sort.name === item.name) {
         if (sort.sortBy === 'asc' || sort.sortBy === null) {
