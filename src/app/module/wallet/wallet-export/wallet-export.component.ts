@@ -25,7 +25,7 @@ export class WalletExportComponent implements OnInit, OnDestroy {
   constructor(private cashContractsService: CashContractsService) {}
 
   ngOnInit() {
-    this.cashContractsService.listenWallet
+    this.cashContractsService.getWallet
       .pipe(takeUntil(this.destroy$))
       .subscribe(async wallet => {
         if (!wallet) {

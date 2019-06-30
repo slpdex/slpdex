@@ -55,7 +55,7 @@ export class TokensDetailsOpenOffersComponent implements OnInit, OnDestroy {
           return marketToken.offers().toArray();
         }),
       ),
-      this.cashContractsService.listenWallet,
+      this.cashContractsService.getWallet,
       this.marketService.marketOverviewToken,
       this.activatedRoute.params,
     ])

@@ -3,6 +3,7 @@
 :host {
   @include fadeIn();
   display: flex;
+  margin: 0 auto;
   max-width: 800px;
   width: 100%;
 }

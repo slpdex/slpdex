@@ -24,66 +24,27 @@ import { NotificationService } from './notification.service';
   providedIn: 'root',
 })
 export class CashContractsService {
-  private isSecretInStorageSubject = new BehaviorSubject<boolean>(false);
-  private walletSubject = new BehaviorSubject<Wallet>(null);
+  private hasWalletSubject$ = new BehaviorSubject<boolean>(false);
+  private walletSubject$ = new BehaviorSubject<Wallet>(null);
   private wallet: Wallet;
 
-  get listenIsSecretInStorage() {
-    return this.isSecretInStorageSubject.asObservable();
+  get hasWallet() {
+    return this.hasWalletSubject$.asObservable();
   }
 
-  get listenWallet() {
-    return this.walletSubject.asObservable();
+  get getWallet() {
+    return this.walletSubject$.asObservable();
   }
 
   constructor(private notificationService: NotificationService) {}
 
   init = () => {
+    this.checkIfWalletExists();
     this.loadWallet();
   };
 
   getTransactionHistory = (slpAddress: string, cashAddress: string) => {
     return from(AddressTxHistory.create(slpAddress, cashAddress));
-  };
-
-  sendBch = (address: string, amount: BigNumber) => {
-    console.log(address, amount);
-    this.notificationService.showNotification(
-      `Trying to send ${amount} BCH to <a href="https://explorer.bitcoin.com/bch/address/${address}">
-      ${generateShortId(address)}</a>`,
-    );
-
-    this.walletSubject.pipe(take(1)).subscribe(async wallet => {
-      const sats = convertBchToSats(amount);
-      const satsMinusFee = sats.minus(feeSendNonToken(wallet, sats));
-      const item = sendToAddressTx(wallet, address, satsMinusFee);
-      const broadcast = await item.broadcast();
-      this.showBroadcastResultNotification(broadcast);
-
-      this.emitWallet();
-    });
-  };
-
-  sendToken = (
-    address: string,
-    amount: BigNumber,
-    tokenId: string,
-    name: string,
-  ) => {
-    console.log(address, amount, tokenId);
-
-    this.notificationService.showNotification(
-      `Trying to send ${amount} ${name} to <a href="https://explorer.bitcoin.com/bch/address/${address}">
-      ${generateShortId(address)}</a>`,
-    );
-
-    this.walletSubject.pipe(take(1)).subscribe(async wallet => {
-      const item = sendTokensToAddressTx(wallet, address, tokenId, amount);
-      const broadcast = await item.broadcast();
-      this.showBroadcastResultNotification(broadcast);
-
-      this.emitWallet();
-    });
   };
 
   getBchFee = (amount: BigNumber) => {
@@ -100,7 +61,44 @@ export class CashContractsService {
 
   generateNewWallet = () => {
     Wallet.storeRandomSecret();
-    this.loadWallet();
+    this.checkIfWalletExists();
+  };
+
+  sendBch = (address: string, amount: BigNumber) => {
+    this.notificationService.showNotification(
+      `Trying to send ${amount} BCH to <a href="https://explorer.bitcoin.com/bch/address/${address}">
+      ${generateShortId(address)}</a>`,
+    );
+
+    this.walletSubject$.pipe(take(1)).subscribe(async wallet => {
+      const sats = convertBchToSats(amount);
+      const satsMinusFee = sats.minus(feeSendNonToken(wallet, sats));
+      const item = sendToAddressTx(wallet, address, satsMinusFee);
+      const broadcast = await item.broadcast();
+      this.showBroadcastResultNotification(broadcast);
+
+      this.emitWallet();
+    });
+  };
+
+  sendToken = (
+    address: string,
+    amount: BigNumber,
+    tokenId: string,
+    name: string,
+  ) => {
+    this.notificationService.showNotification(
+      `Trying to send ${amount} ${name} to <a href="https://explorer.bitcoin.com/bch/address/${address}">
+      ${generateShortId(address)}</a>`,
+    );
+
+    this.walletSubject$.pipe(take(1)).subscribe(async wallet => {
+      const item = sendTokensToAddressTx(wallet, address, tokenId, amount);
+      const broadcast = await item.broadcast();
+      this.showBroadcastResultNotification(broadcast);
+
+      this.emitWallet();
+    });
   };
 
   createBuyOffer = async (
@@ -118,10 +116,10 @@ export class CashContractsService {
       this.notificationService.showNotification('Error: ' + verification.msg);
       return;
     }
+
     const offer = acceptTradeOfferTx(this.wallet, utxo, params, {
       decimals,
     });
-    console.log(offer);
 
     try {
       const broadcast = await offer.broadcast();
@@ -131,7 +129,7 @@ export class CashContractsService {
     }
   };
 
-  createSellOffer = async (params: TradeOfferParams, decimals: number) => {
+  createSellOffer = (params: TradeOfferParams, decimals: number) => {
     return new Promise(async resolve => {
       const tokenFactor = new BigNumber(10).pow(decimals);
       const verification = verifyAdvancedTradeOffer(
@@ -188,11 +186,10 @@ export class CashContractsService {
     });
   };
 
-  private loadWallet = async () => {
-    this.isSecretInStorageSubject.next(Wallet.isSecretInStorage());
-
-    this.listenIsSecretInStorage.subscribe(async isInStorage => {
-      if (!isInStorage) {
+  private loadWallet = () => {
+    this.hasWalletSubject$.subscribe(async hasWallet => {
+      if (!hasWallet) {
+        this.generateNewWallet();
         return;
       }
 
@@ -225,18 +222,26 @@ export class CashContractsService {
   };
 
   private emitWallet = () => {
-    this.walletSubject.next(this.wallet);
+    this.walletSubject$.next(this.wallet);
+  };
+
+  private checkIfWalletExists = () => {
+    const hasWallet =
+      Wallet.isSecretInStorage() || !!localStorage.getItem('secret');
+
+    this.hasWalletSubject$.next(hasWallet);
   };
 
   private showBroadcastResultNotification = (broadcast: BroadcastResult) => {
-    if (broadcast.success === false) {
+    if (!broadcast.success) {
       console.error(broadcast);
-      const msg = broadcast.msg;
+      const msg = (broadcast as any).msg;
       this.notificationService.showNotification(
         `Transaction broadcasted failed: ${msg}`,
       );
       return;
     }
+
     const tx = broadcast.txid;
     this.notificationService.showNotification(
       `Successfully broadcasted transaction to network.

@@ -20,7 +20,7 @@ export class WalletCreateComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.cashContractsService.listenIsSecretInStorage
+    this.cashContractsService.hasWallet
       .pipe(take(1))
       .subscribe(isSecretInStorage => {
         this.isSecretInStorage = isSecretInStorage;

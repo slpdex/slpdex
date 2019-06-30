@@ -68,7 +68,7 @@ export class TokensDetailsOrderbookComponent
   ) {}
 
   ngOnInit() {
-    this.cashContractsService.listenWallet
+    this.cashContractsService.getWallet
       .pipe(takeUntil(this.destroy$))
       .subscribe(wallet => {
         if (!wallet) {

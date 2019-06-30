@@ -1,6 +1,134 @@
+@import 'helpers';
 
 :host {
+  @include fadeIn();
   display: flex;
-  justify-content: center;
   width: 100%;
+}
+
+h2 {
+  color: white;
+  font-size: 30px;
+}
+
+h3 {
+  color: white;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.wallet-details {
+  display: flex;
+  flex-direction: column;
+
+  &__header {
+    align-items: center;
+    display: flex;
+    margin-bottom: 10px;
+
+    &--right {
+      display: flex;
+      margin-left: auto;
+
+      app-button {
+        margin-left: 10px;
+      }
+    }
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    height: 240px;
+    width: 100%;
+
+    &__buttons {
+      display: flex;
+      justify-content: center;
+      margin-top: auto;
+
+      a {
+        background: $color-green;
+        border-radius: 4px;
+        color: white;
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: 500;
+        margin: 0 20px;
+        padding: 15px 30px;
+      }
+    }
+  }
+
+  &__content {
+    @media (max-width: 900px) {
+      flex-direction: column;
+      margin-top: 20px;
+    }
+
+    display: flex;
+    margin: 30px 0 100px;
+  }
+
+  &__tokens {
+    margin-right: 20px;
+  }
+
+  &__token {
+    align-items: center;
+    display: flex;
+  }
+
+  &__transactions {
+    margin-left: 20px;
+  }
+
+  &__transaction-empty {
+    align-items: center;
+    flex-direction: column;
+
+    svg {
+      fill: $color-gray;
+      height: 100px;
+    }
+
+    p {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+  }
+
+  &__tokens,
+  &__transactions {
+    @media (max-width: 900px) {
+      margin: 0 0 20px;
+    }
+
+    flex: 1;
+  }
+
+  &--bch {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    margin: 20px 0 10px;
+
+    p {
+      font-size: 40px;
+      font-weight: 500;
+      text-align: center;
+    }
+  }
+
+  &--usd {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+
+    p {
+      font-size: 20px;
+      font-weight: 500;
+      text-align: center;
+    }
+  }
 }

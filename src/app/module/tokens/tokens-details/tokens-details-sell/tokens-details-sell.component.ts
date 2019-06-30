@@ -55,7 +55,7 @@ export class TokensDetailsSellComponent implements OnInit, OnDestroy {
     combineLatest([
       this.activatedRoute.params,
       this.marketService.marketOverviewToken,
-      this.cashContractsService.listenWallet,
+      this.cashContractsService.getWallet,
     ])
       .pipe(
         takeUntil(this.destroy$),

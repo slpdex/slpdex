@@ -10,7 +10,6 @@ import { PipeModule } from '../../pipe/pipe.module';
 import { WidgetModule } from '../../widget/widget.module';
 import { WrapperModule } from '../../wrapper/wrapper.module';
 import { WalletCreateComponent } from './wallet-create/wallet-create.component';
-import { WalletDetailsComponent } from './wallet-details/wallet-details.component';
 import { WalletExportComponent } from './wallet-export/wallet-export.component';
 import { WalletReceiveComponent } from './wallet-receive/wallet-receive.component';
 import { WalletRoutingModule } from './wallet-routing.module';
@@ -20,7 +19,6 @@ import { WalletComponent } from './wallet.component';
 @NgModule({
   declarations: [
     WalletCreateComponent,
-    WalletDetailsComponent,
     WalletReceiveComponent,
     WalletSendComponent,
     WalletExportComponent,

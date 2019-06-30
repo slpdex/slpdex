@@ -28,7 +28,7 @@ export class LandingComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.cashContractsService.listenWallet
+    this.cashContractsService.getWallet
       .pipe(takeUntil(this.destroy$))
       .subscribe(wallet => {
         this.wallet = wallet;
