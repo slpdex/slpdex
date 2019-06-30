@@ -3,15 +3,13 @@ import {
   Component,
   OnDestroy,
   OnInit,
-  ChangeDetectorRef,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { combineLatest, Subject } from 'rxjs';
-import { map, takeUntil, take } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { map, take, takeUntil } from 'rxjs/operators';
 import { TokenOverview } from 'slpdex-market';
 import { MarketService } from '../../../market.service';
 import { SLPRoutes } from '../../../slp-routes';
-import { CashContractsService } from '../../../cash-contracts.service';
 
 @Component({
   selector: 'app-tokens-details',
@@ -22,7 +20,6 @@ import { CashContractsService } from '../../../cash-contracts.service';
 export class TokensDetailsComponent implements OnInit, OnDestroy {
   tokenOverview: TokenOverview = {} as TokenOverview;
   slpRoutes = { ...SLPRoutes };
-  walletConnected = false;
 
   private destroy$ = new Subject();
   private tokenId: string;
@@ -30,8 +27,6 @@ export class TokensDetailsComponent implements OnInit, OnDestroy {
   constructor(
     private activatedRoute: ActivatedRoute,
     private marketService: MarketService,
-    private cashContractsService: CashContractsService,
-    private changeDetectorRef: ChangeDetectorRef,
   ) {}
 
   ngOnInit() {
@@ -41,18 +36,10 @@ export class TokensDetailsComponent implements OnInit, OnDestroy {
       this.marketService.loadMarketOverviewToken(this.tokenId);
     });
 
-    combineLatest([
-      this.marketService.marketOverviewToken,
-      this.cashContractsService.listenWallet,
-    ])
+    this.marketService.marketOverviewToken
       .pipe(
         takeUntil(this.destroy$),
-        map(([marketOverviewToken, wallet]) => {
-          if (wallet) {
-            this.walletConnected = true;
-            this.changeDetectorRef.markForCheck();
-          }
-
+        map(marketOverviewToken => {
           this.marketService.loadOffersAndStartListener(this.tokenId);
 
           if (!marketOverviewToken) {
