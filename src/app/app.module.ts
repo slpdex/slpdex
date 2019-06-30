@@ -16,8 +16,11 @@ const sentryOptions: Sentry.BrowserOptions = {
 };
 
 if (!environment.production) {
-  sentryOptions.enabled = false;
   sentryOptions.defaultIntegrations = false;
+  sentryOptions.beforeSend = (event, hint) => {
+    console.error(hint.originalException || hint.syntheticException);
+    return null;
+  };
 }
 
 Sentry.init(sentryOptions);
