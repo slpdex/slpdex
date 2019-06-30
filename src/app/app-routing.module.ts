@@ -1,5 +1,11 @@
 import { NgModule } from '@angular/core';
-import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import {
+  PreloadAllModules,
+  RouterModule,
+  Routes,
+  Router,
+  NavigationError,
+} from '@angular/router';
 import { SLPRoutes } from './slp-routes';
 
 const routes: Routes = [
@@ -39,4 +45,12 @@ const routes: Routes = [
   ],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule {
+  constructor(private router: Router) {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationError) {
+        window.location.reload();
+      }
+    });
+  }
+}
