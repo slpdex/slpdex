@@ -17,7 +17,7 @@
 </p>
 
 <p align="center">
-	SLPDEX is a Decentralized Tokens Exchange built for the Bitcoin Cash community. 
+  <strong>SLPDEX is a Decentralized Tokens Exchange built for the Bitcoin Cash community.</strong>
 </p>
 
 <div align="center">
