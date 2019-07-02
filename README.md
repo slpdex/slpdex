@@ -10,6 +10,7 @@
 <br>
 
 <p align="center">
+  <img src="https://img.shields.io/badge/STATUS-BETA-orange.svg?style=for-the-badge">
   <img src="https://img.shields.io/website/https/slpdex.cash.svg?style=for-the-badge">
   <img src="https://img.shields.io/github/last-commit/slpdex/slpdex.svg?style=for-the-badge">
   <img src="https://img.shields.io/github/license/slpdex/slpdex.svg?style=for-the-badge">
