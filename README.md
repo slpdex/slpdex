@@ -20,15 +20,21 @@
 </p>
 
 # Team
+
+
+[//]: contributor-faces
+
 <p align="center">
-  <a src="https://github.com/EyeOfPython">
+  <a href="https://github.com/EyeOfPython">
     <img src="https://raw.githubusercontent.com/slpdex/slpdex/master/src/assets/github/tobias.png">
   </a>
-  
-  <a src="https://github.com/Chippi">
+
+  <a href="https://github.com/Chippi">
     <img src="https://raw.githubusercontent.com/slpdex/slpdex/master/src/assets/github/alex.png">
   </a>
 </p>
+
+[//]: contributor-faces
 
 <br>
 
