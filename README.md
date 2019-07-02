@@ -2,7 +2,7 @@
 ⭐️ Star us on GitHub — it helps!
 <hr>
 
-![](https://raw.githubusercontent.com/slpdex/slpdex/master/src/assets/promo.png)
+![](https://raw.githubusercontent.com/slpdex/slpdex/master/src/assets/github/slpdex_promo.png)
 
 <hr>
 
@@ -19,8 +19,17 @@
 </p>
 
 # Team
-<img src="https://avatars1.githubusercontent.com/u/6388933?s=400&u=abcdfeabddbc2394588d833b3a826aad40d41237&v=4" width="100px">
+<p align="center">
+  <a src="https://github.com/EyeOfPython">
+    <img src="https://raw.githubusercontent.com/slpdex/slpdex/master/src/assets/github/tobias.png">
+  </a>
+  
+  <a src="https://github.com/Chippi">
+    <img src="https://raw.githubusercontent.com/slpdex/slpdex/master/src/assets/github/alex.png">
+  </a>
+</p>
 
+<br>
 
 # Sponsors
 Special thanks to BrowserStack for their generous support in the open source community. In slpdex we're using BrowserStack to reliably test multiple browsers, sizes & devices.
@@ -30,6 +39,7 @@ Special thanks to BrowserStack for their generous support in the open source com
  
 [Visit BrowserStack](https://www.browserstack.com/)
 
+<br>
 
 # Development
 
@@ -54,6 +64,7 @@ Run `npm run svg` to compile SVGs into a SVG sprite. The sprite content currentl
 
 Run `npm run prod` to build the project. The build artifacts will be stored in the `prod/` directory.
 
+<br>
 
 # License
 Usage is provided under the  [MIT License](https://github.com/slpdex/slpdex/blob/master/LICENSE). See LICENSE for the full details.
