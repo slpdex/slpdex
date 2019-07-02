@@ -24,8 +24,9 @@
 	<h3>
     <a href="https://slpdex.cash">slpdex.cash</a>
   </h3>
-</p>
+</div>
 
+<br>
 
 # Team
 [//]: contributor-faces
