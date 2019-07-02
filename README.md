@@ -1,9 +1,11 @@
 
 ⭐️ Star us on GitHub — it helps!
 
-![](https://raw.githubusercontent.com/slpdex/slpdex/master/src/assets/github/slpdex_promo.png)
+#
 
-<hr>
+<img src="https://raw.githubusercontent.com/slpdex/slpdex/master/src/assets/github/slpdex_promo.png">
+
+#
 
 <p align="center">
   <img src="https://img.shields.io/github/license/mashape/apistatus.svg">
