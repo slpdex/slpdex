@@ -52,14 +52,9 @@
 
 # Sponsors
 
-| <img src="https://cdn.freebiesupply.com/logos/large/2x/browserstack-logo-png-transparent.png" width="100px"> | Special thanks to BrowserStack for their generous support in the open source community. In slpdex we're using BrowserStack to reliably test multiple browsers, sizes & devices. [Check out BrowserStack!](https://www.browserstack.com/)
-| - | - |
+<img src="https://cdn.freebiesupply.com/logos/large/2x/browserstack-logo-png-transparent.png" width="50px">
 
-<br>
- 
- 
- 
-
+Special thanks to BrowserStack for their generous support in the open source community. In slpdex we're using BrowserStack to reliably test multiple browsers, sizes & devices. [Check out BrowserStack!](https://www.browserstack.com/)
 
 <br><br>
 
