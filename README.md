@@ -60,31 +60,31 @@ Special thanks to BrowserStack for their generous support in the open source com
 
 # Development
 
-## Install
+### Install
 - `npm i`
 - `npm i @angular/cli -g`
 
 <br>
 
-## VSCode extensions (recommended)
+### VSCode extensions (recommended)
 - Angular Language Service - https://marketplace.visualstudio.com/items?itemName=Angular.ng-template
 - Prettier Code formatter - https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode
 - Stylelint - https://marketplace.visualstudio.com/items?itemName=shinnn.stylelint
 
 <br>
 
-## Development server
+### Development server
 Run `npm run dev` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
 <br>
 
-## SVG Sprite
+### SVG Sprite
 
 Run `npm run svg` to compile SVGs into a SVG sprite.
 
 <br>
 
-## Build
+### Build
 
 Run `npm run prod` to build the project. The build artifacts will be stored in the `prod/` directory.
 
