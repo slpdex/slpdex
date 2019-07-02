@@ -18,12 +18,12 @@
 <br>
 
 <p align="center">
-  <strong>SLPDEX is a Decentralized Tokens Exchange built for the Bitcoin Cash community.</strong>
+  <strong><a href="https://slpdex.cash">SLPDEX</a> is a Decentralized Tokens Exchange built for the Bitcoin Cash community.</strong>
 </p>
 
 <div align="center">
 	<h3>
-    <a href="https://slpdex.cash">slpdex.cash</a>
+    <a href="https://slpdex.cash">https://slpdex.cash</a>
   </h3>
 </div>
 
