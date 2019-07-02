@@ -26,11 +26,11 @@
 
 <p align="center">
   <a href="https://github.com/EyeOfPython">
-    <img src="https://raw.githubusercontent.com/slpdex/slpdex/master/src/assets/github/tobias.png">
+    <img src="https://raw.githubusercontent.com/slpdex/slpdex/master/src/assets/github/tobias.png" width="250px">
   </a>
 
   <a href="https://github.com/Chippi">
-    <img src="https://raw.githubusercontent.com/slpdex/slpdex/master/src/assets/github/alex.png">
+    <img src="https://raw.githubusercontent.com/slpdex/slpdex/master/src/assets/github/alex.png" width="250px">
   </a>
 </p>
 
