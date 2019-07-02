@@ -43,7 +43,7 @@
 [//]: contributor-faces
 
 <a href="https://github.com/blockparty-sh">
-  <img src="https://avatars2.githubusercontent.com/u/44456286?s=460&v=4" width="60px">
+  <img src="https://avatars2.githubusercontent.com/u/44456286?s=460&v=4" width="50px">
 </a>
 
 [//]: contributor-faces
