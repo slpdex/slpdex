@@ -1,39 +1,60 @@
-# SLPDEX
+
 ⭐️ Star us on GitHub — it helps!
-<br>
-<br>
-<br>
+<hr>
+
+![](https://raw.githubusercontent.com/slpdex/slpdex/master/src/assets/promo.png)
+
+<hr>
+
+<p align="center">
+  <img src="https://img.shields.io/github/license/mashape/apistatus.svg">
+</p>
+
+<p align="center">
+	SLPDEX is a Decentralized Tokens Exchange built for the Bitcoin Cash community. 
+</p>
+
+<p align="center">
+	<a href="https://slpdex.cash">slpdex.cash</a>
+</p>
+
+# Team
+<img src="https://avatars1.githubusercontent.com/u/6388933?s=400&u=abcdfeabddbc2394588d833b3a826aad40d41237&v=4" width="100px">
 
 
-## Development
+# Sponsors
+Special thanks to BrowserStack for their generous support in the open source community. In slpdex we're using BrowserStack to reliably test multiple browsers, sizes & devices.
+<br>
+ 
+ <img src="https://cdn.freebiesupply.com/logos/large/2x/browserstack-logo-png-transparent.png" width="50px">
+ 
+[Visit BrowserStack](https://www.browserstack.com/)
 
-### Install
+
+# Development
+
+## Install
 - `npm i`
 - `npm i @angular/cli -g`
 
-### Visual Studio Code Extensions
+## VSCode extensions (recommended)
 - Angular Language Service - https://marketplace.visualstudio.com/items?itemName=Angular.ng-template
-
 - Prettier Code formatter - https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode
-
 - Stylelint - https://marketplace.visualstudio.com/items?itemName=shinnn.stylelint
 
-### Development server
 
+## Development server
 Run `npm run dev` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-### Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-### Build
-
-Run `npm run prod` to build the project. The build artifacts will be stored in the `prod/` directory.
-
-### SVG Sprite
+## SVG Sprite
 
 Run `npm run svg` to compile SVGs into a SVG sprite. The sprite content currently needs to be copy & pasted into svgs.component.
 
-### Publish
+## Build
 
-Run `npm run prod-push` to quickly push a new release from `prod/` directory to our hosting repo - https://github.com/slpdex/slpdex.github.io. To set this up, you need to `git init` in your `prod/` directory and set remote origin to git@github.com:slpdex/slpdex.github.io.git.
+Run `npm run prod` to build the project. The build artifacts will be stored in the `prod/` directory.
+
+
+# License
+Usage is provided under the  [MIT License](https://github.com/slpdex/slpdex/blob/master/LICENSE). See LICENSE for the full details.
+
