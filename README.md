@@ -1,6 +1,5 @@
 
 ⭐️ Star us on GitHub — it helps!
-<hr>
 
 ![](https://raw.githubusercontent.com/slpdex/slpdex/master/src/assets/github/slpdex_promo.png)
 
