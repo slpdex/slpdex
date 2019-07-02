@@ -22,8 +22,6 @@
 </p>
 
 # Team
-
-
 [//]: contributor-faces
 
 <p align="center">
@@ -39,6 +37,18 @@
 [//]: contributor-faces
 
 <br>
+
+# Contributors
+
+[//]: contributor-faces
+
+<a href="https://github.com/blockparty-sh">
+  <img src="https://avatars2.githubusercontent.com/u/44456286?s=460&v=4" width="60px">
+</a>
+
+[//]: contributor-faces
+
+<br><br>
 
 # Sponsors
 Special thanks to BrowserStack for their generous support in the open source community. In slpdex we're using BrowserStack to reliably test multiple browsers, sizes & devices.
