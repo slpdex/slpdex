@@ -82,7 +82,7 @@ Run `npm run dev` for a dev server. Navigate to `http://localhost:4200/`. The ap
 
 ## SVG Sprite
 
-Run `npm run svg` to compile SVGs into a SVG sprite. The sprite content currently needs to be copy & pasted into svgs.component.
+Run `npm run svg` to compile SVGs into a SVG sprite.
 
 <br>
 
