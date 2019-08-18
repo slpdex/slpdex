@@ -79,41 +79,55 @@ export class WalletComponent implements OnInit, OnDestroy {
 
     this.history$ = this.storageService.txHistory$.pipe(
       switchMap(async history => {
+        if (!history) {
+          return [];
+        }
+
+        let balance = 0;
+
+        history.addTxHistory.forEach(item => {
+          if (item.deltaSatoshis) {
+            balance += item.deltaSatoshis;
+          }
+        });
+
+        this.bchBalance$.next(
+          convertSatsToBch(new BigNumber(balance)).toNumber(),
+        );
+
         const moment = await import('moment');
 
-        return ((history && history.addTxHistory) || []).map<CoinCardExtended>(
-          item => {
-            const sharedProps = {
-              timeSince: item.timestamp
-                ? moment.unix(item.timestamp).fromNow()
-                : 'Unconfirmed',
-              enableBalanceColor: true,
-              txId: item.tokenIdHex,
-            } as CoinCardExtended;
+        return (history.addTxHistory || []).map<CoinCardExtended>(item => {
+          const sharedProps = {
+            timeSince: item.timestamp
+              ? moment.unix(item.timestamp).fromNow()
+              : 'Unconfirmed',
+            enableBalanceColor: true,
+            txId: item.tokenIdHex,
+          } as CoinCardExtended;
 
-            if (
-              (item.deltaTokenBase && +item.deltaTokenBase > 0) ||
-              +item.deltaTokenBase < 0
-            ) {
-              return {
-                ...sharedProps,
-                name: 'TokenName (WIP)',
-                isToken: true,
-                id: item.tokenIdHex,
-                symbol: 'Symbol (WIP)',
-                balance: new BigNumber(item.deltaTokenBase).div(1000),
-              };
-            }
-
+          if (
+            (item.deltaTokenBase && +item.deltaTokenBase > 0) ||
+            +item.deltaTokenBase < 0
+          ) {
             return {
               ...sharedProps,
-              name: 'Bitcoin Cash',
-              balance: convertSatsToBch(
-                new BigNumber(item.deltaSatoshis).div(10),
-              ),
+              name: 'TokenName (WIP)',
+              isToken: true,
+              id: item.tokenIdHex,
+              symbol: 'Symbol (WIP)',
+              balance: new BigNumber(item.deltaTokenBase).div(1000),
             };
-          },
-        );
+          }
+
+          return {
+            ...sharedProps,
+            name: 'Bitcoin Cash',
+            balance: convertSatsToBch(
+              new BigNumber(item.deltaSatoshis).div(10),
+            ),
+          };
+        });
       }),
     );
   }
