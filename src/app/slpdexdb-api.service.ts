@@ -53,6 +53,10 @@ export class SlpdexDBApiService {
       if (data.type === 'TxHistory') {
         this.storageService.setTxHistory(data);
       }
+
+      if (data.type === 'AddressUtxo') {
+        this.storageService.setAddressUtxo(data);
+      }
     });
 
     this.socket.addEventListener('close', event => {
