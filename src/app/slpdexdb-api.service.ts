@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { StorageService } from './storage.service';
 import { BehaviorSubject } from 'rxjs';
+import { take } from 'rxjs/operators';
+import { StorageService } from './storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -8,6 +9,10 @@ import { BehaviorSubject } from 'rxjs';
 export class SlpdexDBApiService {
   private socket: WebSocket;
   private isOpenSubject$ = new BehaviorSubject<boolean>(false);
+  private publicAddress =
+    'bitcoincash:qzzp3al8kmq6a26wqre4xs494897q27pvy0jtqhqny';
+
+  private reconnectTimer: number;
 
   constructor(private storageService: StorageService) {}
 
@@ -22,8 +27,14 @@ export class SlpdexDBApiService {
     //   return;
     // }
 
+    // this.publicAddress = publicAddress;
+
+    this.connect();
+  };
+
+  private connect = () => {
     this.socket = new WebSocket(
-      'wss://api.slpdex.cash/ws/bitcoincash:qzzp3al8kmq6a26wqre4xs494897q27pvy0jtqhqny',
+      `wss://api.slpdex.cash/ws/${this.publicAddress}`,
     );
 
     this.socket.addEventListener('open', event => {
@@ -45,13 +56,28 @@ export class SlpdexDBApiService {
     });
 
     this.socket.addEventListener('close', event => {
-      console.log('Socket Close');
-      this.isOpenSubject$.next(false);
+      console.log('Socket Close', event);
+      this.reconnect();
     });
 
     this.socket.addEventListener('error', event => {
-      console.log('Socket Error');
-      this.isOpenSubject$.next(false);
+      console.log('Socket Error', event);
+      this.reconnect();
     });
+  };
+
+  private reconnect = () => {
+    this.socket = null;
+    this.isOpenSubject$.next(false);
+
+    window.clearTimeout(this.reconnectTimer);
+
+    this.reconnectTimer = window.setTimeout(() => {
+      this.isOpenSubject$.pipe(take(1)).subscribe(isOpen => {
+        if (!isOpen) {
+          this.connect();
+        }
+      });
+    }, 10000);
   };
 }
