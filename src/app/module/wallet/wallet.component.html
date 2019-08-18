@@ -94,11 +94,13 @@
         <ng-container *ngIf="(history$ | async) as history">
           <ng-container *ngIf="history?.length; else noHistory">
 
-            <app-coin-card *ngFor="let item of history; trackBy: trackById"
-                           [item]="item"
-                           class="mb-sm"
-                           (click)="openTxExplorer(item)">
-            </app-coin-card>
+            <a *ngFor="let item of history; trackBy: trackById"
+               [href]="'https://explorer.bitcoin.com/bch/tx/' + item.txId"
+               target="_blank">
+              <app-coin-card [item]="item"
+                             class="mb-sm">
+              </app-coin-card>
+            </a>
 
           </ng-container>
         </ng-container>
