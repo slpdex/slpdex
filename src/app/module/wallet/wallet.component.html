@@ -91,22 +91,27 @@
       <div class="wallet-details__transactions">
         <h3>Last 10 transactions</h3>
 
-        <ng-container *ngIf="history.length">
-          <app-coin-card *ngFor="let item of history; trackBy: trackById"
-                         [item]="item"
-                         class="mb-sm"
-                         (click)="openTxExplorer(item)">
-          </app-coin-card>
+        <ng-container *ngIf="(history$ | async) as history">
+          <ng-container *ngIf="history?.length; else noHistory">
+
+            <app-coin-card *ngFor="let item of history; trackBy: trackById"
+                           [item]="item"
+                           class="mb-sm"
+                           (click)="openTxExplorer(item)">
+            </app-coin-card>
+
+          </ng-container>
         </ng-container>
 
-        <app-widget *ngIf="!history.length"
-                    class="wallet-details__transaction-empty">
-          <svg>
-            <use xlink:href="#empty"></use>
-          </svg>
+        <ng-template #noHistory>
+          <app-widget class="wallet-details__transaction-empty">
+            <svg>
+              <use xlink:href="#empty"></use>
+            </svg>
 
-          <p>No transactions yet</p>
-        </app-widget>
+            <p>No transactions yet</p>
+          </app-widget>
+        </ng-template>
 
       </div>
 

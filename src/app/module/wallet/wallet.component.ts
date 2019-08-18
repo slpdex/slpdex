@@ -1,6 +1,5 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   OnDestroy,
   OnInit,
@@ -8,13 +7,14 @@ import {
 import { Router } from '@angular/router';
 import BigNumber from 'bignumber.js';
 import { Wallet } from 'cashcontracts';
-import { BehaviorSubject, Subject } from 'rxjs';
-import { map, take, takeUntil } from 'rxjs/operators';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { switchMap, takeUntil } from 'rxjs/operators';
 import { CashContractsService } from '../../cash-contracts.service';
 import { CoinCard } from '../../coin-card/coin-card.component';
 import { EndpointsService } from '../../endpoints.service';
 import { convertSatsToBch } from '../../helpers';
 import { SLPRoutes } from '../../slp-routes';
+import { StorageService } from '../../storage.service';
 import { WalletSendSelected } from './wallet-send/wallet-send.component';
 
 interface CoinCardExtended extends CoinCard {
@@ -35,6 +35,8 @@ export class WalletComponent implements OnInit, OnDestroy {
 
   history: CoinCardExtended[] = [];
 
+  history$: Observable<CoinCardExtended[]>;
+
   slpRoutes = { ...SLPRoutes };
 
   private destroy$ = new Subject();
@@ -46,7 +48,7 @@ export class WalletComponent implements OnInit, OnDestroy {
     private endpointsService: EndpointsService,
     private router: Router,
     private cashContractsService: CashContractsService,
-    private changeDetectorRef: ChangeDetectorRef,
+    private storageService: StorageService,
   ) {}
 
   ngOnInit() {
@@ -62,7 +64,6 @@ export class WalletComponent implements OnInit, OnDestroy {
         this.wallet = wallet;
         this.setBchBalance();
         this.setWalletTokens();
-        this.setHistory();
       });
 
     this.endpointsService.bchUsdPrice
@@ -75,6 +76,46 @@ export class WalletComponent implements OnInit, OnDestroy {
           this.usdPrice$.next(usdPriceForBch.decimalPlaces(5).toString());
         });
       });
+
+    this.history$ = this.storageService.txHistory$.pipe(
+      switchMap(async history => {
+        const moment = await import('moment');
+
+        return ((history && history.addTxHistory) || []).map<CoinCardExtended>(
+          item => {
+            const sharedProps = {
+              timeSince: item.timestamp
+                ? moment.unix(item.timestamp).fromNow()
+                : 'Unconfirmed',
+              enableBalanceColor: true,
+              txId: item.tokenIdHex,
+            } as CoinCardExtended;
+
+            if (
+              (item.deltaTokenBase && +item.deltaTokenBase > 0) ||
+              +item.deltaTokenBase < 0
+            ) {
+              return {
+                ...sharedProps,
+                name: 'TokenName (WIP)',
+                isToken: true,
+                id: item.tokenIdHex,
+                symbol: 'Symbol (WIP)',
+                balance: new BigNumber(item.deltaTokenBase).div(1000),
+              };
+            }
+
+            return {
+              ...sharedProps,
+              name: 'Bitcoin Cash',
+              balance: convertSatsToBch(
+                new BigNumber(item.deltaSatoshis).div(10),
+              ),
+            };
+          },
+        );
+      }),
+    );
   }
 
   ngOnDestroy() {
@@ -112,63 +153,6 @@ export class WalletComponent implements OnInit, OnDestroy {
 
   openTxExplorer = (item: CoinCardExtended) => {
     window.open(`https://explorer.bitcoin.com/bch/tx/${item.txId}`, '_blank');
-  };
-
-  private setHistory = () => {
-    this.cashContractsService
-      .getTransactionHistory(this.wallet.slpAddr(), this.wallet.cashAddr())
-      .pipe(
-        take(1),
-        map(items => {
-          return items
-            .txHistory()
-            .toArray()
-            .slice(0, 10);
-        }),
-      )
-      .subscribe(async historyItems => {
-        const moment = await import('moment');
-
-        this.history = historyItems.map(item => {
-          const txId = item[0];
-          const historyItem = item[1];
-
-          let newItem = {
-            timeSince: historyItem.timestamp
-              ? moment.unix(historyItem.timestamp).fromNow()
-              : 'Unconfirmed',
-            enableBalanceColor: true,
-            txId,
-          } as CoinCardExtended;
-
-          if (
-            historyItem.deltaBaseToken &&
-            (historyItem.deltaBaseToken.lt(0) ||
-              historyItem.deltaBaseToken.gt(0))
-          ) {
-            const tokenDetails = this.wallet.tokenDetails(historyItem.tokenId);
-
-            newItem = {
-              ...newItem,
-              name: tokenDetails.name,
-              isToken: true,
-              id: tokenDetails.id,
-              balance: historyItem.deltaBaseToken.div(1000),
-              symbol: tokenDetails.symbol,
-            } as CoinCardExtended;
-          } else {
-            newItem = {
-              ...newItem,
-              name: 'Bitcoin Cash',
-              balance: convertSatsToBch(historyItem.deltaSatoshis.div(10)),
-            };
-          }
-
-          return newItem;
-        });
-
-        this.changeDetectorRef.markForCheck();
-      });
   };
 
   private setWalletTokens = () => {
