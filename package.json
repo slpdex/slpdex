@@ -43,6 +43,7 @@
     "rxjs": "~6.5.2",
     "simplebar": "^4.0.0",
     "slpdex-market": "^0.1.17",
+    "slpdexdb-api": "0.0.1",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1"
   },
