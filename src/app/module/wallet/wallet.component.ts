@@ -6,10 +6,8 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import BigNumber from 'bignumber.js';
-import { Wallet } from 'cashcontracts';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
 import { switchMap, takeUntil } from 'rxjs/operators';
-import { CashContractsService } from '../../cash-contracts.service';
 import { CoinCard } from '../../coin-card/coin-card.component';
 import { EndpointsService } from '../../endpoints.service';
 import { convertSatsToBch } from '../../helpers';
@@ -33,103 +31,21 @@ export class WalletComponent implements OnInit, OnDestroy {
 
   tokens$ = new BehaviorSubject<CoinCard[]>([]);
 
-  history: CoinCardExtended[] = [];
-
   history$: Observable<CoinCardExtended[]>;
 
   slpRoutes = { ...SLPRoutes };
 
   private destroy$ = new Subject();
 
-  private usdPrice = 0;
-  private wallet: Wallet;
-
   constructor(
     private endpointsService: EndpointsService,
     private router: Router,
-    private cashContractsService: CashContractsService,
     private storageService: StorageService,
   ) {}
 
   ngOnInit() {
-    this.cashContractsService.getWallet
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(wallet => {
-        if (!wallet) {
-          return;
-        }
-
-        this.isLoading$.next(false);
-
-        this.wallet = wallet;
-        this.setBchBalance();
-        this.setWalletTokens();
-      });
-
-    this.endpointsService.bchUsdPrice
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(price => {
-        this.usdPrice = price;
-
-        this.bchBalance$.pipe(takeUntil(this.destroy$)).subscribe(bch => {
-          const usdPriceForBch = new BigNumber(this.usdPrice * +bch);
-          this.usdPrice$.next(usdPriceForBch.decimalPlaces(5).toString());
-        });
-      });
-
-    this.history$ = this.storageService.txHistory$.pipe(
-      switchMap(async history => {
-        if (!history) {
-          return [];
-        }
-
-        let balance = 0;
-
-        history.addTxHistory.forEach(item => {
-          if (item.deltaSatoshis) {
-            balance += item.deltaSatoshis;
-          }
-        });
-
-        this.bchBalance$.next(
-          convertSatsToBch(new BigNumber(balance)).toNumber(),
-        );
-
-        const moment = await import('moment');
-
-        return (history.addTxHistory || []).map<CoinCardExtended>(item => {
-          const sharedProps = {
-            timeSince: item.timestamp
-              ? moment.unix(item.timestamp).fromNow()
-              : 'Unconfirmed',
-            enableBalanceColor: true,
-            txId: item.tokenIdHex,
-          } as CoinCardExtended;
-
-          if (
-            (item.deltaTokenBase && +item.deltaTokenBase > 0) ||
-            +item.deltaTokenBase < 0
-          ) {
-            return {
-              ...sharedProps,
-              name: 'TokenName (WIP)',
-              isToken: true,
-              id: item.tokenIdHex,
-              symbol: 'Symbol (WIP)',
-              balance: new BigNumber(item.deltaTokenBase).div(1000),
-            };
-          }
-
-          return {
-            ...sharedProps,
-            name: 'Bitcoin Cash',
-            balance: convertSatsToBch(
-              new BigNumber(item.deltaSatoshis).div(10),
-            ),
-          };
-        });
-      }),
-    );
+    this.loadBalance();
+    this.loadHistory();
   }
 
   ngOnDestroy() {
@@ -165,27 +81,82 @@ export class WalletComponent implements OnInit, OnDestroy {
     return token.id;
   };
 
-  openTxExplorer = (item: CoinCardExtended) => {
-    window.open(`https://explorer.bitcoin.com/bch/tx/${item.txId}`, '_blank');
+  private loadBalance = () => {
+    combineLatest([
+      this.endpointsService.bchUsdPrice,
+      this.storageService.addressUtxo$,
+    ])
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(values => {
+        const [bchUsdPrice, addressUtxo] = values;
+
+        if (!bchUsdPrice || !addressUtxo) {
+          return;
+        }
+
+        const bchSatsBalance = addressUtxo.addUtxos
+          .map(addUtxo => {
+            const isNegativeUtxo = addressUtxo.removeUtxos.find(
+              x => x.tx === addUtxo.tx,
+            );
+
+            if (isNegativeUtxo) {
+              return -(addUtxo.valueSatoshis + +addUtxo.valueToken);
+            }
+
+            return addUtxo.valueSatoshis + +addUtxo.valueToken;
+          })
+          .reduce((prev, current) => prev + current);
+
+        const bchBalance = convertSatsToBch(new BigNumber(bchSatsBalance));
+        const usdPriceForBch = new BigNumber(bchUsdPrice).times(bchBalance);
+
+        this.usdPrice$.next(usdPriceForBch.decimalPlaces(5).toString());
+        this.bchBalance$.next(bchBalance.toNumber());
+      });
   };
 
-  private setWalletTokens = () => {
-    const tokenIds = this.wallet.tokenIds();
+  private loadHistory = () => {
+    this.history$ = this.storageService.txHistory$.pipe(
+      switchMap(async history => {
+        if (!history) {
+          return [];
+        }
 
-    const tokens = tokenIds.map(tokenId => {
-      return {
-        ...this.wallet.tokenDetails(tokenId),
-        balance: this.wallet.tokenBalance(tokenId),
-        isToken: true,
-      };
-    });
+        const moment = await import('moment');
 
-    this.tokens$.next(tokens.toArray());
-  };
+        return (history.addTxHistory || []).map<CoinCardExtended>(item => {
+          const sharedProps = {
+            timeSince: item.timestamp
+              ? moment.unix(item.timestamp).fromNow()
+              : 'Unconfirmed',
+            enableBalanceColor: true,
+            txId: item.tx,
+            id: item.tokenIdHex,
+          } as CoinCardExtended;
 
-  private setBchBalance = () => {
-    const value = this.wallet.nonTokenBalance();
-    const bchBalance = convertSatsToBch(value);
-    this.bchBalance$.next(bchBalance.toNumber());
+          if (
+            (item.deltaTokenBase && +item.deltaTokenBase > 0) ||
+            +item.deltaTokenBase < 0
+          ) {
+            return {
+              ...sharedProps,
+              name: 'TokenName (WIP)',
+              isToken: true,
+              symbol: 'Symbol (WIP)',
+              balance: new BigNumber(item.deltaTokenBase).div(1000),
+            };
+          }
+
+          return {
+            ...sharedProps,
+            name: 'Bitcoin Cash',
+            balance: convertSatsToBch(
+              new BigNumber(item.deltaSatoshis).div(10),
+            ),
+          };
+        });
+      }),
+    );
   };
 }
