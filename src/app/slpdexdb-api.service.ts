@@ -38,7 +38,7 @@ export class SlpdexDBApiService {
     );
 
     this.socket.addEventListener('open', event => {
-      console.log('Socket Open');
+      console.log('Socket Open', event);
       this.isOpenSubject$.next(true);
     });
 
