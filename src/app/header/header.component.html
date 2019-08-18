@@ -20,6 +20,23 @@
         </svg>
       </a>
     </div>
+
+    <div class="header__top--bar"
+         [class.header__top--connected]="slpdexDBApiService.isOpen$ | async"
+         [class.header__top--disconnected]="!(slpdexDBApiService.isOpen$ | async)">
+
+      <div class="header__top--status"></div>
+
+      WebSocket
+
+      <ng-container *ngIf="slpdexDBApiService.isOpen$ | async; else disconnected">
+        Connected
+      </ng-container>
+
+      <ng-template #disconnected>
+        Disconnected
+      </ng-template>
+    </div>
   </div>
 
   <div class="header__bottom">

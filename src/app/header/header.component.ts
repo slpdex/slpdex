@@ -1,14 +1,15 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   OnInit,
-  AfterViewInit,
 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { EndpointsService } from '../endpoints.service';
 import { SLPRoutes } from '../slp-routes';
+import { SlpdexDBApiService } from '../slpdexdb-api.service';
 
 @Component({
   selector: 'app-header',
@@ -24,6 +25,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   constructor(
     private endpointsService: EndpointsService,
     private changeDetectorRef: ChangeDetectorRef,
+    public slpdexDBApiService: SlpdexDBApiService,
   ) {}
 
   ngOnInit() {
@@ -40,7 +42,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     setInterval(() => this.getTimeSinceLastBlock(), 20000);
   }
 
-  getTimeSinceLastBlock = () => {
+  private getTimeSinceLastBlock = () => {
     this.endpointsService
       .getTimeSinceLastBlock()
       .pipe(take(1))
