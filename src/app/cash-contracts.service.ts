@@ -26,6 +26,9 @@ import { NotificationService } from './notification.service';
 export class CashContractsService {
   private hasWalletSubject$ = new BehaviorSubject<boolean>(false);
   private walletSubject$ = new BehaviorSubject<Wallet>(null);
+
+  private publicAddressSubject$ = new BehaviorSubject<string>(null);
+
   private wallet: Wallet;
 
   get hasWallet() {
@@ -36,11 +39,23 @@ export class CashContractsService {
     return this.walletSubject$.asObservable();
   }
 
+  get publicAddress$() {
+    return this.publicAddressSubject$.asObservable();
+  }
+
   constructor(private notificationService: NotificationService) {}
 
-  init = () => {
-    this.checkIfWalletExists();
-    this.loadWallet();
+  init = async () => {
+    const hasWallet =
+      Wallet.isSecretInStorage() || !!localStorage.getItem('secret');
+
+    if (!hasWallet) {
+      Wallet.storeRandomSecret();
+    }
+
+    this.wallet = await Wallet.loadFromStorage();
+
+    this.publicAddressSubject$.next(this.wallet.cashAddr());
   };
 
   getTransactionHistory = (slpAddress: string, cashAddress: string) => {
